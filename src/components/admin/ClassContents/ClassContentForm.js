@@ -47,12 +47,14 @@ export default function ClassContentForm() {
   const [selectedCycleSubjectId, selectedSubjectId] =
     selectedSubject?.split(",") || [];
   const course = useSelector(selectCourse);
-  const courseId = course?.id;
+  // const courseId = course?.id;
+  const courseId = "9edd9b7f-6ed7-4ad4-9766-abdeec2530e3";
 
   const [createCycleClassContent, { isLoading }] =
     useCreateCycleClassContentMutation();
   const { data: cycles, isLoading: isCycleLoading } =
     useGetCyclesByCourseIdQuery(courseId);
+  console.log(cycles);
 
   let cycleOptions;
   let subjectOptions = [];

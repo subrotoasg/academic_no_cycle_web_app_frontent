@@ -5,7 +5,9 @@ function HeaderTitle({ courseName }) {
   return (
     <div className="container mx-auto text-center py-4">
       <SplitText
-        text={`Explore Your Course ${courseName || "Apar's ClassRoom Web App"}`}
+        text={`${
+          courseName ? `${courseName} Web App` : "Apar's ClassRoom Web App"
+        }`}
         className="inline-block text-2xl md:text-4xl font-bold text-center sm:p-3  md:p-4 text-blue-500 dark:text-blue-400 capitalize"
         delay={150}
         animationFrom={{ opacity: 0, transform: "translate3d(0,50px,0)" }}

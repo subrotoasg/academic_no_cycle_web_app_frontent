@@ -13,9 +13,9 @@ function MyClass() {
 
   if (isLoading) {
     return (
-      <div className="py-20 mx-4">
-        <h2 className="text-xl md:text-2xl font-bold text-center text-blue-500">
-          Loading cycles...
+      <div className="py-24 mx-4">
+        <h2 className="text-lg md:text-xl font-bold text-center text-blue-500">
+          Loading Courses...
         </h2>
       </div>
     );

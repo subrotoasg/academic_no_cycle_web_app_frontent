@@ -35,7 +35,7 @@ const Featured = () => {
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6 p-2">
         {features.map((feature, index) => (
-          <div key={feature.id} data-aos="fade-up" data-aos-delay={index * 700}>
+          <div key={feature.id} data-aos="fade-up">
             <FeaturedCard feature={feature} />
           </div>
         ))}

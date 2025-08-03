@@ -15,13 +15,15 @@ export default function Home() {
 
   return (
     <div className="py-14 md:py-20">
-      <HeaderTitle courseName={course?.title} />
+      {/* <HeaderTitle courseName={course?.title} /> */}
+      <HeaderTitle courseName={"Varsity-25"} />
 
       <div data-aos="fade-up" className="overflow-hidden w-full p-1 relative">
-        <HeroSection />
+        {/* <HeroSection /> */}
       </div>
 
-      <div data-aos="fade-up">
+      {/* <div data-aos="fade-up"> */}
+      <div>
         <LiveSection />
       </div>
 
@@ -29,11 +31,11 @@ export default function Home() {
         <NoticeBoard />
       </div>
 
-      <div data-aos="zoom-in" className="my-10 md:my-20">
+      <div className="my-10 md:my-20">
         <CycleFeature />
       </div>
 
-      <div data-aos="fade-up">
+      <div>
         <Featured />
       </div>
       <div data-aos="fade-right">
