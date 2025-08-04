@@ -15,14 +15,12 @@ export default function Home() {
 
   return (
     <div className="py-14 md:py-20">
-      {/* <HeaderTitle courseName={course?.title} /> */}
       <HeaderTitle courseName={"Varsity-25"} />
 
       <div data-aos="fade-up" className="overflow-hidden w-full p-1 relative">
         {/* <HeroSection /> */}
       </div>
 
-      {/* <div data-aos="fade-up"> */}
       <div>
         <LiveSection />
       </div>

@@ -11,10 +11,11 @@ import CourseCard from "../cards/CourseCard";
 const CycleFeature = () => {
   const [hovered, setHovered] = useState(null);
   const course = useSelector(selectCourse);
-  // const courseId = course?.id;
-  const courseId = "9edd9b7f-6ed7-4ad4-9766-abdeec2530e3";
+  const courseId = course?.id;
+  // const courseId = "9edd9b7f-6ed7-4ad4-9766-abdeec2530e3";
   const { data: cycleData, isLoading } = useGetCyclesByCourseIdQuery(courseId);
   const cycles = cycleData?.data || [];
+  console.log(cycleData);
 
   const sortedCycles = [...cycles].sort((a, b) => {
     const numA = parseInt(a.title.replace(/[^\d]/g, ""));

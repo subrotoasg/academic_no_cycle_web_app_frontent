@@ -22,8 +22,8 @@ function ClassCard({ content }) {
       }}
       className="block"
     >
-      <div className="mx-auto w-64 md:w-72 max-w-sm h-auto overflow-hidden bg-blue-100 border border-gray-200 rounded-tl-lg rounded-bl-[44px] rounded-tr-[44px] rounded-br-lg shadow-sm dark:bg-gray-700 dark:border-gray-700 transition-transform transform hover:scale-105 flex flex-col relative">
-        <div className="w-full h-44 overflow-hidden rounded-tl-lg  rounded-tr-[44px]  ">
+      <div className="mx-auto  max-w-xs h-auto gap-4 overflow-hidden rounded-2xl bg-blue-100 border border-gray-200   shadow-sm dark:bg-gray-700 dark:border-gray-700 transition-transform transform hover:scale-105 flex flex-col relative">
+        <div className="w-full h-44 overflow-hidden">
           <Image
             className="w-full h-full object-fill transition-transform duration-300 group-hover:scale-105"
             src={thumbneil}
