@@ -11,30 +11,50 @@ export default function CourseCard({ course }) {
     <Link
       href={{
         pathname: `/cycles/${course?.id}`,
-        query: { title: course?.title },
+        query: { title: course?.productFullName },
       }}
     >
       <Card
-        sx={{ maxWidth: 345 }}
-        className="transition-transform duration-400 hover:shadow-lg hover:scale-[1.1] rounded-4xl"
+        sx={{ maxWidth: 345, height: 350 }}
+        className="transition-transform duration-400 hover:shadow-lg hover:scale-[1.05] rounded-4xl flex flex-col justify-between"
       >
         <CardMedia
-          sx={{ height: 140 }}
-          image={course?.cycleImage}
-          title="course image"
+          sx={{ height: 160, objectFit: "contain" }}
+          image={course?.ProductImage}
+          title={course?.productFullName || "Course Image"}
+          className="object-contain"
         />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            {course?.title}
+        <CardContent className="flex-1">
+          <Typography
+            gutterBottom
+            variant="h6"
+            component="div"
+            className="line-clamp-2"
+          >
+            {course?.productFullName}
+          </Typography>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            className="truncate"
+          >
+            Category: {course?.Category || "N/A"}
+          </Typography>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            className="truncate"
+          >
+            Subcategory: {course?.SubCategory || "N/A"}
           </Typography>
         </CardContent>
-        <CardActions className="flex justify-center items-center">
+        <CardActions className="flex justify-center items-center pb-2">
           <button className="bg-blue-600 hover:bg-blue-700 text-white px-2 py-2 rounded text-xs hover:rounded-full">
             Enroll Now
           </button>
           <button className="border border-gray-400 hover:bg-gray-100 text-gray-700 text-xs px-4 py-2 rounded ml-2 hover:rounded-full">
             Access Now
-          </button>{" "}
+          </button>
         </CardActions>
       </Card>
     </Link>

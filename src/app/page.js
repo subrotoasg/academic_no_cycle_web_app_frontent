@@ -5,10 +5,11 @@ import NoticeBoard from "@/components/notice/NoticeBoard";
 import HeaderTitle from "@/components/HeaderTitle";
 import { useSelector } from "react-redux";
 import { selectCourse } from "@/redux/Features/courseInfo";
-import CycleFeature from "@/components/cycle/CycleFeature";
+import CycleFeature from "@/components/course/CourseFeature";
 import NewsletterForm from "@/components/NewsLetter";
 import { HeroSection } from "@/components/cards/HeroSection";
 import { StudentReviews } from "@/components/cards/StudentReview";
+import CourseFeature from "@/components/course/CourseFeature";
 
 export default function Home() {
   const course = useSelector(selectCourse);
@@ -30,7 +31,7 @@ export default function Home() {
       </div>
 
       <div className="my-10 md:my-20">
-        <CycleFeature />
+        <CourseFeature />
       </div>
 
       <div>

@@ -4,7 +4,7 @@ import { selectCourse } from "@/redux/Features/courseInfo";
 import { useGetCyclesByCourseIdQuery } from "@/redux/services/cycleCreateApi";
 import React from "react";
 import { useSelector } from "react-redux";
-import CycleFeature from "../cycle/CycleFeature";
+import CycleFeature from "../course/CourseFeature";
 
 function MyClass() {
   const course = useSelector(selectCourse);
