@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Admission Web App",
+  title: "Competitive Admission Web App",
   description: "Apar's Classroom 2025",
 };
 
