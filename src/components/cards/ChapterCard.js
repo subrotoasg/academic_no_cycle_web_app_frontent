@@ -18,11 +18,11 @@ function ChapterCard({ chapter }) {
           title: chapter?.chapter?.chapterName,
         },
       }}
-      className="block rounded-xl overflow-hidden shadow-md hover:scale-102 bg-blue-200"
+      className="block rounded-xl overflow-hidden shadow-md hover:scale-102 bg-gray-600"
     >
-      <div className="p-2 ">
-        <h3 className="text-xl font-semibold">
-          {chapter?.chapter?.chapterName || "Untitled Chapter"}
+      <div className="p-2">
+        <h3 className="text-xl font-semibold text-white ">
+          {chapter?.chapter?.chapterName}
         </h3>
       </div>
       <div className="relative w-full h-48">

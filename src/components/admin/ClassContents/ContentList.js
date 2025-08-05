@@ -10,39 +10,43 @@ import ContentDetailsDialog from "./ContentDetailsDialog";
 import ContentInfoEditDialog from "./ContentInfoEditDialog";
 import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
-// import { selectCourse } from "@/redux/Features/courseInfo";
 import {
   useDeleteClassContentMutation,
   useGetAllClassContentsQuery,
 } from "@/redux/services/contentsApi";
+import { selectAllCourses } from "@/redux/Features/courseInfo";
 
 const ContentList = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
-
+  const [selectedCourseId, setSelectedCourseId] = useState("");
+  const courses = useSelector(selectAllCourses);
   const [selectedContent, setSelectedContent] = useState(null);
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  // const course = useSelector(selectCourse);
-  // const courseId = course?.id;
-
-  const courseId = "a220ea44-dfb4-4d4d-a073-50f6bd7d6669";
   const {
     data,
     isLoading,
     isError,
     refetch: refetchClassContents,
-  } = useGetAllClassContentsQuery({
-    page,
-    limit,
-    searchTerm: searchQuery,
-    courseId,
-  });
+  } = useGetAllClassContentsQuery(
+    {
+      page,
+      limit,
+      searchTerm: searchQuery,
+      courseId: selectedCourseId,
+    },
+    {
+      skip: !selectedCourseId,
+    }
+  );
 
   const [deleteClassContent] = useDeleteClassContentMutation();
+
   const classContentsData = data?.data?.data;
+  // console.log(classContentsData);
   const meta = data?.data?.meta;
   const totalPages = meta?.totalCount ? Math.ceil(meta.totalCount / limit) : 1;
   useEffect(() => {
@@ -125,16 +129,27 @@ const ContentList = () => {
     }
   };
 
-  if (isLoading) return <Loading />;
-  if (isError)
-    return (
-      <div className="text-center text-red-500">Failed to load contents.</div>
-    );
   return (
     <div className="w-full p-2 lg:p-6 bg-white dark:bg-gray-900 shadow-lg rounded-2xl space-y-4 mt-3">
+      <div className="p-2 grid grid-cols-2">
+        <label className="text-xs md:text-base w-full font-medium text-gray-700 dark:text-gray-300">
+          Select Course
+        </label>
+        <select
+          value={selectedCourseId}
+          onChange={(e) => setSelectedCourseId(e.target.value)}
+          className="w-full p-2 border border-gray-300 rounded-md dark:bg-gray-800 dark:text-white text-xs md:text-sm"
+        >
+          <option value="">-- Select Course --</option>
+          {courses?.map((course) => (
+            <option key={course.id} value={course.id}>
+              {course.productName}
+            </option>
+          ))}
+        </select>
+      </div>
       <h2 className="text-xl md:text-3xl font-bold text-gray-800 dark:text-white text-center">
-        {/* {course?.title} */}
-        Contents
+        Course Contents
       </h2>
       <p className="text-xs md:text-sm text-muted-foreground text-center">
         View and manage all recorded course videos available
@@ -148,32 +163,46 @@ const ContentList = () => {
         />
       </div>
 
-      {sortedData.length === 0 ? (
-        <div className="text-center text-gray-500 py-4">
-          No Class Content Found
+      {isLoading && (
+        <div className="w-full flex justify-center py-8">
+          <Loading />
         </div>
-      ) : (
-        <>
-          <ContentTable
-            contentData={sortedData}
-            handleContentDelete={handleContentDelete}
-            handleContentEditModal={handleContentEditModal}
-            handleContentInfoModal={handleContentInfoModal}
-            handleRedirect={handleRedirect}
-            handleSort={handleSort}
-          />
-
-          <PaginationControls
-            currentPage={page}
-            totalPages={totalPages}
-            pageSize={limit}
-            setPageSize={setLimit}
-            setCurrentPage={setPage}
-            totalItems={meta?.totalCount}
-          />
-        </>
       )}
 
+      {isError && !isLoading && (
+        <div className="text-center text-red-500 py-4">
+          Failed to load contents.
+        </div>
+      )}
+
+      {!isLoading && !isError && (
+        <>
+          {!selectedCourseId || sortedData?.length === 0 ? (
+            <div className="text-center text-gray-500 py-4">
+              No Class Content Found
+            </div>
+          ) : (
+            <>
+              <ContentTable
+                contentData={sortedData}
+                handleContentDelete={handleContentDelete}
+                handleContentEditModal={handleContentEditModal}
+                handleContentInfoModal={handleContentInfoModal}
+                handleRedirect={handleRedirect}
+                handleSort={handleSort}
+              />
+              <PaginationControls
+                currentPage={page}
+                totalPages={totalPages}
+                pageSize={limit}
+                setPageSize={setLimit}
+                setCurrentPage={setPage}
+                totalItems={meta?.totalCount}
+              />
+            </>
+          )}
+        </>
+      )}
       <ContentDetailsDialog
         selectedContent={selectedContent}
         isOpen={isInfoModalOpen}
