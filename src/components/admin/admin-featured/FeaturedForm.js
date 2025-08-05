@@ -12,7 +12,7 @@ import Swal from "sweetalert2";
 import { toast } from "sonner";
 import { useCreateFeaturedMutation } from "@/redux/services/featuredApi";
 import { useSelector } from "react-redux";
-// import { selectCourse } from "@/redux/Features/courseInfo";
+import { selectAllCourses } from "@/redux/Features/courseInfo";
 
 function FeaturedForm() {
   const [createFeatured, { isLoading }] = useCreateFeaturedMutation();
@@ -20,8 +20,13 @@ function FeaturedForm() {
   const [imagePreview, setImagePreview] = useState(null);
   const fileInputRef = useRef(null);
 
-  // const course = useSelector(selectCourse);
-  // const course = {};
+  const courses = useSelector(selectAllCourses);
+
+  const courseOptions =
+    courses?.map((course) => ({
+      label: course.productName,
+      value: course.id,
+    })) || [];
 
   const types = [
     { label: "Discount", value: "Discount" },
@@ -44,12 +49,6 @@ function FeaturedForm() {
     watch,
     formState: { isSubmitting },
   } = methods;
-
-  // useEffect(() => {
-  //   if (course?.title) {
-  //     setValue("courseTitle", course.title);
-  //   }
-  // }, [course, setValue]);
 
   const handleFileChange = (e) => {
     const file = e.target.files?.[0];
@@ -81,7 +80,7 @@ function FeaturedForm() {
 
     const formData = new FormData();
     const featuredInfo = {
-      courseId: course?.id,
+      courseId: data.courseId,
       title: data.title,
       type: data.type,
       description: data.description,
@@ -111,11 +110,12 @@ function FeaturedForm() {
         onSubmit={handleSubmit(onSubmit)}
         className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-white dark:bg-gray-900 rounded-lg shadow-md"
       >
-        <InputField
-          label="Course Title"
-          name="courseTitle"
-          readOnly
-          // value={course?.title || ""}
+        <Dropdown
+          label="Select Course"
+          name="courseId"
+          className="tiro-bangla-text"
+          options={courseOptions}
+          rules={{ required: "Course is required" }}
         />
         <InputField
           label="Feature Title"
