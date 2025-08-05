@@ -12,7 +12,7 @@ import Swal from "sweetalert2";
 import { toast } from "sonner";
 import { useCreateFeaturedMutation } from "@/redux/services/featuredApi";
 import { useSelector } from "react-redux";
-import { selectCourse } from "@/redux/Features/courseInfo";
+// import { selectCourse } from "@/redux/Features/courseInfo";
 
 function FeaturedForm() {
   const [createFeatured, { isLoading }] = useCreateFeaturedMutation();
@@ -20,7 +20,8 @@ function FeaturedForm() {
   const [imagePreview, setImagePreview] = useState(null);
   const fileInputRef = useRef(null);
 
-  const course = useSelector(selectCourse);
+  // const course = useSelector(selectCourse);
+  // const course = {};
 
   const types = [
     { label: "Discount", value: "Discount" },
@@ -44,11 +45,11 @@ function FeaturedForm() {
     formState: { isSubmitting },
   } = methods;
 
-  useEffect(() => {
-    if (course?.title) {
-      setValue("courseTitle", course.title);
-    }
-  }, [course, setValue]);
+  // useEffect(() => {
+  //   if (course?.title) {
+  //     setValue("courseTitle", course.title);
+  //   }
+  // }, [course, setValue]);
 
   const handleFileChange = (e) => {
     const file = e.target.files?.[0];
@@ -57,7 +58,6 @@ function FeaturedForm() {
       setImagePreview(URL.createObjectURL(file));
     }
   };
-
   const selectedType = watch("type");
 
   useEffect(() => {
@@ -115,7 +115,7 @@ function FeaturedForm() {
           label="Course Title"
           name="courseTitle"
           readOnly
-          value={course?.title || ""}
+          // value={course?.title || ""}
         />
         <InputField
           label="Feature Title"
@@ -134,13 +134,7 @@ function FeaturedForm() {
           name="description"
           placeholder="Write feature description "
           textarea
-          rules={{
-            required: "Description is required",
-            minLength: {
-              value: 4,
-              message: "Description must be at least 4 characters long.",
-            },
-          }}
+          rules={{ required: "Description is required" }}
         />
         {selectedType === "Coupon" && (
           <InputField
@@ -162,7 +156,7 @@ function FeaturedForm() {
           <Input
             ref={fileInputRef}
             type="file"
-            accept=".jpg,.jpeg,.png,.webp"
+            accept="image/*"
             onChange={handleFileChange}
             required
             className="w-full border  rounded-md dark:bg-gray-800 dark:text-white dark:border-gray-700"
@@ -183,7 +177,7 @@ function FeaturedForm() {
           <Button
             type="submit"
             disabled={isLoading || isSubmitting}
-            className="w-full bg-blue-400 text-xs md:text-base text-white py-2 px-4 rounded-sm hover:rounded-3xl hover:bg-blue-700 transition flex justify-center items-center dark:bg-blue-500 dark:hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-blue-400 text-sm md:text-base text-white py-2 px-4 rounded-sm hover:rounded-3xl hover:bg-blue-700 transition flex justify-center items-center dark:bg-blue-500 dark:hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading || isSubmitting ? "Creating..." : "Create Feature"}
           </Button>

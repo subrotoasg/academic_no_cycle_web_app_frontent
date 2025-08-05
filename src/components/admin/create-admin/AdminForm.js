@@ -12,14 +12,20 @@ import adminApiServices, {
   useCreateAdminMutation,
 } from "@/redux/services/adminApi";
 import { useDispatch, useSelector } from "react-redux";
-import { selectCourse } from "@/redux/Features/courseInfo";
+import { selectAllCourses } from "@/redux/Features/courseInfo";
+import Dropdown from "@/components/form/Dropdown";
 
 export default function AdminForm() {
-  const course = useSelector(selectCourse);
-
-  const courseId = course?.id;
+  const courseId = "a220ea44-dfb4-4d4d-a073-50f6bd7d6669";
+  const courses = useSelector(selectAllCourses);
+  console.log(courses);
+  const courseOptions =
+    courses?.map((course) => ({
+      label: course.productName,
+      value: course.id,
+    })) || [];
   const methods = useForm({
-    defaultValues: { username: "", email: "", phone: "" },
+    defaultValues: { username: "", email: "", phone: "", courseId: "" },
   });
 
   const dispatch = useDispatch();
@@ -31,7 +37,7 @@ export default function AdminForm() {
     useAssignCoursesToAdminsMutation();
 
   const onSubmit = async (data) => {
-    const { email, phone, username } = data;
+    const { email, phone, username, courseId } = data;
 
     try {
       const { data: newAdmin } = await createAdmin({
@@ -39,6 +45,7 @@ export default function AdminForm() {
         email,
         phone,
       }).unwrap();
+
       const assignRes = await assignCoursesToAdmins({
         newAdminId: newAdmin.id,
         courseId,
@@ -56,6 +63,7 @@ export default function AdminForm() {
         const { data: existingAdmin } = await dispatch(
           adminApiServices.endpoints.getAdminByEmailOrPhone.initiate(email)
         ).unwrap();
+        console.log(existingAdmin);
         const existingId = existingAdmin?.data?.[0]?.id;
         if (existingId) {
           await assignCoursesToAdmins({
@@ -73,6 +81,7 @@ export default function AdminForm() {
       } catch (err2) {
         toast.error(err2?.data?.message);
       }
+
       toast.error(err?.data?.message || "Failed to create admin.");
     }
   };
@@ -83,6 +92,13 @@ export default function AdminForm() {
         onSubmit={handleSubmit(onSubmit)}
         className="grid grid-cols-1 gap-4 max-w-xl p-4 mx-auto bg-white dark:bg-gray-900 rounded-lg shadow-md"
       >
+        <Dropdown
+          label="Select Course"
+          name="courseId"
+          className="tiro-bangla-text"
+          options={courseOptions}
+          rules={{ required: "Course is required" }}
+        />
         <InputField
           label="Name"
           name="username"
@@ -121,7 +137,7 @@ export default function AdminForm() {
           <button
             type="submit"
             disabled={isCreating || isAssigning}
-            className="w-full bg-blue-400 text-white text-xs md:text-base py-2 px-4 rounded-sm hover:rounded-3xl hover:bg-blue-700 transition flex justify-center items-center dark:bg-blue-500 dark:hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-blue-400 text-sm md:text-base text-white py-2 px-4 rounded-sm hover:rounded-3xl hover:bg-blue-700 transition flex justify-center items-center dark:bg-blue-500 dark:hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isCreating || isAssigning ? "Processing..." : "Create Admin"}
             <ShieldUser className="ml-2 h-5 w-5" />

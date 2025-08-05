@@ -1,7 +1,4 @@
-"use client";
-
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import CountUp from "react-countup";
 
 const StatsCard = ({ title, value, icon: Icon, subtitle }) => {
   return (
@@ -11,9 +8,7 @@ const StatsCard = ({ title, value, icon: Icon, subtitle }) => {
         <Icon className="h-4 w-4 text-muted-foreground" />
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold">
-          <CountUp end={value} duration={1.5} separator="," />
-        </div>
+        <div className="text-2xl font-bold">{value}</div>
         <p className="text-xs text-muted-foreground">{subtitle}</p>
       </CardContent>
     </Card>

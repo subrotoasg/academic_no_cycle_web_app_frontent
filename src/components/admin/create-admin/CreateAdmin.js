@@ -8,7 +8,6 @@ const CreateAdmin = () => {
   return (
     <div className="w-full">
       <AdminUploader />
-
       <AdminList />
     </div>
   );

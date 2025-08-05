@@ -1,5 +1,5 @@
-import Routines from "@/components/notice/Routines";
 import React from "react";
+import Routines from "@/components/notice/Routines";
 
 function RoutinePage() {
   return (

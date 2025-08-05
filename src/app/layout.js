@@ -1,12 +1,11 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import "aos/dist/aos.css";
 import { ThemeProvider } from "next-themes";
 import Navbar from "@/components/navbar/Navbar";
-import Footer from "@/components/footer/Footer";
 import PersistorProvider from "@/redux/Provider/PersistorProvider";
+import Footer from "@/components/footer/Footer";
 import AOSInitializer from "@/components/navbar/AOSInitializer";
-import "aos/dist/aos.css";
-import "animate.css";
 import BackToTopButton from "@/components/footer/upArrow";
 
 const geistSans = Geist({
@@ -20,7 +19,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Cycle Course WebApp",
+  title: "Admission Web App",
   description: "Apar's Classroom 2025",
 };
 
@@ -40,8 +39,8 @@ export default function RootLayout({ children }) {
             <div className="container mx-auto overflow-hidden w-full">
               <Navbar />
             </div>
-            <main className="flex-grow">
-              <div className="mx-auto md:min-h-screen my-5 md:my-0">
+            <main className="flex-grow ">
+              <div className="mx-auto  md:min-h-screen my-5 md:my-0">
                 {children}
               </div>
             </main>

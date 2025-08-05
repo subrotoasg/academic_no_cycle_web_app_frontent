@@ -10,7 +10,7 @@ import Swal from "sweetalert2";
 import { toast } from "sonner";
 import { useCreateNoticeRoutineMutation } from "@/redux/services/noticeRoutineApi";
 import { useSelector } from "react-redux";
-import { selectCourse } from "@/redux/Features/courseInfo";
+// import { selectCourse } from "@/redux/Features/courseInfo";
 
 export default function NoticeForm() {
   const [createNoticeRoutine, { isLoading }] = useCreateNoticeRoutineMutation();
@@ -18,7 +18,7 @@ export default function NoticeForm() {
   const [imagePreview, setImagePreview] = useState(null);
   const fileInputRef = useRef(null);
 
-  const course = useSelector(selectCourse);
+  // const course = useSelector(selectCourse);
 
   const types = [
     { label: "Routine", value: "Routine" },
@@ -50,11 +50,11 @@ export default function NoticeForm() {
   const startTimeValue =
     watch("startTime") || new Date().toISOString().slice(0, 16);
 
-  useEffect(() => {
-    if (course?.title) {
-      setValue("courseTitle", course.title);
-    }
-  }, [course, setValue]);
+  // useEffect(() => {
+  //   if (course?.title) {
+  //     setValue("courseTitle", course.title);
+  //   }
+  // }, [course, setValue]);
 
   const allowedImageTypes = [
     "image/jpeg",
@@ -131,7 +131,7 @@ export default function NoticeForm() {
           label="Course Title"
           name="courseTitle"
           readOnly
-          value={course?.title || ""}
+          // value={course?.title || ""}
         />
 
         <Dropdown
@@ -240,7 +240,7 @@ export default function NoticeForm() {
           <button
             type="submit"
             disabled={isLoading || isSubmitting}
-            className="w-full bg-blue-400 text-xs md:text-base text-white py-2 px-4 rounded-sm hover:rounded-3xl hover:bg-blue-700 transition flex justify-center items-center dark:bg-blue-500 dark:hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-blue-400 text-sm md:text-base text-white py-2 px-4 rounded-sm hover:rounded-3xl hover:bg-blue-700 transition flex justify-center items-center dark:bg-blue-500 dark:hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading || isSubmitting ? "Submitting..." : "Add Notice"}
           </button>

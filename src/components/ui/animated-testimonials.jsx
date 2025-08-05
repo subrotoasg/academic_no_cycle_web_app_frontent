@@ -1,7 +1,7 @@
 "use client";
+
 import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "motion/react";
-
 import { useEffect, useState } from "react";
 
 export const AnimatedTestimonials = ({ testimonials, autoplay = true }) => {
@@ -30,7 +30,7 @@ export const AnimatedTestimonials = ({ testimonials, autoplay = true }) => {
     return Math.floor(Math.random() * 21) - 10;
   };
   return (
-    <div className="mx-auto max-w-md px-4 md:py-10  md:max-w-4xl md:px-8 lg:px-10">
+    <div className="mx-auto max-w-md px-4 md:py-20 md:max-w-4xl md:px-8 lg:px-10">
       <div className="text-center my-6">
         {" "}
         <h2 className="text-2xl md:text-3xl font-bold text-center text-blue-500 mt-20">
@@ -41,7 +41,6 @@ export const AnimatedTestimonials = ({ testimonials, autoplay = true }) => {
           support. Be inspired by their journeys and accomplishments.
         </p>
       </div>
-
       <div className="relative grid grid-cols-1 gap-8 md:gap-16 md:grid-cols-2 md:mt-10">
         <div className="relative h-80 w-full mt-10 md:mt-20">
           <AnimatePresence>
@@ -88,6 +87,7 @@ export const AnimatedTestimonials = ({ testimonials, autoplay = true }) => {
             ))}
           </AnimatePresence>
         </div>
+
         <div className="flex flex-col justify-between md:mt-20">
           <motion.div
             key={active}

@@ -91,7 +91,7 @@ export default function ReportForm() {
   return (
     <div className="max-w-2xl mx-auto bg-white dark:bg-slate-900 shadow-lg rounded-xl p-4 md:p-8">
       <h1 className="text-2xl md:text-3xl font-semibold text-[#578EEB] mb-6 text-center">
-        Report an Issue
+        Submit Your Report
       </h1>
 
       <form onSubmit={handleSubmit} className="space-y-6">

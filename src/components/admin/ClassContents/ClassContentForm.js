@@ -9,12 +9,11 @@ import { toast } from "sonner";
 import Swal from "sweetalert2";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
-import { useGetCyclesByCourseIdQuery } from "@/redux/services/cycleCreateApi";
 import { useSelector } from "react-redux";
-import { selectCourse } from "@/redux/Features/courseInfo";
-import { useGetSubjectsByCycleIdQuery } from "@/redux/services/cycleSubjectApi";
+import { useGetSubjectsQuery } from "@/redux/services/subjectsApi";
 import { useGetChaptersBySubjectIdQuery } from "@/redux/services/chapterAPi";
-import { useCreateCycleClassContentMutation } from "@/redux/services/cycleClassContentApi";
+import { useCreateClassContentMutation } from "@/redux/services/contentsApi";
+import { selectAllCourses } from "@/redux/Features/courseInfo";
 
 export default function ClassContentForm() {
   const types = [
@@ -23,9 +22,8 @@ export default function ClassContentForm() {
     { label: "Free Youtube", value: "freeyt" },
     { label: "Premium Youtube", value: "premyt" },
   ];
-
   const defaultValues = {
-    courseTitle: "",
+    courseId: "",
   };
   const methods = useForm({ defaultValues });
 
@@ -41,50 +39,33 @@ export default function ClassContentForm() {
   const videoId = useWatch({ control, name: "videoId" });
   const [selectedFile, setSelectedFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
-  const selectedCycleId = useWatch({ control, name: "cycle" });
-  const selectedSubject = useWatch({ control, name: "subject" });
+  const selectedSubjectId = useWatch({ control, name: "subject" });
   const fileInputRef = useRef(null);
-  const [selectedCycleSubjectId, selectedSubjectId] =
-    selectedSubject?.split(",") || [];
-  const course = useSelector(selectCourse);
-  // const courseId = course?.id;
-  const courseId = "9edd9b7f-6ed7-4ad4-9766-abdeec2530e3";
 
-  const [createCycleClassContent, { isLoading }] =
-    useCreateCycleClassContentMutation();
-  const { data: cycles, isLoading: isCycleLoading } =
-    useGetCyclesByCourseIdQuery(courseId);
-  console.log(cycles);
-
-  let cycleOptions;
-  let subjectOptions = [];
-  let chapterOptions = [];
-  if (!isCycleLoading) {
-    const cycleData = cycles?.data;
-    cycleOptions =
-      cycleData.map((cycle) => ({
-        label: cycle.title,
-        value: cycle.id,
-      })) || [];
-  }
-
-  const { data: subjects, isLoading: isSubjectLoading } =
-    useGetSubjectsByCycleIdQuery(
-      { cycleId: selectedCycleId },
-      { skip: !selectedCycleId }
-    );
-
-  if (!isSubjectLoading && subjects?.data && Array.isArray(subjects.data)) {
-    subjectOptions = subjects?.data.map((cs) => ({
-      label: cs?.title != null ? cs.title : cs?.subject?.title,
-      value: `${cs?.id},${cs?.subject?.id}`,
-    }));
-  }
-
+  const courses = useSelector(selectAllCourses);
+  console.log(courses);
+  const courseOptions =
+    courses?.map((course) => ({
+      label: course.productName,
+      value: course.id,
+    })) || [];
+  const { data: subjects, isLoading: isSubjectLoading } = useGetSubjectsQuery();
   const { data: chapters, isLoading: isChapterLoading } =
     useGetChaptersBySubjectIdQuery(selectedSubjectId, {
       skip: !selectedSubjectId,
     });
+  const [createClassContent, { isLoading }] = useCreateClassContentMutation();
+  let subjectOptions;
+  let chapterOptions = [];
+
+  if (!isSubjectLoading) {
+    const subjectData = subjects?.data;
+    subjectOptions =
+      subjectData?.map((subject) => ({
+        label: subject.title,
+        value: subject.id,
+      })) || [];
+  }
 
   if (!isChapterLoading && chapters?.data && Array.isArray(chapters.data)) {
     chapterOptions = chapters.data.map((ch) => ({
@@ -101,12 +82,6 @@ export default function ClassContentForm() {
     }
   };
 
-  useEffect(() => {
-    if (course?.title) {
-      setValue("courseTitle", course.title);
-    }
-  }, [course, setValue]);
-
   const resetForm = () => {
     reset(defaultValues);
     setSelectedFile(null);
@@ -122,33 +97,30 @@ export default function ClassContentForm() {
 
     const formData = new FormData();
     const contentInfo = {
-      courseId: course?.id,
-      cycleSubjectId: selectedCycleSubjectId,
+      courseId: data.courseId,
+      subjectId: selectedSubjectId,
       chapterId: data.chapter,
       hostingType: data.type,
       classTitle: data.title,
       classNo: data.classNumber,
       description: data.description,
       videoUrl: data.videoId,
-      cycleId: data.cycle,
     };
 
     formData.append("file", selectedFile);
     formData.append("data", JSON.stringify(contentInfo));
 
     try {
-      await createCycleClassContent(formData).unwrap();
+      await createClassContent(formData).unwrap();
 
       Swal.fire({
         icon: "success",
         title: "Class Content Successfully Uploaded",
-        timer: 1500,
+        timer: 1000,
       });
       resetForm();
     } catch (err) {
-      toast.error(
-        toast.error(err?.data?.message || "Upload Failed. Please try again.")
-      );
+      toast.error(err?.data?.message || "Upload Failed. Please try again.");
     }
   };
 
@@ -158,12 +130,12 @@ export default function ClassContentForm() {
         onSubmit={handleSubmit(onSubmit)}
         className="grid grid-cols-1 md:grid-cols-2 gap-3 p-2 md:p-3 rounded-lg"
       >
-        <InputField
-          label="Course Title"
-          name="courseTitle"
-          placeholder="Provide a course title"
-          readOnly
-          value={course?.title || ""}
+        <Dropdown
+          label="Select Course"
+          name="courseId"
+          className="tiro-bangla-text"
+          options={courseOptions}
+          rules={{ required: "Course is required" }}
         />
         <Dropdown
           label="Video Hosting Type"
@@ -172,27 +144,17 @@ export default function ClassContentForm() {
           rules={{ required: "Hosting type is required" }}
         />
         <Dropdown
-          label="Select Cycle"
-          name="cycle"
-          options={cycleOptions}
-          rules={{ required: "Cycle is required" }}
+          label="Select Subject"
+          name="subject"
+          className="tiro-bangla-text"
+          options={subjectOptions}
+          rules={{ required: "Subject is required" }}
         />
-        {selectedCycleId && (
-          <Dropdown
-            label="Select Subject"
-            name="subject"
-            options={
-              subjectOptions.length > 0
-                ? subjectOptions
-                : [{ label: "No subjects added yet", value: "" }]
-            }
-            rules={{ required: "Subject is required" }}
-          />
-        )}
         {selectedSubjectId && (
           <Dropdown
             label="Select Chapter"
             name="chapter"
+            className="tiro-bangla-text"
             options={
               chapterOptions.length > 0
                 ? chapterOptions
@@ -225,8 +187,8 @@ export default function ClassContentForm() {
           rules={{
             required: "Description is required",
             minLength: {
-              value: 4,
-              message: "Description must be at least 4 characters long.",
+              value: 3,
+              message: "Description must be at least 3 characters long",
             },
           }}
           textarea
@@ -244,7 +206,7 @@ export default function ClassContentForm() {
           <Input
             ref={fileInputRef}
             type="file"
-            accept=".jpg,.jpeg,.png,.webp"
+            accept="image/*"
             onChange={handleFileChange}
             required
             className="w-full border rounded-md h-10 dark:bg-gray-800 dark:text-white dark:border-gray-700"
@@ -267,7 +229,7 @@ export default function ClassContentForm() {
                 width="100%"
                 height="auto"
                 src={`https://www.youtube.com/embed/${videoId}`}
-                title={title}
+                title="YouTube video player"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
@@ -279,8 +241,8 @@ export default function ClassContentForm() {
             <div className="w-full mt-2">
               <iframe
                 src={videoId}
-                title={title}
                 width="100%"
+                title="Vimeo video player"
                 height="450"
                 frameBorder="0"
                 allow="autoplay; fullscreen; picture-in-picture"
@@ -293,10 +255,12 @@ export default function ClassContentForm() {
         <div className="md:col-span-2">
           <button
             type="submit"
-            disabled={isLoading}
-            className="w-full bg-blue-400 text-xs md:text-base text-white py-2 px-4 rounded-sm hover:rounded-3xl hover:bg-blue-700 transition flex justify-center items-center dark:bg-blue-500 dark:hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={isLoading || isSubmitting}
+            className="w-full bg-blue-400 text-sm md:text-base text-white py-2 px-4 rounded-sm hover:rounded-3xl hover:bg-blue-700 transition flex justify-center items-center dark:bg-blue-500 dark:hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isLoading ? "Uploading..." : "Upload a Class Content"}
+            {isLoading || isSubmitting
+              ? "Uploading..."
+              : "Upload a Class Content"}
             <FileVideo2 className="ms-2 h-4 md:h-5" />
           </button>
         </div>

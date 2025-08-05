@@ -32,8 +32,12 @@ const contactInfo = [
 
 const Footer = () => {
   return (
-    <footer className="w-full bg-gray-100 dark:bg-gray-800 ">
-      <div className="p-5 container px-5 sm:px-9 mx-auto flex justify-between gap-6 flex-col md:flex-row flex-wrap w-full ">
+    <footer
+      className="w-full  text-white" 
+      
+    >
+      <div className="p-10  flex justify-between gap-6 flex-col md:flex-row flex-wrap w-full backdrop-blur-sm bg-black/85 ">
+        {/* Left: Logo & Description */}
         <div className="w-full sm:w-[30%]">
           <Image
             src="/logo.png"
@@ -41,22 +45,23 @@ const Footer = () => {
             height={32}
             alt="Apars Classroom Logo"
           />
-          <p className="mt-4 text-sm dark:text-slate-500 text-[#333333] cursor-pointer transition-all duration-300 ease-in-out">
+          <p className="mt-4 text-sm dark:text-slate-300 ">
             Apar&apos;s Classroom is committed to revolutionizing education
             through innovative learning solutions and expert guidance. Join us
             in building a brighter future for learners around the world.
           </p>
         </div>
 
+        {/* Middle: Quick Links */}
         <div className="w-full sm:w-[25%]">
-          <h3 className="text-[1.2rem] dark:text-[#abc2d3] font-semibold text-[#424242] mb-2">
+          <h3 className="text-[1.2rem]  font-semibold   mb-2">
             Quick Links
           </h3>
           <ul className="flex flex-col gap-3">
             {quickLinks.map((link, index) => (
               <li
                 key={index}
-                className="text-base dark:text-slate-500 text-[#333333] hover:text-[#1A73E8] dark:hover:text-[#1A73E8] cursor-pointer transition-all duration-300 ease-in-out"
+                className="text-base  hover:text-[#1A73E8] cursor-pointer transition-all duration-300"
               >
                 <a href={link.url}>{link.name}</a>
               </li>
@@ -64,21 +69,22 @@ const Footer = () => {
           </ul>
         </div>
 
+        {/* Right: Contact Info */}
         <div className="w-full sm:w-[25%]">
-          <h3 className="text-[1.2rem] dark:text-[#abc2d3] font-semibold text-[#424242] mb-2">
+          <h3 className="text-[1.2rem] font-semibold   mb-2">
             Contact Us
           </h3>
-          <div className="flex flex-col gap-3 text-[#424242] dark:text-slate-400">
+          <div className="flex flex-col gap-3   dark:text-slate-300">
             {contactInfo.map((contact, index) => (
               <div
                 key={index}
-                className="flex items-center gap-2 text-base text-[#333333] dark:text-slate-500 hover:text-[#1A73E8] transition-all duration-300 ease-in-out cursor-pointer"
+                className="flex items-center gap-2 text-base hover:text-[#1A73E8] transition-all duration-300 cursor-pointer"
               >
-                <span className="flex-shrink-0">{contact.icon}</span>
+                <span>{contact.icon}</span>
                 {contact.url ? (
                   <a
                     href={contact.url}
-                    className="hover:text-[#1A73E8] transition-all duration-300 ease-in-out break-all"
+                    className="break-all hover:text-[#1A73E8]"
                   >
                     {contact.text}
                   </a>
@@ -89,7 +95,10 @@ const Footer = () => {
             ))}
           </div>
         </div>
+
+        {/* Bottom: Copyright */}
         <Copyright />
+
       </div>
     </footer>
   );

@@ -1,12 +1,11 @@
 {
-	"$schema": "https://unpkg.com/jsrepo@2.0.4/schemas/project-config.json",
-	"repos": [
-		"https://reactbits.dev/tailwind"
-	],
-	"includeTests": false,
-	"watermark": true,
-	"configFiles": {},
-	"paths": {
-		"*": "./src/components/blocks"
-	}
+  "$schema": "https://unpkg.com/jsrepo@2.0.2/schemas/project-config.json",
+  "repos": ["https://reactbits.dev/tailwind"],
+  "includeTests": false,
+  "watermark": true,
+  "formatter": "prettier",
+  "configFiles": {},
+  "paths": {
+    "*": "./src/blocks"
+  }
 }

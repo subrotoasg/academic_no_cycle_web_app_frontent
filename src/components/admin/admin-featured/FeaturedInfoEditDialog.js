@@ -182,7 +182,7 @@ export default function FeaturedInfoEditDialog({
                 id="image-upload"
                 name="image"
                 type="file"
-                accept=".jpg,.jpeg,.png,.webp"
+                accept="image/*"
                 ref={fileInputRef}
                 onChange={handleFileChange}
                 className="w-full p-2 mt-2 border rounded-md"

@@ -23,7 +23,7 @@ const NoticeCarousel = ({ notices }) => {
             </p>
             <div className="w-full h-60 sm:h-72 md:h-96 lg:h-[500px] xl:h-[600px] bg-black flex items-center justify-center rounded-2xl overflow-hidden">
               <Image
-                src={notice?.image}
+                src={notice.image}
                 alt={`Notice ${index + 1}`}
                 width={800}
                 height={600}

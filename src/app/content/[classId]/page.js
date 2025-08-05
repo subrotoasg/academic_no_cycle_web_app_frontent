@@ -3,7 +3,7 @@
 import Loading from "@/components/admin/utilities/Loading";
 import Comments from "@/components/video/Comments";
 import VideoHolder from "@/components/video/VideoHolder";
-import { useGetCycleClassContentByClassIdQuery } from "@/redux/services/cycleClassContentApi";
+import { useGetClassContentByClassIdQuery } from "@/redux/services/contentsApi";
 import { useParams, useSearchParams } from "next/navigation";
 import React from "react";
 
@@ -18,7 +18,7 @@ const Videos = () => {
     data: classContentData,
     isLoading,
     error,
-  } = useGetCycleClassContentByClassIdQuery(classId);
+  } = useGetClassContentByClassIdQuery(classId);
 
   if (isLoading) {
     return (
@@ -30,12 +30,12 @@ const Videos = () => {
   if (error) {
     return (
       <div className="text-center text-red-500 mt-26">
-        Failed to load Vidoes. Please try again later.
+        Failed to load class content. Please try again later.
       </div>
     );
   }
-  const classContent = classContentData?.data;
 
+  const classContent = classContentData?.data;
   return (
     <div className="p-2 mt-20">
       {classContentData?.data.length === 0 ? (

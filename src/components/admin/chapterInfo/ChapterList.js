@@ -6,14 +6,14 @@ import PaginationControls from "../utilities/PaginationControls";
 import Swal from "sweetalert2";
 import Loading from "../utilities/Loading";
 import { useSelector } from "react-redux";
-import { selectCourse } from "@/redux/Features/courseInfo";
+// import { selectCourse } from "@/redux/Features/courseInfo";
 
 import { ChapterTable } from "./ChapterTable";
-import {
-  useDeleteCycleSubjectChapterMutation,
-  useGetCycleSubjectChaptersQuery,
-} from "@/redux/services/chapterAPi";
 import ChapterInfoEditDialog from "./ChapterInfoEditDialog";
+import {
+  useDeleteCourseSubjectChapterMutation,
+  useGetCourseSubjectChaptersQuery,
+} from "@/redux/services/chapterAPi";
 
 export function ChapterList() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -21,11 +21,13 @@ export function ChapterList() {
   const [limit, setLimit] = useState(5);
 
   const [selectedChapter, setSelectedChapter] = useState(null);
+  const [ChapterInfoModalOpen, setChapterInfoModalOpen] = useState(false);
   const [ChapterEditModalOpen, setChapterEditModalOpen] = useState(false);
 
-  const course = useSelector(selectCourse);
-  const courseId = course?.id;
-  const { data, isError, isLoading } = useGetCycleSubjectChaptersQuery({
+  // const course = useSelector(selectCourse);
+  // const courseId = course?.id;
+  const courseId = "a220ea44-dfb4-4d4d-a073-50f6bd7d6669";
+  const { data, isError, isLoading } = useGetCourseSubjectChaptersQuery({
     page,
     limit,
     searchTerm: searchQuery,
@@ -47,10 +49,13 @@ export function ChapterList() {
 
     setChapterEditModalOpen(true);
   };
-  const [deleteCycleSubjectChapter] = useDeleteCycleSubjectChapterMutation();
+  const handleChapterInfoModal = (Chapter) => {
+    setSelectedChapter(Chapter);
+    setChapterInfoModalOpen(true);
+  };
+  const [deleteCourseSubjectChapter] = useDeleteCourseSubjectChapterMutation();
 
   const handleChapterDelete = async (Chapter) => {
-    console.log("Chapter", Chapter);
     const result = await Swal.fire({
       title: "Are you sure?",
       text: `You're about to delete the Chapter titled "${Chapter?.chapter?.chapterName}". This action cannot be undone.`,
@@ -63,7 +68,7 @@ export function ChapterList() {
 
     if (result.isConfirmed) {
       try {
-        await deleteCycleSubjectChapter(Chapter.id).unwrap();
+        const res = await deleteCourseSubjectChapter(Chapter.id).unwrap();
 
         Swal.fire({
           title: "Deleted!",
@@ -92,13 +97,13 @@ export function ChapterList() {
 
   return (
     <div className="w-full p-2 md:p-4 bg-white dark:bg-gray-900 shadow-xl rounded-xl space-y-3 mt-3">
-      <h2 className="text-xl md:text-3xl font-bold text-center text-gray-800 dark:text-white pt-5">
-        {" "}
-        Chapter List {course?.title}
-      </h2>
+      <h1 className="text-xl md:text-3xl font-semibold text-center mb-6">
+        Chapter List
+        {/* {course?.title} */}
+      </h1>
 
       <p className="text-xs md:text-sm text-muted-foreground text-center mt-2">
-        Manage the uploaded Chapter
+        Browse, edit, or delete the uploaded Chapter
       </p>
 
       <div className="p-2">
@@ -117,6 +122,7 @@ export function ChapterList() {
             Chapters={sortedChapter}
             handleDelete={handleChapterDelete}
             handlechapterEditModal={handleChapterEditModal}
+            handleChapterInfoModal={handleChapterInfoModal}
           />
 
           <PaginationControls

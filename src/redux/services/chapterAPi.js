@@ -13,21 +13,21 @@ const chapterApiServices = baseApi.injectEndpoints({
       providesTags: [tagTypesValue.CHAPTER],
     }),
 
-    // Get Chapters by CycleSubject ID
-    getChaptersByCycleSubjectId: builder.query({
-      query: (cycleSubjectId) => ({
-        url: `/cycle/subject/chapter/chapters/${cycleSubjectId}`,
+    // Get Chapters by CourseSubject ID
+    getChaptersByCourseSubjectId: builder.query({
+      query: (courseSubjectId) => ({
+        url: `/course/subject/chapter/course-subject/${courseSubjectId}`,
         method: "GET",
       }),
       providesTags: [tagTypesValue.CHAPTER],
     }),
-
-    // Get Cycle Subject Chapters by Course ID
-    getCycleSubjectChapters: builder.query({
+    // Get Course Subject Chapters by Course ID
+    getCourseSubjectChapters: builder.query({
       query: (queryParams) => {
+        const { courseId, ...params } = queryParams;
         const url = quearyUrlGenerator(
-          `/cycle/subject/chapter/all/${queryParams.courseId}`,
-          queryParams
+          `/course/subject/chapter/all/${courseId}`,
+          params
         );
         return {
           url,
@@ -37,34 +37,37 @@ const chapterApiServices = baseApi.injectEndpoints({
       providesTags: [tagTypesValue.CHAPTER],
     }),
 
-    // Update Cycle Subject Chapter by Subject ID
-    updateCycleSubjectChapter: builder.mutation({
+    // Update Course Subject Chapter by Subject ID
+    updateCourseSubjectChapter: builder.mutation({
       query: ({ id, formData }) => ({
-        url: `/cycle/subject/chapter/${id}`,
+        url: `/course/subject/chapter/${id}`,
         method: "PATCH",
         body: formData,
-        formData: true,
+        formData: true, 
       }),
       invalidatesTags: [tagTypesValue.CHAPTER],
     }),
+    
 
     // Delete Course Subject Chapter by Chapter ID
-    deleteCycleSubjectChapter: builder.mutation({
+    deleteCourseSubjectChapter: builder.mutation({
       query: (chapterId) => ({
-        url: `/cycle/subject/chapter/${chapterId}`,
+        url: `/course/subject/chapter/${chapterId}`,
         method: "DELETE",
       }),
       invalidatesTags: [tagTypesValue.CHAPTER],
     }),
+
   }),
 });
 
 export const {
   useGetChaptersBySubjectIdQuery,
-  useGetChaptersByCycleSubjectIdQuery,
-  useGetCycleSubjectChaptersQuery,
-  useUpdateCycleSubjectChapterMutation,
-  useDeleteCycleSubjectChapterMutation,
+  useGetChaptersByCourseSubjectIdQuery,
+  useGetCourseSubjectChaptersQuery,
+  useUpdateCourseSubjectChapterMutation,
+  useDeleteCourseSubjectChapterMutation,
+
 } = chapterApiServices;
 
 export default chapterApiServices;

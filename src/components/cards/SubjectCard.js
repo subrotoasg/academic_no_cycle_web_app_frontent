@@ -1,35 +1,61 @@
-import Image from "next/image";
-import Link from "next/link";
-import { BackgroundGradient } from "../ui/background-gradient";
+"use client";
 
-const SubjectCard = ({ cycleSubject }) => {
+import React from "react";
+import Link from "next/link";
+import Image from "next/image";
+import Card from "@mui/material/Card";
+import CardMedia from "@mui/material/CardMedia";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import CardActionArea from "@mui/material/CardActionArea";
+
+const SubjectCard = ({ courseSubject }) => {
+  const imageUrl =
+    courseSubject?.courseSubjectImage ||
+    courseSubject?.subject?.subjectImage ||
+    "/placeholder-image.png";
+
+  const title = courseSubject?.subject?.title || "Untitled Subject";
+
   return (
-    <Link
-      href={{
-        pathname: `/subject/${cycleSubject?.id}`,
-        query: {
-          title: cycleSubject?.subject?.title,
+    <Card
+      sx={{
+        maxWidth: 345,
+        transition: "transform 0.3s",
+        "&:hover": {
+          transform: "scale(1.01)",
         },
       }}
-      className="group block"
+      data-aos="fade-up"
+      className="rounded-3xl"
     >
-      <div className="rounded-[22px]  p-2 bg-white dark:bg-zinc-900 transition-transform transform group-hover:scale-105 border">
-        {" "}
-        <Image
-          src={
-            cycleSubject?.cycleSubjectImage ||
-            cycleSubject?.subject?.subjectImage
-          }
-          alt="subject image"
-          height={400}
-          width={400}
-          className="object-fill w-full h-40 rounded-xl"
-        />
-        <p className="text-center pt-2 text-neutral-700 dark:text-neutral-300">
-          Title: {cycleSubject?.subject?.title}
-        </p>
-      </div>
-    </Link>
+      <Link
+        href={{
+          pathname: `/subject/${courseSubject?.id}`,
+          query: { title },
+        }}
+        passHref
+      >
+        <CardActionArea component="div" sx={{ height: "100%" }}>
+          <CardMedia
+            component="img"
+            height="180"
+            image={imageUrl}
+            alt={title}
+            sx={{
+              height: 160,
+              objectFit: "cover",
+              backgroundColor: "#f5f5f5",
+            }}
+          />
+          <CardContent>
+            <Typography gutterBottom variant="h6" component="div">
+              {title}
+            </Typography>
+          </CardContent>
+        </CardActionArea>
+      </Link>
+    </Card>
   );
 };
 

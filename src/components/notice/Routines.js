@@ -26,10 +26,10 @@ function Routines() {
   const lastRoutine = routine?.[routine.length - 1];
   // console.log(lastRoutine)
   return (
-    <div className=" pt-16 md:pt-20 px-4 md:my-12">
+    <div className="pt-16 md:pt-20 px-4 md:my-12">
       <div className="text-center my-6">
         <h2 className="text-2xl md:text-3xl font-bold text-center text-blue-500 my-4">
-          Schedule Class
+          Routine Schedule
         </h2>
         <p className="text-xs md:text-lg text-gray-600 dark:text-gray-300 mt-2">
           Stay organized with the latest class routines. Check the schedule to

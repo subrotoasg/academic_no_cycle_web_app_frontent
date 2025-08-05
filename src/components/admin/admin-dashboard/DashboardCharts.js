@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import React from "react";
 import {
   PieChart,
@@ -14,10 +15,11 @@ import {
   CartesianGrid,
   ResponsiveContainer,
 } from "recharts";
+import StatsCard from "../utilities/StatsCard";
 
-const COLORS = ["#454706", "#0f2b44", "#0c453a", "#401206"];
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#AF19FF"];
 
-const DashboardCharts = ({ stats }) => {
+const DashboardCharts = ({ stats, statsData }) => {
   const Data = [
     // { name: "Students", value: stats.students },
     { name: "Admins", value: stats.admins },
@@ -40,9 +42,9 @@ const DashboardCharts = ({ stats }) => {
     <div className="gap-2 md:gap-6 mt-10">
       <div
         className="bg-white dark:bg-gray-800 rounded-2xl p-2 md:p-4 shadow-md"
-        data-aos="fade-up"
+        data-aos="fade-right"
       >
-        <h2 className="text-base md:text-xl font-bold text-gray-950 dark:text-white text-center mb-4">
+        <h2 className="text-base md:text-xl font-bold text-center text-gray-800 dark:text-white py-3">
           Course Operational Stats Overview
         </h2>
         <ResponsiveContainer width="95%" height={350}>
@@ -57,10 +59,26 @@ const DashboardCharts = ({ stats }) => {
         </ResponsiveContainer>
       </div>
       <div
-        className="bg-blue-100 dark:bg-white rounded-2xl mt-3 p-2 md:p-4 shadow-md"
+        className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 p-3 mt-6"
+        data-aos="fade-up"
+      >
+        {statsData.map((data, index) => (
+          <Link key={index} href={data.link}>
+            <StatsCard
+              key={index}
+              title={data.title}
+              value={data.value}
+              icon={data.icon}
+              subtitle={data.subtitle}
+            />
+          </Link>
+        ))}
+      </div>
+      <div
+        className="bg-gray-200 dark:bg-gray-800 rounded-2xl mt-3 p-2 md:p-4 shadow-md"
         data-aos="fade-down"
       >
-        <h2 className="text-base md:text-xl text-black  dark:text-gray-950 font-bold text-center mb-4 py-3">
+        <h2 className="text-base md:text-xl font-bold text-center text-gray-800 dark:text-white py-3">
           Platform Insights
         </h2>
         <ResponsiveContainer width="100%" height={300}>

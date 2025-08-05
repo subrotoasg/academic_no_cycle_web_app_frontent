@@ -1,29 +1,18 @@
 "use client";
+
 import Image from "next/image";
 import { useEffect, useState, useMemo } from "react";
+import liveImage from "../../../public/liveClass.jpg";
 
 const classInfo = {
   title: "Physics Vector-2",
   teacherName: "Numeri Sattar Apar",
 };
 
+const startTime = new Date(2025, 5, 18, 14, 30, 0);
 const LiveSection = () => {
   const { title, teacherName } = classInfo;
 
-  // const startTime = useMemo(() => {
-  //   const now = new Date();
-  //   return new Date(
-  //     now.getFullYear(),
-  //     now.getMonth(),
-  //     now.getDate(),
-  //     23,
-  //     12,
-  //     0
-  //   );
-  // }, []);
-  const [startTime] = useState(() => {
-    return new Date(2025, 5, 18, 14, 30, 0);
-  });
   const [isLive, setIsLive] = useState(() => new Date() >= startTime);
 
   const [remainingTime, setRemainingTime] = useState({
@@ -37,7 +26,6 @@ const LiveSection = () => {
 
   useEffect(() => {
     if (isLive) {
-      setRemainingTime({ days: 12, hours: 16, minutes: 20, seconds: 0 });
       return;
     }
 
@@ -53,14 +41,14 @@ const LiveSection = () => {
           seconds: Math.floor((difference / 1000) % 60),
         });
       } else {
-        setRemainingTime({ days: 0, hours: 0, minutes: 0, seconds: 0 });
         setIsLive(true);
+        setRemainingTime({ days: 0, hours: 0, minutes: 0, seconds: 0 });
         clearInterval(interval);
       }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [startTime, isLive]);
+  }, [isLive]);
 
   return (
     <div className="container mx-auto pt-15">
@@ -75,21 +63,21 @@ const LiveSection = () => {
           <div className="grid grid-cols-4 gap-4 md:gap-8 p-4 max-w-sm">
             {/* Days */}
             <div className="text-center">
-              <div className="text-[2.2rem] leading-[38px] font-bold text-[#578CEF]">
+              <div className="text-[2.2rem] leading-[38px] font-bold text-[#17b4d3]">
                 {formatNumber(remainingTime.days)}
               </div>
               <div className="text-[0.7rem] uppercase text-gray-500">Days</div>
             </div>
             {/* Hours */}
             <div className="text-center">
-              <div className="text-[2.2rem] leading-[38px] font-bold text-[#578CEF]">
+              <div className="text-[2.2rem] leading-[38px] font-bold text-[#17b4d3]">
                 {formatNumber(remainingTime.hours)}
               </div>
               <div className="text-[0.7rem] uppercase text-gray-500">Hours</div>
             </div>
             {/* Minutes */}
             <div className="text-center">
-              <div className="text-[2.2rem] leading-[38px] font-bold text-[#578CEF]">
+              <div className="text-[2.2rem] leading-[38px] font-bold text-[#17b4d3]">
                 {formatNumber(remainingTime.minutes)}
               </div>
               <div className="text-[0.7rem] uppercase text-gray-500">
@@ -98,7 +86,7 @@ const LiveSection = () => {
             </div>
             {/* Seconds */}
             <div className="text-center">
-              <div className="text-[2.2rem] leading-[38px] font-bold text-[#578CEF]">
+              <div className="text-[2.2rem] leading-[38px] font-bold text-[#17b4d3]">
                 {formatNumber(remainingTime.seconds)}
               </div>
               <div className="text-[0.7rem] uppercase text-gray-500">
@@ -122,7 +110,7 @@ const LiveSection = () => {
           )}
 
           <Image
-            src="https://fai-cg.b-cdn.net/file-1747736732757-893267524.jpg"
+            src={liveImage}
             alt="Class Thumbnail"
             layout="responsive"
             width={1000}

@@ -1,4 +1,4 @@
-'use client'; 
+"use client";
 
 import React, { useEffect, useState } from "react";
 
@@ -23,7 +23,7 @@ function Comments() {
         src={data.facebookComments.src}
         className="w-full rounded-xl"
         style={{
-          minHeight: "1200px", 
+          minHeight: "1200px",
           maxHeight: "1500px",
           width: "100%",
           border: "none",

@@ -10,13 +10,13 @@ export default function CourseCard({ course }) {
   return (
     <Link
       href={{
-        pathname: `/cycles/${course?.id}`,
-        query: { title: course?.productFullName },
+        pathname: `/course/${course?.id}`,
+        query: { title: course?.productName },
       }}
     >
       <Card
         sx={{ maxWidth: 345, height: 350 }}
-        className="transition-transform duration-400 hover:shadow-lg hover:scale-[1.05] rounded-4xl flex flex-col justify-between"
+        className="transition-transform duration-400 hover:shadow-lg hover:scale-[1.01] rounded-4xl flex flex-col justify-between"
       >
         <CardMedia
           sx={{ height: 160, objectFit: "contain" }}
