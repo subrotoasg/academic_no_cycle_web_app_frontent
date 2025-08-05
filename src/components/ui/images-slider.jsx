@@ -10,7 +10,7 @@ export const ImagesSlider = ({
   overlayClassName,
   className,
   autoplay = true,
-  direction = "down"
+  direction = "up",
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -18,12 +18,14 @@ export const ImagesSlider = ({
 
   const handleNext = () => {
     setCurrentIndex((prevIndex) =>
-      prevIndex + 1 === images.length ? 0 : prevIndex + 1);
+      prevIndex + 1 === images.length ? 0 : prevIndex + 1
+    );
   };
 
   const handlePrevious = () => {
     setCurrentIndex((prevIndex) =>
-      prevIndex - 1 < 0 ? images.length - 1 : prevIndex - 1);
+      prevIndex - 1 < 0 ? images.length - 1 : prevIndex - 1
+    );
   };
 
   useEffect(() => {
@@ -75,35 +77,29 @@ export const ImagesSlider = ({
 
   const slideVariants = {
     initial: {
-      scale: 0,
       opacity: 0,
-      rotateX: 45,
+      y: direction === "up" ? 50 : -50, // use prop to determine direction
+      scale: 0.95,
     },
-    visible: {
+    animate: {
+      opacity: 1,
+      y: 0,
       scale: 1,
-      rotateX: 0,
-      opacity: 1,
       transition: {
-        duration: 0.5,
-        ease: [0.645, 0.045, 0.355, 1.0],
+        duration: 0.6,
+        ease: "easeInOut",
       },
     },
-    upExit: {
-      opacity: 1,
-      y: "-150%",
+    exit: {
+      opacity: 0,
+      y: direction === "up" ? -50 : 50,
+      scale: 0.95,
       transition: {
-        duration: 1,
-      },
-    },
-    downExit: {
-      opacity: 1,
-      y: "150%",
-      transition: {
-        duration: 1,
+        duration: 0.6,
+        ease: "easeInOut",
       },
     },
   };
-
   const areImagesLoaded = loadedImages.length > 0;
 
   return (
@@ -114,21 +110,30 @@ export const ImagesSlider = ({
       )}
       style={{
         perspective: "1000px",
-      }}>
+      }}
+    >
       {areImagesLoaded && children}
       {areImagesLoaded && overlay && (
-        <div className={cn("absolute inset-0 bg-black/60 z-40", overlayClassName)} />
+        <div
+          className={cn("absolute inset-0 bg-black/60 z-40", overlayClassName)}
+        />
       )}
       {areImagesLoaded && (
-        <AnimatePresence>
-          <motion.img
+        <AnimatePresence mode="wait">
+          <motion.div
             key={currentIndex}
-            src={loadedImages[currentIndex]}
+            className="absolute inset-0 h-full w-full"
             initial="initial"
-            animate="visible"
-            exit={direction === "up" ? "upExit" : "downExit"}
+            animate="animate"
+            exit="exit"
             variants={slideVariants}
-            className="image h-full w-full absolute inset-0 object-cover object-center" />
+          >
+            <img
+              src={loadedImages[currentIndex]}
+              className="h-full w-full object-cover object-center pointer-events-none"
+              alt={`Slide ${currentIndex}`}
+            />
+          </motion.div>
         </AnimatePresence>
       )}
     </div>

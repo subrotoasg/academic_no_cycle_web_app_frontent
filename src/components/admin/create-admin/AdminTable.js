@@ -27,9 +27,9 @@ const AdminTable = ({ admins }) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {admins.map((admin) => {
+          {admins.map((admin, index) => {
             return (
-              <TableRow key={admin.admin.id}>
+              <TableRow key={index}>
                 <TableCell className="px-2 py-2 border text-sm md:text-base capitalize">
                   {admin.admin.name}
                 </TableCell>

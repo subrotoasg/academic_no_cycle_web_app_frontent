@@ -11,7 +11,6 @@ function AdminFeatured() {
   const handleToggle = (e) => {
     setShowUploader(e.target.checked);
   };
-
   return (
     <div className="w-full p-4">
       <Switch
@@ -22,7 +21,6 @@ function AdminFeatured() {
       />
 
       {showUploader && <FeatureUploader />}
-
       <FeaturedList />
     </div>
   );

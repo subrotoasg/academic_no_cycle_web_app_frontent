@@ -42,10 +42,9 @@ const adminApiServices = baseApi.injectEndpoints({
     // Get Admins by Course ID
     getAdminsByCourseId: builder.query({
       query: (queryParams) => {
-        const { courseId, ...query } = queryParams;
-        const url = pathUrlGenerator(
-          `/supadmn/course-admin/${courseId}`,
-          query
+        const url = quearyUrlGenerator(
+          `/supadmn/course-admin/${queryParams.courseId}`,
+          queryParams
         );
         return {
           url,

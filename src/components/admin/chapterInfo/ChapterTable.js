@@ -23,9 +23,6 @@ export function ChapterTable({
         <TableHeader>
           <TableRow>
             <TableHead className="text-center text-sm md:text-base border">
-              Cycle Title
-            </TableHead>
-            <TableHead className="text-center text-sm md:text-base border">
               Subject Title
             </TableHead>
             <TableHead className="text-center text-sm md:text-base border">
@@ -48,10 +45,7 @@ export function ChapterTable({
             Chapters.map((chapter) => (
               <TableRow key={chapter?.id}>
                 <TableCell className="text-center border">
-                  {chapter?.cycleSubject?.cycle?.title || "N/A"}
-                </TableCell>
-                <TableCell className="text-center border">
-                  {chapter?.cycleSubject?.subject?.title || "N/A"}
+                  {chapter?.courseSubject?.subject?.title || "N/A"}
                 </TableCell>
                 <TableCell className="text-center border">
                   {chapter?.chapter?.chapterName || "N/A"}
@@ -59,7 +53,7 @@ export function ChapterTable({
                 <TableCell className="text-center border">
                   <Image
                     src={
-                      chapter?.cycleSubjectChapterImage ||
+                      chapter?.courseSubjectChapterImage ||
                       chapter?.chapter?.chapterImage
                     }
                     alt={chapter?.chapter?.chapterName || "Chapter Image"}

@@ -7,43 +7,35 @@ import Link from "next/link";
 import { GiBrightExplosion } from "react-icons/gi";
 
 export function HeroSection() {
+  // const images = ["/buet.jpg", "/kuet.jpg", "/ruet.jpg", "/cuet.jpg"];
   const images = [
+    "/img/ac1.webp",
     "/img/ac3.jpeg",
     "/img/ac4.webp",
-    "/img/ac1.webp",
     "/img/ac2.webp",
   ];
 
   return (
     <div className="w-full overflow-hidden relative">
+      {" "}
       <ImagesSlider
         className="relative h-[20rem] md:h-[40rem] w-[95vw] md:w-full  max-w-screen-xl mx-auto overflow-hidden rounded-xl"
         images={images}
       >
         <motion.div
+          style={{ willChange: "transform", backfaceVisibility: "hidden" }}
           initial={{ opacity: 0, y: -80 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="z-50 flex flex-col justify-center items-center bg-black/40 p-2 rounded-lg max-w-[90vw] text-center"
         >
           <motion.p className="font-bold  md:text-4xl lg:text-6xl text-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 md:py-4 mb-2 break-words">
-            Empowering Students to Excel in Academic Exams and Master the
-            Curriculum
+            Guiding Students Toward Success in University Admission Exams
           </motion.p>
 
           <button
-            className="px-4 py-1 md:px-4 md:py-2 backdrop-blur-sm border   bg-emerald-300/10 
-    border-emerald-500/20 
-    text-white 
-    rounded-full 
-    relative 
-   md:mt-4 
-    hover:shadow-lg 
-    hover:bg-emerald-500/20 
-    hover:border-emerald-500/30 
-    transition 
-    duration-300 
-    hover:scale-105 "
+            className="px-4 py-1 md:px-4 md:py-2 backdrop-blur-sm border bg-emerald-300/10 border-emerald-500/20 text-white rounded-full relative md:mt-4 
+  hover:shadow-lg hover:bg-emerald-500/20 hover:border-emerald-500/30 transition duration-300 hover:scale-105 "
           >
             <Link
               target="_blank"

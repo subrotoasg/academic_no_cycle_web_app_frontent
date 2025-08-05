@@ -8,7 +8,7 @@ import NoticeDetailsDialog from "./NoticeDetailsDialog";
 import Swal from "sweetalert2";
 import Loading from "../utilities/Loading";
 import { useSelector } from "react-redux";
-import { selectCourse } from "@/redux/Features/courseInfo";
+// import { selectCourse } from "@/redux/Features/courseInfo";
 import {
   useDeleteNoticeRoutineMutation,
   useGetNoticeRoutinesByCourseIdQuery,
@@ -23,8 +23,9 @@ export function NoticeList() {
   const [noticeInfoModalOpen, setNoticeInfoModalOpen] = useState(false);
   const [noticeEditModalOpen, setNoticeEditModalOpen] = useState(false);
 
-  const course = useSelector(selectCourse);
-  const courseId = course?.id;
+  // const course = useSelector(selectCourse);
+  // const courseId = course?.id;
+  const courseId = "a220ea44-dfb4-4d4d-a073-50f6bd7d6669";
   const {
     data,
     isLoading,
@@ -45,6 +46,7 @@ export function NoticeList() {
   useEffect(() => {
     setPage(1);
   }, [searchQuery]);
+
   const sortedNotices = useMemo(() => {
     return noticesData;
   }, [noticesData]);
@@ -95,18 +97,19 @@ export function NoticeList() {
   if (isError)
     return (
       <div className="text-center text-red-500">
-        Failed to load Notice listings.
+        Failed to load notice listings.
       </div>
     );
 
   return (
     <div className="w-full p-2 md:p-4 bg-white dark:bg-gray-900 shadow-xl rounded-xl space-y-3 mt-3">
-      <h2 className="text-xl md:text-3xl font-bold text-center text-gray-800 dark:text-white pt-5">
-        Notice & Routine for {course?.title}
-      </h2>
+      <h1 className="text-xl md:text-3xl font-semibold text-center mb-6">
+        Notice & Routine for
+        {/* {course?.title} */}
+      </h1>
 
       <p className="text-xs md:text-sm text-muted-foreground text-center mt-2">
-        Manage the uploaded notices and routines.
+        Browse, edit, or delete the uploaded notices and routines.
       </p>
 
       <div className="p-2">

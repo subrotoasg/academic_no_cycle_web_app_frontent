@@ -1,11 +1,12 @@
-"use client"
-import { useState, useEffect, useRef } from "react"
-import Image from "next/image"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { useTheme } from "next-themes"
-import { useSelector } from "react-redux"
-import { Button } from "@/components/ui/button"
+"use client";
+
+import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useTheme } from "next-themes";
+import { useSelector } from "react-redux";
+import { Button } from "@/components/ui/button";
 import {
   FaFacebook,
   FaYoutube,
@@ -13,12 +14,13 @@ import {
   FaHome,
   FaUser,
   FaRegMoon,
-} from "react-icons/fa"
-import { GoSun } from "react-icons/go"
-import { GrSchedule, GrUserAdmin } from "react-icons/gr"
-import { Menu, X } from "lucide-react"
-import { currentUser } from "@/redux/Features/authentication"
-import { SiGoogleclassroom } from "react-icons/si"
+} from "react-icons/fa";
+import { GoSun } from "react-icons/go";
+import { GrSchedule } from "react-icons/gr";
+import { Menu, X } from "lucide-react";
+import { currentUser } from "@/redux/Features/authentication";
+import { SiGoogleclassroom } from "react-icons/si";
+import { BiSolidDashboard } from "react-icons/bi";
 
 const NAV_ITEMS = [
   {
@@ -36,50 +38,48 @@ const NAV_ITEMS = [
     url: "https://www.messenger.com/login.php?next=https%3A%2F%2Fwww.messenger.com%2Ft%2F103533265542288%2F",
     icon: <FaFacebookMessenger size={18} />,
   },
-]
+];
 
 export default function Navbar() {
-  const [mounted, setMounted] = useState(false)
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const { theme, setTheme } = useTheme()
-  const pathname = usePathname()
-  const user = useSelector(currentUser)
-  const menuRef = useRef(null)
-  const toggleButtonRef = useRef(null)
+  const [mounted, setMounted] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { theme, setTheme } = useTheme();
+  const pathname = usePathname();
+  const user = useSelector(currentUser);
+  const menuRef = useRef(null);
+  const toggleRef = useRef(null);
 
   useEffect(() => {
-    setMounted(true)
+    setMounted(true);
 
-    // Close menu when clicking outside
     const handleClickOutside = (event) => {
       if (
         menuRef.current &&
         !menuRef.current.contains(event.target) &&
-        toggleButtonRef.current &&
-        !toggleButtonRef.current.contains(event.target)
+        toggleRef.current &&
+        !toggleRef.current.contains(event.target)
       ) {
-        setIsMenuOpen(false)
+        setIsMenuOpen(false);
       }
-    }
+    };
 
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [])
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
-  // Close menu when route changes
   useEffect(() => {
-    setIsMenuOpen(false)
-  }, [pathname])
+    setIsMenuOpen(false);
+  }, [pathname]);
 
-  if (pathname.startsWith("/admin")) return null
+  if (pathname.startsWith("/admin")) return null;
 
   const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark")
-  }
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
 
   const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen)
-  }
+    setIsMenuOpen((prev) => !prev);
+  };
 
   const isActive = (href) => {
     if (href === "/myclass") {
@@ -87,68 +87,72 @@ export default function Navbar() {
         pathname === "/myclass" ||
         pathname.startsWith("/content/") ||
         pathname.startsWith("/subject/") ||
-        pathname.startsWith("/classes/") ||
-        pathname.startsWith("/cycles/")
-      )
+        pathname.startsWith("/classes/")
+      );
     }
-    return pathname === href
-  }
+    return pathname === href;
+  };
+  const NavItem = ({ href, icon, label, isMobile }) => {
+    const active = isActive(href);
+    const baseClass = `flex items-center gap-2 px-3 py-2 rounded-md transition  duration-300 ease-in-out hover:bg-accent hover:text-accent-foreground`;
+
+    return (
+      <Link
+        href={href}
+        className={`${baseClass} ${
+          active ? "text-white bg-blue-500" : "text-foreground"
+        }`}
+      >
+        {icon}
+        {(isMobile || active) && <span>{label}</span>}
+      </Link>
+    );
+  };
 
   const NavLinks = ({ isMobile = false }) => (
-    <ul className={`flex ${isMobile ? "flex-col" : "flex-row"} gap-2`}>
+    <ul
+      className={`flex ${
+        isMobile ? "flex-col" : "flex-row"
+      } gap-2 md:items-center md:justify-center`}
+    >
       <li>
-        <Link
-          href="/"
-          className={`flex items-center gap-2 px-3 py-2 rounded-md transition hover:bg-accent hover:text-accent-foreground ${
-            isActive("/") ? "text-blue-800 font-bold" : "text-foreground"
-          }`}
-        >
-           Home
-        </Link>
+        <NavItem href="/" icon={<FaHome />} label="Home" isMobile={isMobile} />
       </li>
       <li>
-        <Link
+        <NavItem
           href="/myclass"
-          className={`flex items-center gap-2 px-3 py-2 rounded-md transition hover:bg-accent hover:text-accent-foreground ${
-            isActive("/myclass") ? "text-blue-800 font-bold" : "text-foreground"
-          }`}
-        >
-          My Classes
-        </Link>
+          icon={<SiGoogleclassroom />}
+          label="My Courses"
+          isMobile={isMobile}
+        />
       </li>
       <li>
-        <Link
+        <NavItem
           href="/routine"
-          className={`flex items-center gap-2 px-3 py-2 rounded-md transition hover:bg-accent hover:text-accent-foreground ${
-            isActive("/routine") ? "text-blue-800 font-bold" : "text-foreground"
-          }`}
-        >
-         Schedule
-        </Link>
+          icon={<GrSchedule />}
+          label="Routine"
+          isMobile={isMobile}
+        />
       </li>
 
       {user &&
         (user.role === "admin" ? (
           <li>
-            <Link
+            <NavItem
               href="/admin"
-              className={`flex items-center gap-2 px-3 py-2 rounded-md transition hover:bg-accent hover:text-accent-foreground ${
-                isActive("/admin") ? "text-blue-700" : "text-foreground"
-              }`}
-            >
-               Dashboard
-            </Link>
+              icon={<BiSolidDashboard />}
+              label="Admin Dashboard"
+              isMobile={isMobile}
+            />
           </li>
         ) : (
           <li>
-            <Link
+            <NavItem
               href="/profile"
-              className={`flex items-center gap-2 px-3 py-2 rounded-md transition hover:bg-accent hover:text-accent-foreground ${
-                isActive("/profile") ? "text-blue-800 font-bold" : "text-foreground"
-              }`}
-            >
-              <FaUser /> Profile
-            </Link>
+              icon={<FaUser />}
+              label="Profile"
+              isMobile={isMobile}
+            />
           </li>
         ))}
 
@@ -158,14 +162,15 @@ export default function Navbar() {
             href={item.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 px-3 py-2 text-foreground hover:text-blue-800 font-bold transition"
+            className="flex items-center gap-2 px-3 py-2 text-foreground hover:text-[#578EEB] transition"
           >
             {item.icon}
+            {isMobile && <span>{item.name}</span>}
           </Link>
         </li>
       ))}
     </ul>
-  )
+  );
 
   return (
     <nav className="fixed top-0 left-0 w-full z-50 border-b border-border bg-background shadow-sm">
@@ -175,12 +180,10 @@ export default function Navbar() {
           <Image src="/logo.png" width={180} height={60} alt="Logo" priority />
         </Link>
 
-        {/* Desktop Navigation */}
         <div className="hidden md:flex items-center space-x-4">
           <NavLinks />
         </div>
 
-        {/* Theme toggle + mobile menu button */}
         <div className="flex items-center gap-3">
           <Button
             onClick={toggleTheme}
@@ -189,20 +192,28 @@ export default function Navbar() {
             className="h-9 w-9"
             aria-label="Toggle theme"
           >
-            {mounted && (theme === "dark" ? <FaRegMoon size={18} /> : <GoSun size={20} />)}
+            {mounted &&
+              (theme === "dark" ? (
+                <FaRegMoon size={18} />
+              ) : (
+                <GoSun size={20} />
+              ))}
           </Button>
 
-          {/* Mobile menu toggle button */}
           <Button
-            ref={toggleButtonRef}
             onClick={toggleMenu}
+            ref={toggleRef}
             variant="ghost"
             size="icon"
             className="md:hidden h-9 w-9"
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={isMenuOpen}
           >
-            {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {isMenuOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
           </Button>
         </div>
       </div>
@@ -211,7 +222,9 @@ export default function Navbar() {
       <div
         ref={menuRef}
         className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-          isMenuOpen ? "max-h-[500px] opacity-100 border-b border-border" : "max-h-0 opacity-0"
+          isMenuOpen
+            ? "max-h-[500px] opacity-100 border-b border-border"
+            : "max-h-0 opacity-0"
         }`}
       >
         <div className="px-4 py-3 bg-background">
@@ -219,5 +232,5 @@ export default function Navbar() {
         </div>
       </div>
     </nav>
-  )
+  );
 }

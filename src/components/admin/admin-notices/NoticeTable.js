@@ -14,7 +14,6 @@ import Image from "next/image";
 
 export function NoticeTable({
   notices,
-
   handleDelete,
   handleNoticeEditModal,
   handleNoticeInfoModal,

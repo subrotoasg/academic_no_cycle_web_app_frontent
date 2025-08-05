@@ -1,28 +1,29 @@
-import { useEffect, useState, useRef } from "react";
-import { FormProvider, useForm, useWatch } from "react-hook-form";
-import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
+"use client";
+
 import {
   Dialog,
+  DialogTrigger,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+  DialogFooter,
 } from "@/components/ui/dialog";
-
-import { useUpdateCycleClassContentMutation } from "@/redux/services/cycleClassContentApi";
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import InputField from "@/components/form/InputField";
+import { useEffect, useRef, useState } from "react";
+import { useForm, FormProvider, useWatch } from "react-hook-form";
 import Dropdown from "@/components/form/Dropdown";
+import InputField from "@/components/form/InputField";
+import { toast } from "sonner";
 import Swal from "sweetalert2";
+import { useUpdateClassContentMutation } from "@/redux/services/contentsApi";
 
-const ContentInfoEditDialog = ({
-  selectedContent,
+export default function ContentInfoEditDialog({
   isOpen,
   onOpenChange,
+  selectedContent,
   refetchClassContents,
-}) => {
+}) {
   const types = [
     { label: "Free Teachimint", value: "Free" },
     { label: "Premium Teachimint", value: "Premium" },
@@ -30,29 +31,28 @@ const ContentInfoEditDialog = ({
     { label: "Premium Youtube", value: "premyt" },
   ];
   const methods = useForm();
-  const { handleSubmit, reset, control } = methods;
+
+  const { reset, handleSubmit, control } = methods;
 
   const videoType = useWatch({ control, name: "type" });
   const videoId = useWatch({ control, name: "videoId" });
   const [thumbnailPreview, setThumbnailPreview] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef(null);
-
-  const [updateCycleClassContent, { isLoading }] =
-    useUpdateCycleClassContentMutation();
+  const [updateClassContent, { isLoading }] = useUpdateClassContentMutation();
 
   useEffect(() => {
     if (selectedContent) {
       reset({
         courseTitle:
-          selectedContent?.cycleSubjectChapter?.cycleSubject?.cycle?.course
-            ?.title || "",
+          selectedContent?.courseSubjectChapter?.courseSubject?.course?.title ||
+          "",
         type: selectedContent?.hostingType || "",
         subject:
-          selectedContent?.cycleSubjectChapter?.cycleSubject?.subject?.title ||
-          "",
+          selectedContent?.courseSubjectChapter?.courseSubject?.subject
+            ?.title || "",
         chapter:
-          selectedContent?.cycleSubjectChapter?.chapter?.chapterName || "",
+          selectedContent?.courseSubjectChapter?.chapter?.chapterName || "",
         title: selectedContent?.classTitle || "",
         classNumber: selectedContent?.classNo || "",
         description: selectedContent?.description || "",
@@ -60,9 +60,6 @@ const ContentInfoEditDialog = ({
         practiceSheetId: selectedContent?.practiceSheet || "",
         solutionSheetId: selectedContent?.solutionSheet || "",
         videoId: selectedContent?.videoUrl || "",
-        cycle:
-          selectedContent?.cycleSubjectChapter?.cycleSubject?.cycle?.title ||
-          "",
       });
 
       setThumbnailPreview(selectedContent?.thumbneil || null);
@@ -79,7 +76,7 @@ const ContentInfoEditDialog = ({
     }
   };
 
-  const onSubmit = async (data) => {
+  const handleFormSubmit = async (data) => {
     const formData = new FormData();
 
     const contentInfo = {
@@ -99,8 +96,8 @@ const ContentInfoEditDialog = ({
     }
 
     try {
-      await updateCycleClassContent({
-        classId: selectedContent.id,
+      const res = await updateClassContent({
+        id: selectedContent.id,
         formData,
       }).unwrap();
 
@@ -119,23 +116,26 @@ const ContentInfoEditDialog = ({
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogTrigger asChild></DialogTrigger>
-      <DialogContent className="md:w-1/2 max-h-[90vh] overflow-y-auto">
+      <DialogContent className="w-7xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl text-center">
             Content Edit for{" "}
-            {selectedContent?.cycleSubjectChapter?.cycleSubject?.subject
-              ?.title || ""}
+            {
+              selectedContent?.courseSubjectChapter?.courseSubject?.subject
+                ?.title
+            }
           </DialogTitle>
         </DialogHeader>
 
         <FormProvider {...methods}>
           <form
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={handleSubmit(handleFormSubmit)}
             className="grid grid-cols-1 md:grid-cols-2 gap-2 p-4 rounded-lg"
           >
             <InputField label="Course Title" name="courseTitle" readOnly />
-            <InputField label="Cycle Title" name="cycle" readOnly />
+
             <InputField label="Subject Title" name="subject" readOnly />
+
             <InputField label="Chapter Name" name="chapter" readOnly />
 
             <Dropdown
@@ -161,7 +161,7 @@ const ContentInfoEditDialog = ({
                 required: "Class number is required.",
                 min: {
                   value: 1,
-                  message: "Chapter number must start from 1",
+                  message: "Chapter number must be start from 1",
                 },
               }}
               min={1}
@@ -203,7 +203,6 @@ const ContentInfoEditDialog = ({
               />
             </div>
 
-            {/* Video Preview */}
             <div className="md:col-span-2" id="video_thumb">
               {videoId &&
                 (videoType === "freeyt" || videoType === "premyt") && (
@@ -212,7 +211,8 @@ const ContentInfoEditDialog = ({
                       width="100%"
                       height="auto"
                       src={`https://www.youtube.com/embed/${videoId}`}
-                      title="Youtube video player"
+                      title="YouTube video player"
+                      frameBorder="0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
                       className="rounded-lg shadow-md"
@@ -223,9 +223,10 @@ const ContentInfoEditDialog = ({
                 <div className="w-full mt-2">
                   <iframe
                     src={videoId}
-                    title="Youtube video player"
+                    title="Vimeo video player"
                     width="100%"
                     height="450"
+                    frameBorder="0"
                     allow="autoplay; fullscreen; picture-in-picture"
                     allowFullScreen
                     className="rounded-lg shadow-md"
@@ -255,7 +256,7 @@ const ContentInfoEditDialog = ({
                 name="thumbnail"
                 type="file"
                 ref={fileInputRef}
-                accept=".jpg,.jpeg,.png,.webp"
+                accept="image/*"
                 onChange={handleFileChange}
                 className="w-full border rounded-md h-10 dark:bg-gray-800 dark:text-white dark:border-gray-700 p-2 mt-1"
               />
@@ -284,6 +285,4 @@ const ContentInfoEditDialog = ({
       </DialogContent>
     </Dialog>
   );
-};
-
-export default ContentInfoEditDialog;
+}

@@ -1,3 +1,4 @@
+import { tagTypesValue } from "../tagTypes";
 import baseApi from "./baseApi";
 
 const courseApiServices = baseApi.injectEndpoints({
@@ -15,9 +16,24 @@ const courseApiServices = baseApi.injectEndpoints({
         { type: "course", id: courseId },
       ],
     }),
+
+    getAllCourse: builder.query({
+      query: () => ({
+        url: `/course`,
+        method: "GET",
+      }),
+      providesTags: (result) =>
+        result?.data
+          ? result.data.map((course) => ({
+              type: tagTypesValue.COURSE,
+              id: course.id,
+            }))
+          : [{ type: tagTypesValue.COURSE, id: "LIST" }],
+    }),
   }),
 });
 
-export const { useGetCourseByIdQuery } = courseApiServices;
+export const { useGetCourseByIdQuery, useGetAllCourseQuery } =
+  courseApiServices;
 
 export default courseApiServices;

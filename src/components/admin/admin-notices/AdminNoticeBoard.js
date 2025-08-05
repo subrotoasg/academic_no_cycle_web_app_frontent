@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState } from "react";
 import { NoticeUploader } from "./NoticeUploader";
 import { NoticeList } from "./NoticeList";
@@ -21,7 +22,6 @@ function AdminNoticeBoard() {
       />
 
       {showUploader && <NoticeUploader />}
-
       <NoticeList />
     </div>
   );

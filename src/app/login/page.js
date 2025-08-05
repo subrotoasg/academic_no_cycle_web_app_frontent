@@ -2,21 +2,11 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
-import { MdOutlineMail } from "react-icons/md";
+import { MdArrowBack } from "react-icons/md";
 import { useRouter } from "next/navigation";
 import PasswordInput from "@/components/admin/login/PasswordInput";
 import { toast } from "sonner";
 import Loading from "../admin/loading";
-
 import { useDispatch, useSelector } from "react-redux";
 import {
   currentUser,
@@ -29,229 +19,233 @@ import {
   useVerifyLoginMutation,
 } from "@/redux/services/authApi";
 import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
+
 const Login = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+
+  const [step, setStep] = useState("email");
   const [emailOrPhone, setEmailOrPhone] = useState("");
-  const [showPasswordDialog, setShowPasswordDialog] = useState(false);
-  const [showNewPasswordDialog, setShowNewPasswordDialog] = useState(false);
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [role, setRole] = useState("");
   const [loading, setLoading] = useState(false);
+
   const [userLogin] = useUserLoginMutation();
   const [verifyLogin] = useVerifyLoginMutation();
   const [changePassword] = useChangePasswordMutation();
-  const user = useSelector(currentUser);
-  useEffect(() => {
-    // Only redirect if user exists and NOT showing new password dialog
-    if (user && !showNewPasswordDialog) {
-      if (user.role === "admin") {
-        router.replace("/admin");
-      } else {
-        router.push("/");
-      }
-    }
-  }, [user, showNewPasswordDialog, router]);
 
-  if (user && !showNewPasswordDialog) return null;
+  const user = useSelector(currentUser);
+
+  // Prevent redirect before password set
+  useEffect(() => {
+    if (user && step !== "newPassword") {
+      router.replace(user.role === "admin" ? "/admin" : "/");
+    }
+  }, [user, router, step]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    if (!emailOrPhone) {
-      toast.warning("Please enter your email or phone number");
-      return;
-    }
+    if (!emailOrPhone) return toast.warning("Email or phone is required.");
+    setLoading(true);
     try {
-      setLoading(true);
-      const response = await userLogin({ emailOrPhone });
-      const userRole = response?.data?.meta?.role;
-      if (userRole === "admin") {
-        setShowPasswordDialog(true);
+      const response = await userLogin({ emailOrPhone }).unwrap();
+      if (response?.meta?.role === "admin") {
+        setStep("password");
       } else {
-        toast.error("Unrecognized user role");
+        toast.error("You are not authorized to access the admin panel.");
       }
-      setRole(userRole);
     } catch (error) {
-      toast.error("No user found!", error?.message);
+      toast.error(
+        error?.data?.message || "No user found with these credentials."
+      );
     } finally {
       setLoading(false);
     }
   };
+
   const handlePasswordSubmit = async () => {
+    if (!password) return toast.warning("Password cannot be empty.");
+    setLoading(true);
     try {
-      setLoading(true);
-      const response = await verifyLogin({ otpValue: password });
-      const success = response?.data?.success;
-      const message = response?.error?.data?.message;
-
-      if (!success) {
-        toast.error(message || "Invalid password");
-      }
-      const token = response?.data?.data?.authToken;
-      if (token) {
-        dispatch(setUserFromToken(token));
-        if (response?.data?.data?.newLogin) {
-          setShowPasswordDialog(false);
-          setShowNewPasswordDialog(true);
-        } else {
-          toast.success("Login successful");
-          setShowPasswordDialog(false);
-          router.push("/admin");
-        }
+      const response = await verifyLogin({ otpValue: password }).unwrap();
+      const token = response?.data?.authToken;
+      setEmailOrPhone("");
+      if (response?.data?.newLogin) {
+        setStep("newPassword");
         setPassword("");
+        dispatch(setUserFromToken(token));
+      } else {
+        dispatch(setUserFromToken(token));
+        toast.success("Login Successful!");
+        router.push("/admin");
       }
+
+      setPassword("");
     } catch (error) {
-      // console.error("Login error:", error);
-      toast.error(
-        `Password error: ${
-          error?.response?.data?.message ||
-          error?.message ||
-          "Something went wrong"
-        }`
-      );
+      toast.error(error?.data?.message || "Invalid password.");
     } finally {
       setLoading(false);
     }
   };
-  const handleSetNewPassword = async () => {
-    const hasMinimumLength = newPassword.length >= 8;
-    const hasDigit = /\d/.test(newPassword);
 
-    if (!hasMinimumLength || !hasDigit) {
-      toast.error(
-        "Password must be at least 8 characters and include a digit."
-      );
-      return;
+  const handleSetNewPassword = async () => {
+    if (newPassword.length < 8 || !/\d/.test(newPassword)) {
+      return toast.error("Password must be 8+ characters with a number.");
     }
+    setLoading(true);
     try {
-      setLoading(true);
-      await changePassword({ newPassword });
-      toast.success(
-        "Password set successfully! Please, Login again to confirm."
-      );
+      await changePassword({ newPassword }).unwrap();
+      toast.success("Password set! Please login again to continue.");
       dispatch(removeUser());
       setNewPassword("");
-      setShowNewPasswordDialog(false);
-      router.push("/login");
+      setStep("email");
     } catch (error) {
-      toast.error(error?.message);
+      toast.error(error?.data?.message || "Failed to set password.");
     } finally {
       setLoading(false);
     }
   };
-  if (loading) {
-    return <Loading />;
-  }
+
+  const formVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: -20 },
+  };
+
+  const transition = { duration: 0.3, ease: "easeInOut" };
+
+  if (user && step !== "newPassword") return null;
+
   return (
-    <div className="h-[560px] w-full flex items-center justify-center px-4 mt-6 md:mt-10 lg:mt-30">
-      {!showPasswordDialog && !showNewPasswordDialog && (
-        <Card className="w-full max-w-md shadow-xl">
-          <CardHeader className="flex flex-col items-center py-4">
-            <Image src="/logo.png" width={120} height={60} alt="Logo" />
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Sign In for Admin Dashboard
-            </p>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleLogin} className="space-y-4">
-              <div>
-                <Label
-                  htmlFor="emailOrPhone"
-                  className="flex items-center gap-2 mb-3"
-                >
-                  <MdOutlineMail />
-                  Email / Phone
-                </Label>
-                <Input
-                  id="emailOrPhone"
-                  type="text"
-                  value={emailOrPhone}
-                  onChange={(e) => setEmailOrPhone(e.target.value)}
-                  placeholder="Enter your email or phone number"
-                  required
-                />
-              </div>
-              <Button type="submit"             className="w-full bg-blue-400 text-white py-2 px-4 rounded-sm hover:rounded-3xl hover:bg-blue-700 transition flex justify-center items-center dark:bg-blue-500 dark:hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+    <div className="min-h-screen w-full flex items-center justify-center bg-white dark:bg-gray-950 p-4 transition-colors duration-300">
+      <div className="w-full max-w-sm bg-white dark:bg-gray-900 border-2 border-black dark:border-gray-200 rounded-lg shadow-[8px_8px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_rgba(255,255,255,0.2)] transition-shadow duration-300">
+        <div className="p-6 border-b-2 border-black dark:border-gray-200">
+          <Image src="/logo.png" width={100} height={50} alt="Logo" />
+        </div>
+
+        <div className="p-6 h-[290px] overflow-hidden relative">
+          <AnimatePresence mode="wait">
+            {step === "email" && (
+              <motion.div
+                key="email"
+                variants={formVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                transition={transition}
+                className="space-y-5"
               >
-                Send User Credential
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
-      )}
-      {/* Password Dialog */}
-      {!showNewPasswordDialog && (
-        <Dialog open={showPasswordDialog} onOpenChange={setShowPasswordDialog}>
-          <DialogContent className="sm:max-w-md">
-            <DialogHeader>
-              <div className="px-10 py-4">
-                <Image
-                  src="/logo.png"
-                  width={120}
-                  height={60}
-                  alt="Logo"
-                  className="mx-auto mb-4"
-                />
-              </div>
-              <DialogTitle>Enter Password</DialogTitle>
-              <DialogDescription>
-                Please enter your password to continue.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="space-y-3">
-              <PasswordInput
-                type="password"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <Button onClick={handlePasswordSubmit}             className="w-full bg-blue-400 text-white py-2 px-4 rounded-sm hover:rounded-3xl hover:bg-blue-700 transition flex justify-center items-center dark:bg-blue-500 dark:hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                <div className="space-y-1">
+                  <h1 className="text-xl font-bold text-black dark:text-white">
+                    Admin Access
+                  </h1>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Sign in to manage your dashboard.
+                  </p>
+                </div>
+                <form onSubmit={handleLogin} className="space-y-3">
+                  <Input
+                    id="emailOrPhone"
+                    type="text"
+                    value={emailOrPhone}
+                    onChange={(e) => setEmailOrPhone(e.target.value)}
+                    placeholder="Email or Phone"
+                    required
+                    className="h-11 rounded-md border-2 border-black dark:border-gray-200 bg-transparent focus:ring-4 focus:ring-blue-400/50 dark:focus:ring-blue-500/50"
+                  />
+                  <Button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full bg-blue-400 text-white py-2 px-4 rounded-sm hover:rounded-3xl hover:bg-blue-700 transition flex justify-center items-center dark:bg-blue-500 dark:hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {loading ? "Continue..." : "Continue"}
+                  </Button>
+                </form>
+              </motion.div>
+            )}
+
+            {step === "password" && (
+              <motion.div
+                key="password"
+                variants={formVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                transition={transition}
+                className="space-y-4"
               >
-                Submit
-              </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
-      )}
-      {/* Set New Password Dialog */}
-      <Dialog
-        open={showNewPasswordDialog}
-        onOpenChange={setShowNewPasswordDialog}
-      >
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <div className="px-10 py-4">
-              <Image
-                src="/logo.png"
-                width={120}
-                height={60}
-                alt="Logo"
-                className="mx-auto mb-4"
-              />
-            </div>
-            <DialogTitle>Set New Password (8 digit)</DialogTitle>
-            <DialogDescription>
-              It looks like this is your first login. Please set a new password.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-3">
-            <PasswordInput
-              placeholder="Enter new password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-            />
-            <Button
-              onClick={handleSetNewPassword}
-              className="w-full bg-blue-400 text-white py-2 px-4 rounded-sm hover:rounded-3xl hover:bg-blue-700 transition flex justify-center items-center dark:bg-blue-500 dark:hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={newPassword.length < 8 || !/\d/.test(newPassword)}
-            >
-              Set Password
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+                <div className="space-y-1">
+                  <h1 className="text-xl font-bold text-black dark:text-white">
+                    Enter Password
+                  </h1>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
+                    for {emailOrPhone}
+                  </p>
+                </div>
+                <div className="space-y-3">
+                  <PasswordInput
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <Button
+                    onClick={handlePasswordSubmit}
+                    disabled={loading}
+                    className="w-full bg-blue-400 text-white py-2 px-4 rounded-sm hover:rounded-3xl hover:bg-blue-700 transition flex justify-center items-center dark:bg-blue-500 dark:hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {loading ? "Signing in..." : "Sign In"}
+                  </Button>
+
+                  <Button
+                    variant="ghost"
+                    onClick={() => setStep("email")}
+                    className="w-full h-11 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md"
+                  >
+                    <MdArrowBack className="mr-2" />
+                    Back
+                  </Button>
+                </div>
+              </motion.div>
+            )}
+
+            {step === "newPassword" && (
+              <motion.div
+                key="newPassword"
+                variants={formVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                transition={transition}
+                className="space-y-4"
+              >
+                <div className="space-y-1">
+                  <h1 className="text-xl font-bold text-black dark:text-white">
+                    Create Password
+                  </h1>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Must be 8+ characters with a number.
+                  </p>
+                </div>
+                <div className="space-y-3">
+                  <PasswordInput
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                  />
+                  <Button
+                    onClick={handleSetNewPassword}
+                    disabled={loading}
+                    className="w-full h-11 rounded-md border-2 border-black dark:border-gray-200 bg-blue-400 text-black font-bold active:translate-y-0.5 active:translate-x-0.5 shadow-[4px_4px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_rgba(255,255,255,0.2)] active:shadow-none transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {loading ? "Setting..." : "Set Password"}
+                  </Button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
     </div>
   );
 };
+
 export default Login;

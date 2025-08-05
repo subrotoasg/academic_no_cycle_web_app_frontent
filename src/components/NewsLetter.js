@@ -2,21 +2,21 @@ import React from "react";
 
 const NewsletterForm = () => {
   return (
-    <section className="w-4/5 rounded-xl mx-auto py-10">
+    <section className="w-4/5 rounded-xl mx-auto py-10 text-center md:text-left">
       <div className="grid grid-cols-1 md:grid-cols-2 items-center justify-center gap-[50px] lg:gap-[20px] ">
         
         {/* Left Section - Heading and Description */}
-        <div className="w-full ">
-          <h1 className="text-[2rem] dark:text-[#abc2d3] sm:text-[3rem] font-[500] capitalize text-center md:text-left  leading-[50px] ">
+        <div className="w-full "  >
+          <h1 className="text-[2rem] dark:text-[#abc2d3] sm:text-[3rem] font-[500] capitalize text-text leading-[50px]">
             Stay Ahead in Learning!
           </h1>
-          <p className="md:w-2/3 text-[1.1rem] dark:text-slate-400 mt-3 text-center md:text-left">
+          <p className="md:w-2/3  dark:text-slate-400 mt-3">
             Subscribe to our newsletter for the latest updates on courses, educational insights, and exclusive offers from Apars Classroom.
           </p>
         </div>
 
         {/* Right Section - Input Form */}
-        <div className="w-full ">
+        <div className="w-full " >
           <form className="md:mt-12 relative">
             <input type="email" name="email" 
               placeholder="Enter your email address"

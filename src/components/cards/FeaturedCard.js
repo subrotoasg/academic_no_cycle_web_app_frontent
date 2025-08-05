@@ -6,10 +6,10 @@ import featureImg from "../../../public/feature.jpg";
 
 function FeaturedCard({ feature }) {
   return (
-    <div className="max-w-sm h-full flex flex-col bg-gradient-to-br from-indigo-400 to-blue-700 border border-gray-300 rounded-lg shadow-sm ">
+    <div className="max-w-xs h-full flex flex-col  border border-gray-300 rounded-lg shadow-sm bg-blue-300 hover:scale-[1.05] ">
       <div className="relative w-full h-48 overflow-hidden rounded-t-lg">
         {feature?.type && (
-          <span className="absolute flex items-center gap-1 bottom-2 right-2 bg-slate-200 font-bold text-blue-600 text-xs px-2 py-1 rounded-full z-10">
+          <span className="absolute flex items-center gap-1 bottom-2 right-2 bg-slate-300 font-bold text-blue-600 text-xs px-2 py-1 rounded-full z-10">
             {feature.type === "Discount" && (
               <>
                 <BookmarkCheck className="h-4 w-4" />
@@ -36,7 +36,7 @@ function FeaturedCard({ feature }) {
           </span>
         )}
         <Image
-          className="w-full h-full object-cover p-1 rounded-sm"
+          className="w-full h-full object-cover p-1 rounded-sm bg-gray-200"
           src={
             feature?.image && feature.image.trim() !== ""
               ? feature.image
@@ -72,7 +72,7 @@ function FeaturedCard({ feature }) {
           >
             <button
               type="button"
-              className="text-white border flex justify-center items-center border-black text-sm font-semibold px-4 py-2 rounded-lg hover:rounded-full bg-slate-900 hover:bg-white hover:text-slate-900 transition"
+              className="text-white border flex justify-center items-center border-black text-sm font-semibold px-4 py-2 rounded-lg hover:rounded-full bg-blue-900 hover:bg-blue-700 transition"
             >
               {feature?.type === "Discount"
                 ? "Purchase Now"

@@ -76,14 +76,14 @@ export default function RegisteredStudents() {
   };
 
   const handleDelete = (id) => {
-    // console.log(`Delete user with ID: ${id}`);
+    console.log(`Delete user with ID: ${id}`);
   };
 
   return (
     <div className="w-full space-y-3 p-2">
-      <h2 className="text-xl md:text-3xl font-bold text-center text-gray-800 dark:text-white pt-5">
+      <h1 className="text-xl md:text-3xl font-bold text-center">
         Registered Students
-      </h2>
+      </h1>
       <p className="text-xs md:text-sm text-muted-foreground text-center mt-2">
         View and manage all student registered for the course
       </p>

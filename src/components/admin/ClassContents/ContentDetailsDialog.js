@@ -15,37 +15,32 @@ export default function ContentDetailsDialog({
   isOpen,
   onOpenChange,
 }) {
-  const course =
-    selectedContent?.cycleSubjectChapter?.cycleSubject?.cycle?.course?.title;
-  const cycle =
-    selectedContent?.cycleSubjectChapter?.cycleSubject?.cycle?.title;
-  const subject =
-    selectedContent?.cycleSubjectChapter?.cycleSubject?.subject?.title;
-  const chapter = selectedContent?.cycleSubjectChapter?.chapter?.chapterName;
-
   const infoFields = [
     {
       label: "Course",
-      value: course,
+      value:
+        selectedContent?.courseSubjectChapter?.courseSubject?.course?.title,
     },
-    {
-      label: "Cycle",
-      value: cycle,
-    },
-    ,
     {
       label: "Subject",
-      value: subject,
+      value:
+        selectedContent?.courseSubjectChapter?.courseSubject?.subject?.title,
     },
     {
       label: "Chapter Title",
-      value: chapter,
+      value: selectedContent?.courseSubjectChapter?.chapter?.chapterName,
     },
     { label: "Class Title", value: selectedContent?.classTitle },
-    { label: "Class No", value: selectedContent?.classNo },
     { label: "Class Description", value: selectedContent?.description },
+    { label: "Class No", value: selectedContent?.classNo },
     { label: "Hosting Type", value: selectedContent?.hostingType },
     { label: "Video Id/Url", value: selectedContent?.videoUrl },
+    {
+      label: "Content Uploaded",
+      value: selectedContent?.createdAt
+        ? new Date(selectedContent.createdAt).toLocaleString()
+        : "N/A",
+    },
   ];
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -62,6 +57,18 @@ export default function ContentDetailsDialog({
               <strong>{field.label}: </strong> {field.value ?? "N/A"}
             </div>
           ))}
+
+          {/* <div>
+            <strong>Attendance Count: </strong>
+            <button
+              onClick={(e) => {
+                e.currentTarget.innerText = "60";
+              }}
+              className="text-white border rounded-lg p-1 bg-blue-800"
+            >
+              View Report
+            </button>
+          </div> */}
         </div>
         <DialogFooter>
           <Button

@@ -7,16 +7,13 @@ export const useMobile = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 768) // Adjust breakpoint as needed
+      setIsMobile(window.innerWidth < 768)
     }
 
-    // Set initial value
     handleResize()
 
-    // Add event listener
     window.addEventListener("resize", handleResize)
 
-    // Remove event listener on cleanup
     return () => window.removeEventListener("resize", handleResize)
   }, [])
 

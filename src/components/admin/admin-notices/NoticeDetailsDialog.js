@@ -31,7 +31,6 @@ export default function NoticeDetailsDialog({
       value: new Date(selectedNotice?.endTime).toLocaleString(),
     },
     { label: "Image", value: selectedNotice?.image },
-
   ];
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -52,7 +51,7 @@ export default function NoticeDetailsDialog({
                   <Image
                     src={field.value}
                     alt={selectedNotice?.title || "Image"}
-                    className="max-h-48 rounded-md border"
+                    className=" rounded-md border"
                     width={200}
                     height={200}
                   />

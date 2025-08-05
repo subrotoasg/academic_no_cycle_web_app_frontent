@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import SearchBar from "../utilities/SearchBar";
 import PaginationControls from "../utilities/PaginationControls";
 import Loading from "../utilities/Loading";
@@ -8,12 +9,12 @@ import ContentTable from "./ContentTable";
 import ContentDetailsDialog from "./ContentDetailsDialog";
 import ContentInfoEditDialog from "./ContentInfoEditDialog";
 import Swal from "sweetalert2";
-import { selectCourse } from "@/redux/Features/courseInfo";
 import { useSelector } from "react-redux";
+// import { selectCourse } from "@/redux/Features/courseInfo";
 import {
-  useGetAllCycleClassContentsQuery,
-  useDeleteCycleClassContentMutation,
-} from "@/redux/services/cycleClassContentApi";
+  useDeleteClassContentMutation,
+  useGetAllClassContentsQuery,
+} from "@/redux/services/contentsApi";
 
 const ContentList = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -24,39 +25,49 @@ const ContentList = () => {
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  const course = useSelector(selectCourse);
-  const courseId = course?.id;
+  // const course = useSelector(selectCourse);
+  // const courseId = course?.id;
 
+  const courseId = "a220ea44-dfb4-4d4d-a073-50f6bd7d6669";
   const {
     data,
     isLoading,
     isError,
     refetch: refetchClassContents,
-  } = useGetAllCycleClassContentsQuery({
+  } = useGetAllClassContentsQuery({
     page,
     limit,
     searchTerm: searchQuery,
     courseId,
   });
 
-  const [deleteCycleClassContent] = useDeleteCycleClassContentMutation();
-
-  const classContentsData = data?.data;
-  const meta = data?.meta;
+  const [deleteClassContent] = useDeleteClassContentMutation();
+  const classContentsData = data?.data?.data;
+  const meta = data?.data?.meta;
   const totalPages = meta?.totalCount ? Math.ceil(meta.totalCount / limit) : 1;
   useEffect(() => {
     setPage(1);
   }, [searchQuery]);
+
   const sortedContents = useMemo(() => {
     return classContentsData;
   }, [classContentsData]);
+
+  const handleContentEditModal = (content) => {
+    setSelectedContent(content);
+    setIsEditModalOpen(true);
+  };
+
+  const handleContentInfoModal = (content) => {
+    setSelectedContent(content);
+    setIsInfoModalOpen(true);
+  };
 
   const handleRedirect = (content) => {
     const query = new URLSearchParams({ title: content.classTitle }).toString();
     const url = `/content/${content.id}?${query}`;
     window.open(url, "_blank");
   };
-
   const [sortConfig, setSortConfig] = useState({
     key: null,
     direction: "asc",
@@ -82,20 +93,10 @@ const ContentList = () => {
     });
   }, [sortedContents, sortConfig]);
 
-  const handleContentInfoModal = (content) => {
-    setSelectedContent(content);
-    setIsInfoModalOpen(true);
-  };
-
-  const handleContentEditModal = (content) => {
-    setSelectedContent(content);
-    setIsEditModalOpen(true);
-  };
-
   const handleContentDelete = async (content) => {
     const result = await Swal.fire({
       title: "Are you sure?",
-      text: `You are about to delete "${content?.classTitle}" from class contents. This action cannot be undone.`,
+      text: `You're about to delete "${content?.classTitle}" from class contents. This action is irreversible.`,
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -105,21 +106,19 @@ const ContentList = () => {
 
     if (result.isConfirmed) {
       try {
-        await deleteCycleClassContent(content.id).unwrap();
+        await deleteClassContent(content.id).unwrap();
         Swal.fire({
           title: "Deleted!",
-          text: `"${content?.classTitle}" class content has been successfully deleted.`,
+          text: `"${content?.classTitle}" was deleted successfully.`,
           icon: "success",
-          timer: 1500,
+          timer: 2000,
           showConfirmButton: false,
         });
         refetchClassContents();
       } catch (error) {
         Swal.fire({
           title: "Error",
-          text:
-            error?.message ||
-            "Failed to delete the class content. Please try again.",
+          text: "Something went wrong while deleting. Please try again.",
           icon: "error",
         });
       }
@@ -131,17 +130,16 @@ const ContentList = () => {
     return (
       <div className="text-center text-red-500">Failed to load contents.</div>
     );
-
   return (
     <div className="w-full p-2 lg:p-6 bg-white dark:bg-gray-900 shadow-lg rounded-2xl space-y-4 mt-3">
-      <h2 className="text-xl md:text-3xl font-bold text-center text-gray-800 dark:text-white pt-5">
-        {" "}
-        {course?.title} Contents
+      <h2 className="text-xl md:text-3xl font-bold text-gray-800 dark:text-white text-center">
+        {/* {course?.title} */}
+        Contents
       </h2>
       <p className="text-xs md:text-sm text-muted-foreground text-center">
         View and manage all recorded course videos available
       </p>
-      {/* Subject wise Search Functionality */}
+
       <div className="p-2">
         <SearchBar
           searchQuery={searchQuery}
@@ -156,15 +154,15 @@ const ContentList = () => {
         </div>
       ) : (
         <>
-          {" "}
           <ContentTable
-            data={sortedData}
-            handleRedirect={handleRedirect}
-            handleContentInfoModal={handleContentInfoModal}
-            handleContentEditModal={handleContentEditModal}
+            contentData={sortedData}
             handleContentDelete={handleContentDelete}
+            handleContentEditModal={handleContentEditModal}
+            handleContentInfoModal={handleContentInfoModal}
+            handleRedirect={handleRedirect}
             handleSort={handleSort}
           />
+
           <PaginationControls
             currentPage={page}
             totalPages={totalPages}
@@ -176,14 +174,12 @@ const ContentList = () => {
         </>
       )}
 
-      {/* Video Details Info Dialog */}
       <ContentDetailsDialog
         selectedContent={selectedContent}
         isOpen={isInfoModalOpen}
         onOpenChange={setIsInfoModalOpen}
       />
 
-      {/* Video Info Edit Dialog */}
       <ContentInfoEditDialog
         selectedContent={selectedContent}
         isOpen={isEditModalOpen}

@@ -3,7 +3,7 @@ import React from "react";
 
 function Copyright() {
   return (
-    <footer className="w-full grid grid-cols-1 md:grid-cols-2   pt-6 text-gray-700 dark:text-gray-300 border-t border-gray-200">
+    <footer className="w-full grid grid-cols-1 md:grid-cols-2   pt-6  border-t border-gray-200">
       <p className=" text-center  md:text-left">
         Copyright © 2018–{new Date().getFullYear()} Apars Classroom. All Rights
         Reserved.

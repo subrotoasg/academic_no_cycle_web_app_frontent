@@ -14,13 +14,9 @@ import { useEffect, useRef, useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
-import { useUpdateCycleSubjectChapterMutation } from "@/redux/services/chapterAPi";
+import { useUpdateCourseSubjectChapterMutation } from "@/redux/services/chapterAPi";
 
-export default function ChapterImageEditDialog({
-  isOpen,
-  onOpenChange,
-  chapter,
-}) {
+export default function ChapterImageEditDialog({ isOpen, onOpenChange, chapter }) {
   const methods = useForm();
   const { handleSubmit } = methods;
 
@@ -29,15 +25,11 @@ export default function ChapterImageEditDialog({
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
 
-  const [updateCycleSubjectChapter] = useUpdateCycleSubjectChapterMutation();
+  const [updateCourseSubjectChapter] = useUpdateCourseSubjectChapterMutation();
 
   useEffect(() => {
     if (chapter) {
-      setImagePreview(
-        chapter?.cycleSubjectChapterImage ||
-          chapter?.chapter?.chapterImage ||
-          "/placeholder.jpg"
-      );
+      setImagePreview(chapter?.courseSubjectChapterImage || chapter?.chapter?.chapterImage || "/placeholder.jpg");
       setSelectedFile(null);
     }
   }, [chapter]);
@@ -75,7 +67,7 @@ export default function ChapterImageEditDialog({
 
     try {
       setLoading(true);
-      await updateCycleSubjectChapter({ id: chapter.id, formData }).unwrap();
+      await updateCourseSubjectChapter({ id: chapter.id, formData }).unwrap();
       Swal.fire({
         icon: "success",
         title: "Chapter image updated successfully!",
@@ -96,21 +88,13 @@ export default function ChapterImageEditDialog({
       <DialogTrigger asChild></DialogTrigger>
       <DialogContent className="w-3xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-2xl text-center">
-            Edit Chapter Image
-          </DialogTitle>
+          <DialogTitle className="text-2xl text-center">Edit Chapter Image</DialogTitle>
         </DialogHeader>
 
         <FormProvider {...methods}>
-          <form
-            onSubmit={handleSubmit(handleFormSubmit)}
-            className="grid grid-cols-1 gap-4 p-4"
-          >
+          <form onSubmit={handleSubmit(handleFormSubmit)} className="grid grid-cols-1 gap-4 p-4">
             <div>
-              <label
-                htmlFor="chapter-image-upload"
-                className="block text-sm font-medium"
-              >
+              <label htmlFor="chapter-image-upload" className="block text-sm font-medium">
                 Upload Chapter Image
               </label>
 
@@ -128,7 +112,7 @@ export default function ChapterImageEditDialog({
                 id="chapter-image-upload"
                 name="chapter-image"
                 type="file"
-                accept=".jpg,.jpeg,.png,.webp"
+                accept="image/*"
                 ref={fileInputRef}
                 onChange={handleFileChange}
                 className="w-full p-2 mt-2 border rounded-md"

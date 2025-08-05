@@ -8,7 +8,7 @@ import FeaturedInfoEditDialog from "./FeaturedInfoEditDialog";
 import Swal from "sweetalert2";
 import Loading from "../utilities/Loading";
 import { useSelector } from "react-redux";
-import { selectCourse } from "@/redux/Features/courseInfo";
+// import { selectCourse } from "@/redux/Features/courseInfo";
 import {
   useDeleteFeaturedMutation,
   useGetFeaturesByCourseIdQuery,
@@ -23,8 +23,9 @@ export function FeaturedList() {
   const [featureInfoModalOpen, setFeatureInfoModalOpen] = useState(false);
   const [featureEditModalOpen, setFeatureEditModalOpen] = useState(false);
 
-  const course = useSelector(selectCourse);
-  const courseId = course?.id;
+  // const course = useSelector(selectCourse);
+  // const courseId = course?.id;
+  const courseId = "a220ea44-dfb4-4d4d-a073-50f6bd7d6669";
   const {
     data,
     isLoading,
@@ -44,6 +45,7 @@ export function FeaturedList() {
   useEffect(() => {
     setPage(1);
   }, [searchQuery]);
+
   const sortedFeatures = useMemo(() => {
     return featuresData;
   }, [featuresData]);
@@ -99,9 +101,10 @@ export function FeaturedList() {
 
   return (
     <div className="w-full p-2 md:p-4 bg-white dark:bg-gray-900 shadow-xl rounded-xl space-y-3 mt-3">
-      <h2 className="text-xl md:text-3xl font-bold text-center text-gray-800 dark:text-white pt-5">
-        Featured Listings for {course?.title}
-      </h2>
+      <h1 className="text-xl md:text-3xl font-semibold text-center mb-6">
+        Features Listed for
+        {/* {course?.title} */}
+      </h1>
 
       <p className="text-xs md:text-sm text-muted-foreground text-center mt-2">
         View, edit, or delete featured content, discounts, and offers.
@@ -111,7 +114,7 @@ export function FeaturedList() {
         <SearchBar
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
-          placeholder="Search by Title..."
+          placeholder="Search by Feature Title..."
         />
       </div>
 

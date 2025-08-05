@@ -1,14 +1,18 @@
+"use client";
+
 import React from "react";
 import NoticeCarousel from "./NoticeCarousel";
 import { useSelector } from "react-redux";
-import { selectCourse } from "@/redux/Features/courseInfo";
+// import { selectCourse } from "@/redux/Features/courseInfo";
 import { useGetNoticeRoutinesByCourseIdQuery } from "@/redux/services/noticeRoutineApi";
 import Loading from "@/app/loading";
 import Marquee from "react-fast-marquee";
+import "animate.css";
 
 const NoticeBoard = () => {
-  const course = useSelector(selectCourse);
-  const courseId = course?.id;
+  // const course = useSelector(selectCourse);
+  // const courseId = course?.id;
+  const courseId = "a220ea44-dfb4-4d4d-a073-50f6bd7d6669";
   const { data: notices, isLoading } = useGetNoticeRoutinesByCourseIdQuery({
     courseId,
   });
@@ -31,7 +35,7 @@ const NoticeBoard = () => {
           📢 Announcements
         </h2>
         <Marquee>
-          <div className="flex mx-2 md:mx-8 py-3 md:py-3">
+          <div className="flex mx-2 md:mx-8 py-2 md:py-3">
             {noticesData.map((notice, index) => (
               <p key={index} className="mx-2 md:mx-4">
                 <span className="text-sm md:text-lg text-red-700 animate__animated animate__flash">
@@ -42,7 +46,6 @@ const NoticeBoard = () => {
           </div>
         </Marquee>
       </div>
-
       <NoticeCarousel notices={noticesData} />
     </div>
   );

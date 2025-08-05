@@ -7,21 +7,34 @@ import PaginationControls from "../utilities/PaginationControls";
 import Loading from "../utilities/Loading";
 import { useGetAdminsByCourseIdQuery } from "@/redux/services/adminApi";
 import { useSelector } from "react-redux";
-import { selectCourse } from "@/redux/Features/courseInfo";
+import {
+  selectAllCourses,
+  selectSelectedCourse,
+} from "@/redux/Features/courseInfo";
 
 export default function AdminList() {
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
-  const course = useSelector(selectCourse);
-  const courseId = course?.id;
+  const [selectedCourseId, setSelectedCourseId] = useState("");
+  const courses = useSelector(selectAllCourses);
+  const course = useSelector(
+    selectedCourseId ? selectSelectedCourse(selectedCourseId) : () => null
+  );
 
-  const { data, isLoading, isError, refetch } = useGetAdminsByCourseIdQuery({
-    page,
-    limit,
-    searchTerm: searchQuery,
-    courseId,
-  });
+  console.log(course);
+
+  const { data, isLoading, isError, refetch } = useGetAdminsByCourseIdQuery(
+    {
+      page,
+      limit,
+      searchTerm: searchQuery,
+      courseId: selectedCourseId,
+    },
+    {
+      skip: !selectedCourseId,
+    }
+  );
 
   const meta = data?.data?.meta;
   const adminData = data?.data?.data;
@@ -29,22 +42,34 @@ export default function AdminList() {
   useEffect(() => {
     setPage(1);
   }, [searchQuery]);
+
   const sortedData = useMemo(() => {
     return adminData || [];
   }, [adminData]);
 
-  if (isLoading) return <Loading />;
-  if (isError)
-    return (
-      <div className="text-center text-red-500">Failed to load admins.</div>
-    );
-
   return (
     <div className="w-full p-1 lg:p-6 bg-white dark:bg-gray-900 shadow-lg rounded-2xl mt-3">
+      <div className="p-2 grid grid-cols-2">
+        <label className="text-xs md:text-base w-full font-medium text-gray-700 dark:text-gray-300">
+          Select Course
+        </label>
+        <select
+          value={selectedCourseId}
+          onChange={(e) => setSelectedCourseId(e.target.value)}
+          className="w-full p-2 border border-gray-300 rounded-md dark:bg-gray-800 dark:text-white text-xs md:text-sm"
+        >
+          <option value="">-- Select a course --</option>
+          {courses?.map((course) => (
+            <option key={course.id} value={course.id}>
+              {course.productName}
+            </option>
+          ))}
+        </select>
+      </div>
       <h2 className="text-xl md:text-3xl font-bold text-center text-gray-800 dark:text-white pt-5">
-        Admin List {course?.title}
+        Course Admin List {course?.productName}
       </h2>
-      <p className="text-xs md:text-sm text-muted-foreground text-center">
+      <p className="text-xs md:text-sm text-muted-foreground text-center mt-2">
         Manage and oversee course administrators
       </p>
 
@@ -52,23 +77,41 @@ export default function AdminList() {
         <SearchBar
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
-          placeholder="Search... "
+          placeholder="Search by email"
         />
       </div>
 
-      {sortedData.length === 0 ? (
-        <div className="text-center text-gray-500 py-4">No Admins Found</div>
-      ) : (
+      {isLoading && (
+        <div className="w-full flex justify-center py-8">
+          <Loading />
+        </div>
+      )}
+
+      {isError && !isLoading && (
+        <div className="text-center text-red-500 py-4">
+          Failed to load admins.
+        </div>
+      )}
+
+      {!isLoading && !isError && (
         <>
-          <AdminTable admins={sortedData} refetch={refetch} />
-          <PaginationControls
-            currentPage={page}
-            totalPages={totalPages}
-            pageSize={limit}
-            setPageSize={setLimit}
-            setCurrentPage={setPage}
-            totalItems={meta?.totalCount}
-          />
+          {sortedData.length === 0 ? (
+            <div className="text-center text-gray-500 py-4">
+              No Admins Found
+            </div>
+          ) : (
+            <>
+              <AdminTable admins={sortedData} refetch={refetch} />
+              <PaginationControls
+                currentPage={page}
+                totalPages={totalPages}
+                pageSize={limit}
+                setPageSize={setLimit}
+                setCurrentPage={setPage}
+                totalItems={meta?.totalCount}
+              />
+            </>
+          )}
         </>
       )}
     </div>

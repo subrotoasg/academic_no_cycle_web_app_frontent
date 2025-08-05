@@ -12,24 +12,28 @@ import {
 } from "@/components/ui/table";
 
 export default function ContentTable({
-  data,
+  isCycle,
+  contentData,
+  handleSort,
+  handleContentDelete,
   handleRedirect,
   handleContentInfoModal,
   handleContentEditModal,
-  handleContentDelete,
-  handleSort,
 }) {
   return (
     <div className="overflow-x-auto mb-6">
       <Table className="min-w-full border border-gray-100 text-center">
         <TableHeader>
           <TableRow>
-            <TableHead className="text-center text-sm md:text-base border">
-              Cycle Title
-            </TableHead>
+            {isCycle && (
+              <TableHead className="text-center text-sm md:text-base border">
+                Cycle Title
+              </TableHead>
+            )}
             <TableHead className="text-center text-sm md:text-base border">
               Subject
             </TableHead>
+
             <TableHead className="text-center text-sm md:text-base border">
               Chapter
             </TableHead>
@@ -61,18 +65,14 @@ export default function ContentTable({
         </TableHeader>
 
         <TableBody>
-          {data?.length > 0 ? (
-            data.map((content) => (
+          {contentData?.length > 0 ? (
+            contentData.map((content) => (
               <TableRow key={content.id}>
                 <TableCell className="font-medium text-center border">
-                  {content?.cycleSubjectChapter?.cycleSubject?.cycle?.title}
-                </TableCell>
-                <TableCell className="font-medium text-center border">
-                  {content?.cycleSubjectChapter?.cycleSubject?.title ||
-                    content?.cycleSubjectChapter?.cycleSubject?.subject?.title}
+                  {content?.courseSubjectChapter?.courseSubject?.subject?.title}
                 </TableCell>
                 <TableCell className="text-center border">
-                  {content?.cycleSubjectChapter?.chapter?.chapterName}
+                  {content?.courseSubjectChapter?.chapter?.chapterName}
                 </TableCell>
                 <TableCell className="text-center border">
                   {content?.classTitle}
@@ -120,7 +120,7 @@ export default function ContentTable({
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={9} className="h-24 text-center border">
+              <TableCell colSpan={4} className="h-24 text-center border">
                 No results found.
               </TableCell>
             </TableRow>
