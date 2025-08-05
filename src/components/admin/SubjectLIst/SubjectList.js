@@ -8,7 +8,7 @@ import Loading from "../utilities/Loading";
 import { useSelector } from "react-redux";
 
 import { SubjectsTable } from "./SubjectTable";
-import SubjectsImageEditDialog from "./SybjectInfoEditDialog";
+import SubjectsImageEditDialog from "./SubjectInfoEditDialog";
 import {
   useDeleteCourseSubjectMutation,
   useGetCourseSubjectQuery,
