@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect, useMemo, useState } from "react";
 import FeaturedDetailsDialog from "./FeaturedDetailsDialog";
 import SearchBar from "../utilities/SearchBar";
@@ -8,38 +9,42 @@ import FeaturedInfoEditDialog from "./FeaturedInfoEditDialog";
 import Swal from "sweetalert2";
 import Loading from "../utilities/Loading";
 import { useSelector } from "react-redux";
-// import { selectCourse } from "@/redux/Features/courseInfo";
 import {
   useDeleteFeaturedMutation,
   useGetFeaturesByCourseIdQuery,
 } from "@/redux/services/featuredApi";
+import { selectAllCourses } from "@/redux/Features/courseInfo";
 
 export function FeaturedList() {
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
-
+  const [selectedCourseId, setSelectedCourseId] = useState("");
+  const courses = useSelector(selectAllCourses);
   const [selectedFeature, setSelectedFeature] = useState(null);
   const [featureInfoModalOpen, setFeatureInfoModalOpen] = useState(false);
   const [featureEditModalOpen, setFeatureEditModalOpen] = useState(false);
 
-  // const course = useSelector(selectCourse);
-  // const courseId = course?.id;
-  const courseId = "a220ea44-dfb4-4d4d-a073-50f6bd7d6669";
   const {
     data,
     isLoading,
     isError,
     refetch: refetchFeatures,
-  } = useGetFeaturesByCourseIdQuery({
-    page,
-    limit,
-    searchTerm: searchQuery,
-    courseId,
-  });
+  } = useGetFeaturesByCourseIdQuery(
+    {
+      page,
+      limit,
+      searchTerm: searchQuery,
+      courseId: selectedCourseId,
+    },
+    {
+      skip: !selectedCourseId,
+    }
+  );
   const [deleteFeatured] = useDeleteFeaturedMutation();
 
   const featuresData = data?.data?.data;
+  console.log(featuresData);
   const meta = data?.data?.meta;
   const totalPages = meta?.totalCount ? Math.ceil(meta.totalCount / limit) : 1;
   useEffect(() => {
@@ -91,25 +96,33 @@ export function FeaturedList() {
       }
     }
   };
-  if (isLoading) return <Loading />;
-  if (isError)
-    return (
-      <div className="text-center text-red-500">
-        Failed to load featured listings.
-      </div>
-    );
 
   return (
     <div className="w-full p-2 md:p-4 bg-white dark:bg-gray-900 shadow-xl rounded-xl space-y-3 mt-3">
       <h1 className="text-xl md:text-3xl font-semibold text-center mb-6">
-        Features Listed for
-        {/* {course?.title} */}
+        Course Features List
       </h1>
 
       <p className="text-xs md:text-sm text-muted-foreground text-center mt-2">
         View, edit, or delete featured content, discounts, and offers.
       </p>
-
+      <div className="p-2 grid grid-cols-2">
+        <label className="text-xs md:text-base w-full font-medium text-gray-700 dark:text-gray-300">
+          Select Course
+        </label>
+        <select
+          value={selectedCourseId}
+          onChange={(e) => setSelectedCourseId(e.target.value)}
+          className="w-full p-2 border border-gray-300 rounded-md dark:bg-gray-800 dark:text-white text-xs md:text-sm"
+        >
+          <option value="">-- Select Course --</option>
+          {courses?.map((course) => (
+            <option key={course.id} value={course.id}>
+              {course.productName}
+            </option>
+          ))}
+        </select>
+      </div>
       <div className="p-2">
         <SearchBar
           searchQuery={searchQuery}
@@ -118,27 +131,43 @@ export function FeaturedList() {
         />
       </div>
 
-      {sortedFeatures.length === 0 ? (
-        <div className="text-center text-gray-500 py-4">
-          No Featured Items Found
+      {isLoading && (
+        <div className="w-full flex justify-center py-8">
+          <Loading />
         </div>
-      ) : (
-        <>
-          <FeaturedTable
-            features={sortedFeatures}
-            handleDelete={handleFeatureDelete}
-            handleFeatureEditModal={handleFeatureEditModal}
-            handleFeatureInfoModal={handleFeatureInfoModal}
-          />
+      )}
 
-          <PaginationControls
-            currentPage={page}
-            totalPages={totalPages}
-            pageSize={limit}
-            setPageSize={setLimit}
-            setCurrentPage={setPage}
-            totalItems={meta?.totalCount}
-          />
+      {isError && !isLoading && (
+        <div className="text-center text-red-500 py-4">
+          Failed to load Features.
+        </div>
+      )}
+
+      {!isLoading && !isError && (
+        <>
+          {!selectedCourseId || sortedFeatures.length === 0 ? (
+            <div className="text-center text-gray-500 py-4">
+              No Features Found
+            </div>
+          ) : (
+            <>
+              <FeaturedTable
+                features={sortedFeatures}
+                handleDelete={handleFeatureDelete}
+                handleFeatureEditModal={handleFeatureEditModal}
+                handleFeatureInfoModal={handleFeatureInfoModal}
+              />
+
+              <PaginationControls
+                currentPage={page}
+                totalPages={totalPages}
+                pageSize={limit}
+                setPageSize={setLimit}
+                setCurrentPage={setPage}
+                totalItems={meta?.totalCount}
+              />
+            </>
+          )}
         </>
       )}
 
