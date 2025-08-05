@@ -6,7 +6,6 @@ import PaginationControls from "../utilities/PaginationControls";
 import Swal from "sweetalert2";
 import Loading from "../utilities/Loading";
 import { useSelector } from "react-redux";
-// import { selectCourse } from "@/redux/Features/courseInfo";
 
 import { ChapterTable } from "./ChapterTable";
 import ChapterInfoEditDialog from "./ChapterInfoEditDialog";
@@ -14,29 +13,33 @@ import {
   useDeleteCourseSubjectChapterMutation,
   useGetCourseSubjectChaptersQuery,
 } from "@/redux/services/chapterAPi";
+import { selectAllCourses } from "@/redux/Features/courseInfo";
 
 export function ChapterList() {
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
-
+  const [selectedCourseId, setSelectedCourseId] = useState("");
+  const courses = useSelector(selectAllCourses);
   const [selectedChapter, setSelectedChapter] = useState(null);
   const [ChapterInfoModalOpen, setChapterInfoModalOpen] = useState(false);
   const [ChapterEditModalOpen, setChapterEditModalOpen] = useState(false);
 
-  // const course = useSelector(selectCourse);
-  // const courseId = course?.id;
-  const courseId = "a220ea44-dfb4-4d4d-a073-50f6bd7d6669";
-  const { data, isError, isLoading } = useGetCourseSubjectChaptersQuery({
-    page,
-    limit,
-    searchTerm: searchQuery,
-    courseId,
-  });
-
+  const { data, isError, isLoading } = useGetCourseSubjectChaptersQuery(
+    {
+      page,
+      limit,
+      searchTerm: searchQuery,
+      courseId: selectedCourseId,
+    },
+    {
+      skip: !selectedCourseId,
+    }
+  );
+  console.log(data);
   const ChapterData = data?.data?.data;
   const meta = data?.data?.meta;
-
+  console.log(ChapterData);
   const totalPages = meta?.totalCount ? Math.ceil(meta.totalCount / limit) : 1;
   useEffect(() => {
     setPage(1);
@@ -87,25 +90,33 @@ export function ChapterList() {
     }
   };
 
-  if (isLoading) return <Loading />;
-  if (isError)
-    return (
-      <div className="text-center text-red-500">
-        Failed to load Chapter listings.
-      </div>
-    );
-
   return (
     <div className="w-full p-2 md:p-4 bg-white dark:bg-gray-900 shadow-xl rounded-xl space-y-3 mt-3">
       <h1 className="text-xl md:text-3xl font-semibold text-center mb-6">
-        Chapter List
-        {/* {course?.title} */}
+        Course Chapter List
       </h1>
 
       <p className="text-xs md:text-sm text-muted-foreground text-center mt-2">
         Browse, edit, or delete the uploaded Chapter
       </p>
 
+      <div className="p-2 grid grid-cols-2">
+        <label className="text-xs md:text-base w-full font-medium text-gray-700 dark:text-gray-300">
+          Select Course
+        </label>
+        <select
+          value={selectedCourseId}
+          onChange={(e) => setSelectedCourseId(e.target.value)}
+          className="w-full p-2 border border-gray-300 rounded-md dark:bg-gray-800 dark:text-white text-xs md:text-sm"
+        >
+          <option value="">-- Select Course --</option>
+          {courses?.map((course) => (
+            <option key={course.id} value={course.id}>
+              {course.productName}
+            </option>
+          ))}
+        </select>
+      </div>
       <div className="p-2">
         <SearchBar
           searchQuery={searchQuery}
@@ -114,25 +125,43 @@ export function ChapterList() {
         />
       </div>
 
-      {sortedChapter.length === 0 ? (
-        <div className="text-center text-gray-500 py-4">No Chapter Found</div>
-      ) : (
-        <>
-          <ChapterTable
-            Chapters={sortedChapter}
-            handleDelete={handleChapterDelete}
-            handlechapterEditModal={handleChapterEditModal}
-            handleChapterInfoModal={handleChapterInfoModal}
-          />
+      {isLoading && (
+        <div className="w-full flex justify-center py-8">
+          <Loading />
+        </div>
+      )}
 
-          <PaginationControls
-            currentPage={page}
-            totalPages={totalPages}
-            pageSize={limit}
-            setPageSize={setLimit}
-            setCurrentPage={setPage}
-            totalItems={meta?.totalCount}
-          />
+      {isError && !isLoading && (
+        <div className="text-center text-red-500 py-4">
+          Failed to load Chapters.
+        </div>
+      )}
+
+      {!isLoading && !isError && (
+        <>
+          {!selectedCourseId || sortedChapter.length === 0 ? (
+            <div className="text-center text-gray-500 py-4">
+              No Chapters Found
+            </div>
+          ) : (
+            <>
+              <ChapterTable
+                Chapters={sortedChapter}
+                handleDelete={handleChapterDelete}
+                handlechapterEditModal={handleChapterEditModal}
+                handleChapterInfoModal={handleChapterInfoModal}
+              />
+
+              <PaginationControls
+                currentPage={page}
+                totalPages={totalPages}
+                pageSize={limit}
+                setPageSize={setLimit}
+                setCurrentPage={setPage}
+                totalItems={meta?.totalCount}
+              />
+            </>
+          )}
         </>
       )}
 

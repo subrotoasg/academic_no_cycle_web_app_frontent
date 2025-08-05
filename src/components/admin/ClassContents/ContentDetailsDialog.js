@@ -19,7 +19,8 @@ export default function ContentDetailsDialog({
     {
       label: "Course",
       value:
-        selectedContent?.courseSubjectChapter?.courseSubject?.course?.title,
+        selectedContent?.courseSubjectChapter?.courseSubject?.course
+          ?.productName,
     },
     {
       label: "Subject",
@@ -42,6 +43,8 @@ export default function ContentDetailsDialog({
         : "N/A",
     },
   ];
+
+  console.log(selectedContent);
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogTrigger asChild></DialogTrigger>

@@ -16,8 +16,12 @@ import { toast } from "sonner";
 import Swal from "sweetalert2";
 import { useUpdateCourseSubjectMutation } from "@/redux/services/subjectsApi";
 
-export default function SubjectsImageEditDialog({ isOpen, onOpenChange, Subject }) {
-  console.log(Subject)
+export default function SubjectsImageEditDialog({
+  isOpen,
+  onOpenChange,
+  Subject,
+}) {
+  // console.log(Subject)
   const methods = useForm();
   const { handleSubmit } = methods;
 
@@ -30,7 +34,11 @@ export default function SubjectsImageEditDialog({ isOpen, onOpenChange, Subject 
 
   useEffect(() => {
     if (Subject) {
-      setImagePreview(Subject?.courseSubjectImage || Subject?.subject?.subjectImage || "/placeholder.jpg");
+      setImagePreview(
+        Subject?.courseSubjectImage ||
+          Subject?.subject?.subjectImage ||
+          "/placeholder.jpg"
+      );
       setSelectedFile(null);
     }
   }, [Subject]);
@@ -89,13 +97,21 @@ export default function SubjectsImageEditDialog({ isOpen, onOpenChange, Subject 
       <DialogTrigger asChild></DialogTrigger>
       <DialogContent className="w-3xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-2xl text-center">Edit Subject Image</DialogTitle>
+          <DialogTitle className="text-2xl text-center">
+            Edit Subject Image
+          </DialogTitle>
         </DialogHeader>
 
         <FormProvider {...methods}>
-          <form onSubmit={handleSubmit(handleFormSubmit)} className="grid grid-cols-1 gap-4 p-4">
+          <form
+            onSubmit={handleSubmit(handleFormSubmit)}
+            className="grid grid-cols-1 gap-4 p-4"
+          >
             <div>
-              <label htmlFor="Subject-image-upload" className="block text-sm font-medium">
+              <label
+                htmlFor="Subject-image-upload"
+                className="block text-sm font-medium"
+              >
                 Upload Subject Image
               </label>
 

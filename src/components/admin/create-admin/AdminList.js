@@ -58,7 +58,7 @@ export default function AdminList() {
           onChange={(e) => setSelectedCourseId(e.target.value)}
           className="w-full p-2 border border-gray-300 rounded-md dark:bg-gray-800 dark:text-white text-xs md:text-sm"
         >
-          <option value="">-- Select a course --</option>
+          <option value="">-- Select Course --</option>
           {courses?.map((course) => (
             <option key={course.id} value={course.id}>
               {course.productName}

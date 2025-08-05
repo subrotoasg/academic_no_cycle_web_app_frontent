@@ -6,36 +6,41 @@ import PaginationControls from "../utilities/PaginationControls";
 import Swal from "sweetalert2";
 import Loading from "../utilities/Loading";
 import { useSelector } from "react-redux";
-// import { selectCourse } from "@/redux/Features/courseInfo";
 
 import { SubjectsTable } from "./SubjectTable";
-import SubjectsImageEditDialog from "./SybjectInfoEditDialog";
+import SubjectsImageEditDialog from "./SubjectInfoEditDialog";
 import {
   useDeleteCourseSubjectMutation,
   useGetCourseSubjectQuery,
   useGetSubjectsByCourseIdQuery,
 } from "@/redux/services/subjectsApi";
+import { selectAllCourses } from "@/redux/Features/courseInfo";
 
 export function SubjectList() {
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
-
+  const [selectedCourseId, setSelectedCourseId] = useState("");
+  const courses = useSelector(selectAllCourses);
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [SubjectInfoModalOpen, setSubjectInfoModalOpen] = useState(false);
   const [SubjectEditModalOpen, setSubjectEditModalOpen] = useState(false);
 
-  // const course = useSelector(selectCourse);
-  // const courseId = course?.id;
-  const courseId = "a220ea44-dfb4-4d4d-a073-50f6bd7d6669";
-  const { data, isError, isLoading } = useGetCourseSubjectQuery({
-    page,
-    limit,
-    searchTerm: searchQuery,
-    courseId,
-  });
+  const { data, isError, isLoading } = useGetCourseSubjectQuery(
+    {
+      page,
+      limit,
+      searchTerm: searchQuery,
+      courseId: selectedCourseId,
+    },
+    {
+      skip: !selectedCourseId,
+    }
+  );
+  console.log(data);
 
   const SubjectData = data?.data;
+  // console.log(SubjectData);
   const meta = data?.meta;
 
   const totalPages = meta?.totalCount ? Math.ceil(meta.totalCount / limit) : 1;
@@ -88,14 +93,6 @@ export function SubjectList() {
     }
   };
 
-  if (isLoading) return <Loading />;
-  if (isError)
-    return (
-      <div className="text-center text-red-500">
-        Failed to load Subjects listings.
-      </div>
-    );
-
   return (
     <div className="w-full p-2 md:p-4 bg-white dark:bg-gray-900 shadow-xl rounded-xl space-y-3 mt-3">
       <h1 className="text-xl md:text-3xl font-semibold text-center mb-6">
@@ -106,6 +103,23 @@ export function SubjectList() {
         Browse, edit, or delete the uploaded Subjects
       </p>
 
+      <div className="p-2 grid grid-cols-2">
+        <label className="text-xs md:text-base w-full font-medium text-gray-700 dark:text-gray-300">
+          Select Course
+        </label>
+        <select
+          value={selectedCourseId}
+          onChange={(e) => setSelectedCourseId(e.target.value)}
+          className="w-full p-2 border border-gray-300 rounded-md dark:bg-gray-800 dark:text-white text-xs md:text-sm"
+        >
+          <option value="">-- Select Course --</option>
+          {courses?.map((course) => (
+            <option key={course.id} value={course.id}>
+              {course.productName}
+            </option>
+          ))}
+        </select>
+      </div>
       <div className="p-2">
         <SearchBar
           searchQuery={searchQuery}
@@ -113,26 +127,42 @@ export function SubjectList() {
           placeholder="Search by title ..."
         />
       </div>
+      {isLoading && (
+        <div className="w-full flex justify-center py-8">
+          <Loading />
+        </div>
+      )}
 
-      {sortedSubject.length === 0 ? (
-        <div className="text-center text-gray-500 py-4">No Subject Found</div>
-      ) : (
+      {isError && !isLoading && (
+        <div className="text-center text-red-500 py-4">
+          Failed to load Subjects.
+        </div>
+      )}
+
+      {!isLoading && !isError && (
         <>
-          <SubjectsTable
-            Subjects={sortedSubject}
-            handleDelete={handleSubjectDelete}
-            handleSubjectEditModal={handleSubjectEditModal}
-            handleSubjectInfoModal={handleSubjectInfoModal}
-          />
-
-          <PaginationControls
-            currentPage={page}
-            totalPages={totalPages}
-            pageSize={limit}
-            setPageSize={setLimit}
-            setCurrentPage={setPage}
-            totalItems={meta?.totalCount}
-          />
+          {!selectedCourseId || sortedSubject.length === 0 ? (
+            <div className="text-center text-gray-500 py-4">
+              No Subjects Found
+            </div>
+          ) : (
+            <>
+              <SubjectsTable
+                Subjects={sortedSubject}
+                handleDelete={handleSubjectDelete}
+                handleSubjectEditModal={handleSubjectEditModal}
+                handleSubjectInfoModal={handleSubjectInfoModal}
+              />
+              <PaginationControls
+                currentPage={page}
+                totalPages={totalPages}
+                pageSize={limit}
+                setPageSize={setLimit}
+                setCurrentPage={setPage}
+                totalItems={meta?.totalCount}
+              />
+            </>
+          )}
         </>
       )}
 
