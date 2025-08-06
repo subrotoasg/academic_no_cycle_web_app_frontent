@@ -118,22 +118,22 @@ export default function Navbar() {
       <li>
         <NavItem href="/" icon={<FaHome />} label="Home" isMobile={isMobile} />
       </li>
-      <li>
+      {/* <li>
         <NavItem
           href="/myclass"
           icon={<SiGoogleclassroom />}
           label="My Courses"
           isMobile={isMobile}
         />
-      </li>
-      <li>
+      </li> */}
+      {/* <li>
         <NavItem
           href="/routine"
           icon={<GrSchedule />}
           label="Routine"
           isMobile={isMobile}
         />
-      </li>
+      </li> */}
 
       {user &&
         (user.role === "admin" ? (

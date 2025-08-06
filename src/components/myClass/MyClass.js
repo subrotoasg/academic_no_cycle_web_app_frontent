@@ -34,7 +34,7 @@ function MyClass() {
     return (
       <div className="py-25 mx-4">
         <h2 className="text-2xl font-bold text-center text-red-500 mt-20">
-          Oooops! No Subjects Available Yet
+          Oooops! No Courses Available Yet
         </h2>
       </div>
     );

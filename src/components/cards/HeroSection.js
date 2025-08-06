@@ -5,14 +5,15 @@ import React from "react";
 import Link from "next/link";
 import { GiBrightExplosion } from "react-icons/gi";
 import Image from "next/image";
+import thumImg from "../../../public/img/varsitycover.jpg";
 
 export function HeroSection() {
   return (
     <div className="w-full overflow-hidden relative">
       <div className="relative h-[20rem] md:h-[40rem] w-[95vw] md:w-full max-w-screen-xl mx-auto overflow-hidden rounded-xl">
         <Image
-          // src="https://i.postimg.cc/Nfz5TN4Q/Varsity-GST-Thumbnail.jpg"
-          src="/img/varsity-gst-thumbnail.jpg"
+          // src="/img/varsitycover.jpg"
+          src={thumImg}
           alt="Hero Image"
           fill
           className="object-cover"
