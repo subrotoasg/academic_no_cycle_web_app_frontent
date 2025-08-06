@@ -18,10 +18,9 @@ function AdminDashboard() {
   const courses = useSelector(selectAllCourses);
   const user = useSelector(currentUser);
   const name = user?.name || "Admin";
-
   useEffect(() => {
-    if (courses?.length > 0 && !selectedCourseId) {
-      setSelectedCourseId(courses[0].id);
+    if (courses?.data?.length > 0 && !selectedCourseId) {
+      setSelectedCourseId(courses.data[0].id);
     }
   }, [courses, selectedCourseId]);
 
@@ -46,6 +45,7 @@ function AdminDashboard() {
         skip: !selectedCourseId,
       }
     );
+
   const { data: noticeData, isLoading: noticeLoading } =
     useGetNoticeRoutinesByCourseIdQuery(
       { courseId: selectedCourseId },
@@ -129,7 +129,7 @@ function AdminDashboard() {
       <div>
         <CourseSelect
           label="Select Course"
-          courses={courses}
+          courses={courses?.data}
           selectedCourseId={selectedCourseId}
           onChange={setSelectedCourseId}
         />
