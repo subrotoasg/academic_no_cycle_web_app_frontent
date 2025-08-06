@@ -26,6 +26,11 @@ export function ChapterList() {
   const [ChapterInfoModalOpen, setChapterInfoModalOpen] = useState(false);
   const [ChapterEditModalOpen, setChapterEditModalOpen] = useState(false);
 
+  useEffect(() => {
+    if (courses?.length > 0 && !selectedCourseId) {
+      setSelectedCourseId(courses[0].id);
+    }
+  }, [courses, selectedCourseId]);
   const { data, isError, isLoading } = useGetCourseSubjectChaptersQuery(
     {
       page,

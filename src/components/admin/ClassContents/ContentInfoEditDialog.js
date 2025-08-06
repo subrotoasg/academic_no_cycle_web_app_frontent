@@ -45,8 +45,8 @@ export default function ContentInfoEditDialog({
     if (selectedContent) {
       reset({
         courseTitle:
-          selectedContent?.courseSubjectChapter?.courseSubject?.course?.title ||
-          "",
+          selectedContent?.courseSubjectChapter?.courseSubject?.course
+            ?.productName || "",
         type: selectedContent?.hostingType || "",
         subject:
           selectedContent?.courseSubjectChapter?.courseSubject?.subject
