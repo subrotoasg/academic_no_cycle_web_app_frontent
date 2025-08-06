@@ -1,4 +1,5 @@
 import { tagTypesValue } from "../tagTypes";
+import { quearyUrlGenerator } from "../utilities/quearyParamsGenerator";
 import baseApi from "./baseApi";
 
 const courseApiServices = baseApi.injectEndpoints({
@@ -18,16 +19,22 @@ const courseApiServices = baseApi.injectEndpoints({
     }),
 
     getAllCourse: builder.query({
-      query: () => ({
-        url: `/course`,
-        method: "GET",
-      }),
+      query: (queryParams) => {
+        const url = quearyUrlGenerator("/course", queryParams);
+        return {
+          url,
+          method: "GET",
+        };
+      },
       providesTags: (result) =>
-        result?.data
-          ? result.data.data.map((course) => ({
-              type: tagTypesValue.COURSE,
-              id: course.id,
-            }))
+        result?.data?.data
+          ? [
+              ...result.data.data.map((course) => ({
+                type: tagTypesValue.COURSE,
+                id: course.id,
+              })),
+              { type: tagTypesValue.COURSE, id: "LIST" },
+            ]
           : [{ type: tagTypesValue.COURSE, id: "LIST" }],
     }),
   }),
