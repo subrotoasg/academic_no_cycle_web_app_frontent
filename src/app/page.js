@@ -12,21 +12,17 @@ import SubjectFeature from "@/components/subject/SubjectFeature";
 export default function Home() {
   return (
     <div className="py-14 md:py-20">
-      <HeaderTitle courseName={"Varsity 25"} />
+      <HeaderTitle  />
 
       <div data-aos="fade-up" className="overflow-hidden w-full p-1 relative">
-        {/* <HeroSection /> */}
+         <HeroSection /> 
       </div>
       <div>{/* <LiveSection /> */}</div>
-      {/* <div className="my-10 md:my-20">
-        <NoticeBoard />
-      </div> */}
+   
       <div className="my-10 md:my-20">
         <CourseFeature />
       </div>
-      {/* <div>
-        <Featured />
-      </div> */}
+      
       <div data-aos="fade-down">
         <StudentReviews />
       </div>
