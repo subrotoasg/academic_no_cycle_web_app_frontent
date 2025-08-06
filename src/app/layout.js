@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Competitive Admission Web App",
+  title: "ACS Varsity & GST",
   description: "Apar's Classroom 2025",
 };
 
