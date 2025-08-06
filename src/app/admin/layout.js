@@ -6,6 +6,7 @@ import { useGetAllCourseQuery } from "@/redux/services/courseApi";
 import { useEffect } from "react";
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
 import { selectAllCourses, setCourses } from "@/redux/Features/courseInfo";
+export const runtime = "edge";
 
 export default function AdminLayout({ children }) {
   const defaultLimit = 100;
