@@ -1,12 +1,12 @@
 import BlurText from "@/blocks/TextAnimations/BlurText/BlurText";
 import React from "react";
 
-function HeaderTitle({ courseName }) {
+function HeaderTitle() {
   return (
     <div className="container mx-auto text-center py-4">
       <h1 className="flex  justify-center">
         <BlurText
-          text={`Your Future Starts Here, ${courseName || "Apar's ClassRoom"}`}
+          text={`ACS Varsity + GST Special Private Programme 2025`}
           delay={150}
           animateBy="words"
           direction="down"
