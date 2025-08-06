@@ -49,7 +49,7 @@ export function FeaturedList() {
     }
   );
   const [deleteFeatured] = useDeleteFeaturedMutation();
-
+  // console.log(data);
   const featuresData = data?.data?.data;
   // console.log(featuresData);
   const meta = data?.data?.meta;
@@ -57,6 +57,10 @@ export function FeaturedList() {
   useEffect(() => {
     setPage(1);
   }, [searchQuery]);
+  useEffect(() => {
+    setSearchQuery("");
+    setPage(1);
+  }, [selectedCourseId]);
 
   const sortedFeatures = useMemo(() => {
     return featuresData;
@@ -120,6 +124,13 @@ export function FeaturedList() {
         onChange={setSelectedCourseId}
       />
 
+      <div className="p-2">
+        <SearchBar
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          placeholder="Search by Feature Title..."
+        />
+      </div>
       {isLoading && (
         <div className="w-full flex justify-center py-8">
           <Loading />
@@ -140,13 +151,6 @@ export function FeaturedList() {
             </div>
           ) : (
             <>
-              <div className="p-2">
-                <SearchBar
-                  searchQuery={searchQuery}
-                  setSearchQuery={setSearchQuery}
-                  placeholder="Search by Feature Title..."
-                />
-              </div>
               <FeaturedTable
                 features={sortedFeatures}
                 handleDelete={handleFeatureDelete}

@@ -56,6 +56,11 @@ export function NoticeList() {
     setPage(1);
   }, [searchQuery]);
 
+  useEffect(() => {
+    setSearchQuery("");
+    setPage(1);
+  }, [selectedCourseId]);
+
   const sortedNotices = useMemo(() => {
     return noticesData;
   }, [noticesData]);
@@ -117,7 +122,13 @@ export function NoticeList() {
         selectedCourseId={selectedCourseId}
         onChange={setSelectedCourseId}
       />
-
+      <div className="p-2">
+        <SearchBar
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          placeholder="Search by title ..."
+        />
+      </div>
       {isLoading && (
         <div className="w-full flex justify-center py-8">
           <Loading />
@@ -138,13 +149,6 @@ export function NoticeList() {
             </div>
           ) : (
             <>
-              <div className="p-2">
-                <SearchBar
-                  searchQuery={searchQuery}
-                  setSearchQuery={setSearchQuery}
-                  placeholder="Search by title ..."
-                />
-              </div>
               <NoticeTable
                 notices={sortedNotices}
                 handleDelete={handleNoticeDelete}

@@ -49,6 +49,11 @@ export default function AdminList() {
     setPage(1);
   }, [searchQuery]);
 
+  useEffect(() => {
+    setSearchQuery("");
+    setPage(1);
+  }, [selectedCourseId]);
+
   const sortedData = useMemo(() => {
     return adminData || [];
   }, [adminData]);
@@ -67,7 +72,13 @@ export default function AdminList() {
         selectedCourseId={selectedCourseId}
         onChange={setSelectedCourseId}
       />
-
+      <div className="p-2">
+        <SearchBar
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          placeholder="Search by email"
+        />
+      </div>
       {isLoading && (
         <div className="w-full flex justify-center py-8">
           <Loading />
@@ -88,13 +99,6 @@ export default function AdminList() {
             </div>
           ) : (
             <>
-              <div className="p-2">
-                <SearchBar
-                  searchQuery={searchQuery}
-                  setSearchQuery={setSearchQuery}
-                  placeholder="Search by email"
-                />
-              </div>
               <AdminTable admins={sortedData} refetch={refetch} />
               <PaginationControls
                 currentPage={page}

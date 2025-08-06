@@ -18,7 +18,7 @@ export default function NoticeDetailsDialog({
   onOpenChange,
 }) {
   const infoFields = [
-    { label: "Batch", value: selectedNotice?.course?.title },
+    { label: "Batch", value: selectedNotice?.course?.productName },
     { label: "Type", value: selectedNotice?.type },
     { label: "Notice Title", value: selectedNotice?.title },
     { label: "Description", value: selectedNotice?.description },

@@ -54,7 +54,7 @@ export default function NoticeInfoEditDialog({
         : "";
 
       reset({
-        course: notice.course?.title || "",
+        course: notice.course?.productName || "",
         type: notice.type || "",
         title: notice.title || "",
         description: notice.description || "",

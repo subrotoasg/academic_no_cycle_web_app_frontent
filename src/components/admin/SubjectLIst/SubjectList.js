@@ -53,6 +53,11 @@ export function SubjectList() {
   useEffect(() => {
     setPage(1);
   }, [searchQuery]);
+
+  useEffect(() => {
+    setSearchQuery("");
+    setPage(1);
+  }, [selectedCourseId]);
   const sortedSubject = useMemo(() => {
     return SubjectData;
   }, [SubjectData]);
@@ -84,7 +89,7 @@ export function SubjectList() {
 
         Swal.fire({
           title: "Deleted!",
-          text: `"${Subject?.Subject?.SubjectName} has been successfully deleted.`,
+          text: `${Subject?.Subject?.SubjectName} has been successfully deleted.`,
           icon: "success",
           timer: 2000,
           showConfirmButton: false,
@@ -102,7 +107,7 @@ export function SubjectList() {
   return (
     <div className="w-full p-2 md:p-4 bg-white dark:bg-gray-900 shadow-xl rounded-xl space-y-3 mt-3">
       <h1 className="text-xl md:text-3xl font-semibold text-center mb-6">
-        Subjects List
+        Course Subjects List
       </h1>
 
       <p className="text-xs md:text-sm text-muted-foreground text-center mt-2">
@@ -136,13 +141,13 @@ export function SubjectList() {
             </div>
           ) : (
             <>
-              <div className="p-2">
+              {/* <div className="p-2">
                 <SearchBar
                   searchQuery={searchQuery}
                   setSearchQuery={setSearchQuery}
                   placeholder="Search by title ..."
                 />
-              </div>
+              </div> */}
               <SubjectsTable
                 Subjects={sortedSubject}
                 handleDelete={handleSubjectDelete}

@@ -59,6 +59,10 @@ const ContentList = () => {
   useEffect(() => {
     setPage(1);
   }, [searchQuery]);
+  useEffect(() => {
+    setSearchQuery("");
+    setPage(1);
+  }, [selectedCourseId]);
 
   const sortedContents = useMemo(() => {
     return classContentsData;
@@ -150,6 +154,13 @@ const ContentList = () => {
         selectedCourseId={selectedCourseId}
         onChange={setSelectedCourseId}
       />
+      <div className="p-2">
+        <SearchBar
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          placeholder="Search by class title..."
+        />
+      </div>
 
       {isLoading && (
         <div className="w-full flex justify-center py-8">
@@ -171,13 +182,6 @@ const ContentList = () => {
             </div>
           ) : (
             <>
-              <div className="p-2">
-                <SearchBar
-                  searchQuery={searchQuery}
-                  setSearchQuery={setSearchQuery}
-                  placeholder="Search by class title..."
-                />
-              </div>
               <ContentTable
                 contentData={sortedData}
                 handleContentDelete={handleContentDelete}

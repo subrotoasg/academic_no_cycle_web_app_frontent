@@ -48,6 +48,11 @@ export function ChapterList() {
   useEffect(() => {
     setPage(1);
   }, [searchQuery]);
+
+  useEffect(() => {
+    setSearchQuery("");
+    setPage(1);
+  }, [selectedCourseId]);
   const sortedChapter = useMemo(() => {
     return ChapterData;
   }, [ChapterData]);
@@ -111,6 +116,14 @@ export function ChapterList() {
         onChange={setSelectedCourseId}
       />
 
+      <div className="p-2">
+        <SearchBar
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          placeholder="Search by chapter name ..."
+        />
+      </div>
+
       {isLoading && (
         <div className="w-full flex justify-center py-8">
           <Loading />
@@ -131,13 +144,6 @@ export function ChapterList() {
             </div>
           ) : (
             <>
-              <div className="p-2">
-                <SearchBar
-                  searchQuery={searchQuery}
-                  setSearchQuery={setSearchQuery}
-                  placeholder="Search by title ..."
-                />
-              </div>
               <ChapterTable
                 Chapters={sortedChapter}
                 handleDelete={handleChapterDelete}
