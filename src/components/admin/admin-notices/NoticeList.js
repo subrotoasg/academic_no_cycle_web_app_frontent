@@ -8,35 +8,38 @@ import NoticeDetailsDialog from "./NoticeDetailsDialog";
 import Swal from "sweetalert2";
 import Loading from "../utilities/Loading";
 import { useSelector } from "react-redux";
-// import { selectCourse } from "@/redux/Features/courseInfo";
 import {
   useDeleteNoticeRoutineMutation,
   useGetNoticeRoutinesByCourseIdQuery,
 } from "@/redux/services/noticeRoutineApi";
+import { selectAllCourses } from "@/redux/Features/courseInfo";
 
 export function NoticeList() {
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
-
+  const [selectedCourseId, setSelectedCourseId] = useState("");
+  const courses = useSelector(selectAllCourses);
   const [selectedNotice, setSelectedNotice] = useState(null);
   const [noticeInfoModalOpen, setNoticeInfoModalOpen] = useState(false);
   const [noticeEditModalOpen, setNoticeEditModalOpen] = useState(false);
 
-  // const course = useSelector(selectCourse);
-  // const courseId = course?.id;
-  const courseId = "a220ea44-dfb4-4d4d-a073-50f6bd7d6669";
   const {
     data,
     isLoading,
     isError,
     refetch: refetchNotices,
-  } = useGetNoticeRoutinesByCourseIdQuery({
-    page,
-    limit,
-    searchTerm: searchQuery,
-    courseId,
-  });
+  } = useGetNoticeRoutinesByCourseIdQuery(
+    {
+      page,
+      limit,
+      searchTerm: searchQuery,
+      courseId: selectedCourseId,
+    },
+    {
+      skip: !selectedCourseId,
+    }
+  );
 
   const [deleteNoticeRoutine] = useDeleteNoticeRoutineMutation();
 
@@ -93,24 +96,32 @@ export function NoticeList() {
     }
   };
 
-  if (isLoading) return <Loading />;
-  if (isError)
-    return (
-      <div className="text-center text-red-500">
-        Failed to load notice listings.
-      </div>
-    );
-
   return (
     <div className="w-full p-2 md:p-4 bg-white dark:bg-gray-900 shadow-xl rounded-xl space-y-3 mt-3">
       <h1 className="text-xl md:text-3xl font-semibold text-center mb-6">
-        Notice & Routine for
-        {/* {course?.title} */}
+        Course Notice & Routines
       </h1>
 
       <p className="text-xs md:text-sm text-muted-foreground text-center mt-2">
         Browse, edit, or delete the uploaded notices and routines.
       </p>
+      <div className="p-2 grid grid-cols-2">
+        <label className="text-xs md:text-base w-full font-medium text-gray-700 dark:text-gray-300">
+          Select Course
+        </label>
+        <select
+          value={selectedCourseId}
+          onChange={(e) => setSelectedCourseId(e.target.value)}
+          className="w-full p-2 border border-gray-300 rounded-md dark:bg-gray-800 dark:text-white text-xs md:text-sm"
+        >
+          <option value="">-- Select Course --</option>
+          {courses?.map((course) => (
+            <option key={course.id} value={course.id}>
+              {course.productName}
+            </option>
+          ))}
+        </select>
+      </div>
 
       <div className="p-2">
         <SearchBar
@@ -120,25 +131,43 @@ export function NoticeList() {
         />
       </div>
 
-      {sortedNotices.length === 0 ? (
-        <div className="text-center text-gray-500 py-4">No Notice Found</div>
-      ) : (
-        <>
-          <NoticeTable
-            notices={sortedNotices}
-            handleDelete={handleNoticeDelete}
-            handleNoticeEditModal={handleNoticeEditModal}
-            handleNoticeInfoModal={handleNoticeInfoModal}
-          />
+      {isLoading && (
+        <div className="w-full flex justify-center py-8">
+          <Loading />
+        </div>
+      )}
 
-          <PaginationControls
-            currentPage={page}
-            totalPages={totalPages}
-            pageSize={limit}
-            setPageSize={setLimit}
-            setCurrentPage={setPage}
-            totalItems={meta?.totalCount}
-          />
+      {isError && !isLoading && (
+        <div className="text-center text-red-500 py-4">
+          Failed to load Notices.
+        </div>
+      )}
+
+      {!isLoading && !isError && (
+        <>
+          {!selectedCourseId || sortedNotices.length === 0 ? (
+            <div className="text-center text-gray-500 py-4">
+              No Notice Found
+            </div>
+          ) : (
+            <>
+              <NoticeTable
+                notices={sortedNotices}
+                handleDelete={handleNoticeDelete}
+                handleNoticeEditModal={handleNoticeEditModal}
+                handleNoticeInfoModal={handleNoticeInfoModal}
+              />
+
+              <PaginationControls
+                currentPage={page}
+                totalPages={totalPages}
+                pageSize={limit}
+                setPageSize={setLimit}
+                setCurrentPage={setPage}
+                totalItems={meta?.totalCount}
+              />
+            </>
+          )}
         </>
       )}
 

@@ -11,6 +11,7 @@ import {
   selectAllCourses,
   selectSelectedCourse,
 } from "@/redux/Features/courseInfo";
+import CourseSelect from "@/components/form/CourseSelect";
 
 export default function AdminList() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -23,6 +24,11 @@ export default function AdminList() {
   );
 
   console.log(course);
+  useEffect(() => {
+    if (courses?.length > 0 && !selectedCourseId) {
+      setSelectedCourseId(courses[0].id);
+    }
+  }, [courses, selectedCourseId]);
 
   const { data, isLoading, isError, refetch } = useGetAdminsByCourseIdQuery(
     {
@@ -35,7 +41,7 @@ export default function AdminList() {
       skip: !selectedCourseId,
     }
   );
-
+  // console.log(data);
   const meta = data?.data?.meta;
   const adminData = data?.data?.data;
   const totalPages = meta?.totalCount ? Math.ceil(meta.totalCount / limit) : 1;
@@ -49,37 +55,18 @@ export default function AdminList() {
 
   return (
     <div className="w-full p-1 lg:p-6 bg-white dark:bg-gray-900 shadow-lg rounded-2xl mt-3">
-      <div className="p-2 grid grid-cols-2">
-        <label className="text-xs md:text-base w-full font-medium text-gray-700 dark:text-gray-300">
-          Select Course
-        </label>
-        <select
-          value={selectedCourseId}
-          onChange={(e) => setSelectedCourseId(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded-md dark:bg-gray-800 dark:text-white text-xs md:text-sm"
-        >
-          <option value="">-- Select Course --</option>
-          {courses?.map((course) => (
-            <option key={course.id} value={course.id}>
-              {course.productName}
-            </option>
-          ))}
-        </select>
-      </div>
       <h2 className="text-xl md:text-3xl font-bold text-center text-gray-800 dark:text-white pt-5">
-        Course Admin List {course?.productName}
+        Course Admin List
       </h2>
       <p className="text-xs md:text-sm text-muted-foreground text-center mt-2">
         Manage and oversee course administrators
       </p>
-
-      <div className="p-2">
-        <SearchBar
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          placeholder="Search by email"
-        />
-      </div>
+      <CourseSelect
+        label="Select Course"
+        courses={courses}
+        selectedCourseId={selectedCourseId}
+        onChange={setSelectedCourseId}
+      />
 
       {isLoading && (
         <div className="w-full flex justify-center py-8">
@@ -101,6 +88,13 @@ export default function AdminList() {
             </div>
           ) : (
             <>
+              <div className="p-2">
+                <SearchBar
+                  searchQuery={searchQuery}
+                  setSearchQuery={setSearchQuery}
+                  placeholder="Search by email"
+                />
+              </div>
               <AdminTable admins={sortedData} refetch={refetch} />
               <PaginationControls
                 currentPage={page}

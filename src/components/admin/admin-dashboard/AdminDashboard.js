@@ -1,40 +1,61 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Users, UserPlus, Film, Bell, BadgeSwissFranc } from "lucide-react";
 import { useSelector } from "react-redux";
 import { currentUser } from "@/redux/Features/authentication";
 import { useGetAdminsByCourseIdQuery } from "@/redux/services/adminApi";
-// import { selectCourse } from "@/redux/Features/courseInfo";
 import Loading from "../utilities/Loading";
 import { useGetAllClassContentsQuery } from "@/redux/services/contentsApi";
 import { useGetFeaturesByCourseIdQuery } from "@/redux/services/featuredApi";
 import { useGetNoticeRoutinesByCourseIdQuery } from "@/redux/services/noticeRoutineApi";
-
 import DashboardCharts from "./DashboardCharts";
+import { selectAllCourses } from "@/redux/Features/courseInfo";
+import CourseSelect from "@/components/form/CourseSelect";
 
 function AdminDashboard() {
-  // const course = useSelector(selectCourse);
-  // const courseId = course?.id;
-  const courseId = "a220ea44-dfb4-4d4d-a073-50f6bd7d6669";
+  const [selectedCourseId, setSelectedCourseId] = useState("");
+  const courses = useSelector(selectAllCourses);
   const user = useSelector(currentUser);
   const name = user?.name || "Admin";
 
+  useEffect(() => {
+    if (courses?.length > 0 && !selectedCourseId) {
+      setSelectedCourseId(courses[0].id);
+    }
+  }, [courses, selectedCourseId]);
+
   const { data: adminData, isLoading: adminLoading } =
-    useGetAdminsByCourseIdQuery({ courseId });
+    useGetAdminsByCourseIdQuery(
+      { courseId: selectedCourseId },
+      {
+        skip: !selectedCourseId,
+      }
+    );
   const { data: contentData, isLoading: contentLoading } =
-    useGetAllClassContentsQuery({ courseId });
+    useGetAllClassContentsQuery(
+      { courseId: selectedCourseId },
+      {
+        skip: !selectedCourseId,
+      }
+    );
   const { data: featureData, isLoading: featureLoading } =
-    useGetFeaturesByCourseIdQuery({ courseId });
+    useGetFeaturesByCourseIdQuery(
+      { courseId: selectedCourseId },
+      {
+        skip: !selectedCourseId,
+      }
+    );
   const { data: noticeData, isLoading: noticeLoading } =
-    useGetNoticeRoutinesByCourseIdQuery({ courseId });
+    useGetNoticeRoutinesByCourseIdQuery(
+      { courseId: selectedCourseId },
+      {
+        skip: !selectedCourseId,
+      }
+    );
 
   const isAnyLoading =
     adminLoading || contentLoading || featureLoading || noticeLoading;
-
-  if (isAnyLoading) {
-    return <Loading />;
-  }
 
   const admins = adminData?.data?.data.length || 0;
   const videos = contentData?.data?.data.length || 0;
@@ -106,7 +127,26 @@ function AdminDashboard() {
         </p>
       </div>
       <div>
-        <DashboardCharts stats={staticData} statsData={statsData} />
+        <CourseSelect
+          label="Select Course"
+          courses={courses}
+          selectedCourseId={selectedCourseId}
+          onChange={setSelectedCourseId}
+        />
+
+        {selectedCourseId ? (
+          isAnyLoading ? (
+            <div className="flex justify-center py-8">
+              <Loading />
+            </div>
+          ) : (
+            <DashboardCharts stats={staticData} statsData={statsData} />
+          )
+        ) : (
+          <div className="text-center text-muted-foreground text-sm mt-4">
+            Please select a course to view dashboard data.
+          </div>
+        )}
       </div>
     </div>
   );

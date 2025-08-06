@@ -16,9 +16,8 @@ import { selectAllCourses } from "@/redux/Features/courseInfo";
 import Dropdown from "@/components/form/Dropdown";
 
 export default function AdminForm() {
-  const courseId = "a220ea44-dfb4-4d4d-a073-50f6bd7d6669";
   const courses = useSelector(selectAllCourses);
-  console.log(courses);
+  // console.log(courses);
   const courseOptions =
     courses?.map((course) => ({
       label: course.productName,

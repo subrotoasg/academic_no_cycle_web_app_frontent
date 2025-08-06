@@ -34,7 +34,6 @@ function FeaturedForm() {
     { label: "Coupon", value: "Coupon" },
   ];
   const defaultValues = {
-    courseTitle: "",
     title: "",
     type: "",
     description: "",
