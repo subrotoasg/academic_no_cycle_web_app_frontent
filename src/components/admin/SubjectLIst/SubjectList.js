@@ -20,7 +20,7 @@ import CourseSelect from "@/components/form/CourseSelect";
 export function SubjectList() {
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(100);
   const [selectedCourseId, setSelectedCourseId] = useState("");
   const courses = useSelector(selectAllCourses);
   const [selectedSubject, setSelectedSubject] = useState(null);
@@ -28,8 +28,8 @@ export function SubjectList() {
   const [SubjectEditModalOpen, setSubjectEditModalOpen] = useState(false);
 
   useEffect(() => {
-    if (courses?.length > 0 && !selectedCourseId) {
-      setSelectedCourseId(courses[0].id);
+    if (courses?.data?.length > 0 && !selectedCourseId) {
+      setSelectedCourseId(courses.data[0].id);
     }
   }, [courses, selectedCourseId]);
   const { data, isError, isLoading } = useGetCourseSubjectQuery(
@@ -43,16 +43,21 @@ export function SubjectList() {
       skip: !selectedCourseId,
     }
   );
-  // console.log(data);
+  console.log(data);
 
   const SubjectData = data?.data;
-  // console.log(SubjectData);
-  const meta = data?.meta;
+  console.log(SubjectData);
+  const meta = data?.data?.meta;
 
   const totalPages = meta?.totalCount ? Math.ceil(meta.totalCount / limit) : 1;
   useEffect(() => {
     setPage(1);
   }, [searchQuery]);
+
+  useEffect(() => {
+    setSearchQuery("");
+    setPage(1);
+  }, [selectedCourseId]);
   const sortedSubject = useMemo(() => {
     return SubjectData;
   }, [SubjectData]);
@@ -84,7 +89,7 @@ export function SubjectList() {
 
         Swal.fire({
           title: "Deleted!",
-          text: `"${Subject?.Subject?.SubjectName} has been successfully deleted.`,
+          text: `${Subject?.Subject?.SubjectName} has been successfully deleted.`,
           icon: "success",
           timer: 2000,
           showConfirmButton: false,
@@ -102,7 +107,7 @@ export function SubjectList() {
   return (
     <div className="w-full p-2 md:p-4 bg-white dark:bg-gray-900 shadow-xl rounded-xl space-y-3 mt-3">
       <h1 className="text-xl md:text-3xl font-semibold text-center mb-6">
-        Subjects List
+        Course Subjects List
       </h1>
 
       <p className="text-xs md:text-sm text-muted-foreground text-center mt-2">
@@ -111,7 +116,7 @@ export function SubjectList() {
 
       <CourseSelect
         label="Select Course"
-        courses={courses}
+        courses={courses?.data}
         selectedCourseId={selectedCourseId}
         onChange={setSelectedCourseId}
       />
@@ -136,27 +141,27 @@ export function SubjectList() {
             </div>
           ) : (
             <>
-              <div className="p-2">
+              {/* <div className="p-2">
                 <SearchBar
                   searchQuery={searchQuery}
                   setSearchQuery={setSearchQuery}
                   placeholder="Search by title ..."
                 />
-              </div>
+              </div> */}
               <SubjectsTable
                 Subjects={sortedSubject}
                 handleDelete={handleSubjectDelete}
                 handleSubjectEditModal={handleSubjectEditModal}
                 handleSubjectInfoModal={handleSubjectInfoModal}
               />
-              <PaginationControls
+              {/* <PaginationControls
                 currentPage={page}
                 totalPages={totalPages}
                 pageSize={limit}
                 setPageSize={setLimit}
                 setCurrentPage={setPage}
                 totalItems={meta?.totalCount}
-              />
+              /> */}
             </>
           )}
         </>

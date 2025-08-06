@@ -15,6 +15,7 @@ import {
   useGetAllClassContentsQuery,
 } from "@/redux/services/contentsApi";
 import { selectAllCourses } from "@/redux/Features/courseInfo";
+import CourseSelect from "@/components/form/CourseSelect";
 
 const ContentList = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -25,6 +26,12 @@ const ContentList = () => {
   const [selectedContent, setSelectedContent] = useState(null);
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (courses?.data?.length > 0 && !selectedCourseId) {
+      setSelectedCourseId(courses.data[0].id);
+    }
+  }, [courses, selectedCourseId]);
 
   const {
     data,
@@ -52,6 +59,10 @@ const ContentList = () => {
   useEffect(() => {
     setPage(1);
   }, [searchQuery]);
+  useEffect(() => {
+    setSearchQuery("");
+    setPage(1);
+  }, [selectedCourseId]);
 
   const sortedContents = useMemo(() => {
     return classContentsData;
@@ -131,30 +142,18 @@ const ContentList = () => {
 
   return (
     <div className="w-full p-2 lg:p-6 bg-white dark:bg-gray-900 shadow-lg rounded-2xl space-y-4 mt-3">
-      <div className="p-2 grid grid-cols-2">
-        <label className="text-xs md:text-base w-full font-medium text-gray-700 dark:text-gray-300">
-          Select Course
-        </label>
-        <select
-          value={selectedCourseId}
-          onChange={(e) => setSelectedCourseId(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded-md dark:bg-gray-800 dark:text-white text-xs md:text-sm"
-        >
-          <option value="">-- Select Course --</option>
-          {courses?.map((course) => (
-            <option key={course.id} value={course.id}>
-              {course.productName}
-            </option>
-          ))}
-        </select>
-      </div>
       <h2 className="text-xl md:text-3xl font-bold text-gray-800 dark:text-white text-center">
         Course Contents
       </h2>
       <p className="text-xs md:text-sm text-muted-foreground text-center">
         View and manage all recorded course videos available
       </p>
-
+      <CourseSelect
+        label="Select Course"
+        courses={courses?.data}
+        selectedCourseId={selectedCourseId}
+        onChange={setSelectedCourseId}
+      />
       <div className="p-2">
         <SearchBar
           searchQuery={searchQuery}

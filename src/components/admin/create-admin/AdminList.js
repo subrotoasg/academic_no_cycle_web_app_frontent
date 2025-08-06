@@ -19,14 +19,14 @@ export default function AdminList() {
   const [limit, setLimit] = useState(5);
   const [selectedCourseId, setSelectedCourseId] = useState("");
   const courses = useSelector(selectAllCourses);
-  const course = useSelector(
-    selectedCourseId ? selectSelectedCourse(selectedCourseId) : () => null
-  );
+  // const course = useSelector(
+  //   selectedCourseId ? selectSelectedCourse(selectedCourseId) : () => null
+  // );
 
-  console.log(course);
+  // console.log(course);
   useEffect(() => {
-    if (courses?.length > 0 && !selectedCourseId) {
-      setSelectedCourseId(courses[0].id);
+    if (courses?.data?.length > 0 && !selectedCourseId) {
+      setSelectedCourseId(courses.data[0].id);
     }
   }, [courses, selectedCourseId]);
 
@@ -49,6 +49,11 @@ export default function AdminList() {
     setPage(1);
   }, [searchQuery]);
 
+  useEffect(() => {
+    setSearchQuery("");
+    setPage(1);
+  }, [selectedCourseId]);
+
   const sortedData = useMemo(() => {
     return adminData || [];
   }, [adminData]);
@@ -63,11 +68,17 @@ export default function AdminList() {
       </p>
       <CourseSelect
         label="Select Course"
-        courses={courses}
+        courses={courses?.data}
         selectedCourseId={selectedCourseId}
         onChange={setSelectedCourseId}
       />
-
+      <div className="p-2">
+        <SearchBar
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          placeholder="Search by email"
+        />
+      </div>
       {isLoading && (
         <div className="w-full flex justify-center py-8">
           <Loading />
@@ -88,13 +99,6 @@ export default function AdminList() {
             </div>
           ) : (
             <>
-              <div className="p-2">
-                <SearchBar
-                  searchQuery={searchQuery}
-                  setSearchQuery={setSearchQuery}
-                  placeholder="Search by email"
-                />
-              </div>
               <AdminTable admins={sortedData} refetch={refetch} />
               <PaginationControls
                 currentPage={page}

@@ -6,7 +6,6 @@ import PaginationControls from "../utilities/PaginationControls";
 import Swal from "sweetalert2";
 import Loading from "../utilities/Loading";
 import { useSelector } from "react-redux";
-
 import { ChapterTable } from "./ChapterTable";
 import ChapterInfoEditDialog from "./ChapterInfoEditDialog";
 import {
@@ -26,6 +25,11 @@ export function ChapterList() {
   const [ChapterInfoModalOpen, setChapterInfoModalOpen] = useState(false);
   const [ChapterEditModalOpen, setChapterEditModalOpen] = useState(false);
 
+  useEffect(() => {
+    if (courses?.data?.length > 0 && !selectedCourseId) {
+      setSelectedCourseId(courses.data[0].id);
+    }
+  }, [courses, selectedCourseId]);
   const { data, isError, isLoading } = useGetCourseSubjectChaptersQuery(
     {
       page,
@@ -37,14 +41,18 @@ export function ChapterList() {
       skip: !selectedCourseId,
     }
   );
-  // console.log(data);
-  const ChapterData = data?.data;
+
+  const ChapterData = data?.data?.data;
   const meta = data?.data?.meta;
-  // console.log(ChapterData);
   const totalPages = meta?.totalCount ? Math.ceil(meta.totalCount / limit) : 1;
   useEffect(() => {
     setPage(1);
   }, [searchQuery]);
+
+  useEffect(() => {
+    setSearchQuery("");
+    setPage(1);
+  }, [selectedCourseId]);
   const sortedChapter = useMemo(() => {
     return ChapterData;
   }, [ChapterData]);
@@ -103,10 +111,18 @@ export function ChapterList() {
 
       <CourseSelect
         label="Select Course"
-        courses={courses}
+        courses={courses?.data}
         selectedCourseId={selectedCourseId}
         onChange={setSelectedCourseId}
       />
+
+      <div className="p-2">
+        <SearchBar
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          placeholder="Search by chapter name ..."
+        />
+      </div>
 
       {isLoading && (
         <div className="w-full flex justify-center py-8">
@@ -128,13 +144,6 @@ export function ChapterList() {
             </div>
           ) : (
             <>
-              <div className="p-2">
-                <SearchBar
-                  searchQuery={searchQuery}
-                  setSearchQuery={setSearchQuery}
-                  placeholder="Search by title ..."
-                />
-              </div>
               <ChapterTable
                 Chapters={sortedChapter}
                 handleDelete={handleChapterDelete}

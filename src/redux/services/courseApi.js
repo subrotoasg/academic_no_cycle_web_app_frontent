@@ -24,7 +24,7 @@ const courseApiServices = baseApi.injectEndpoints({
       }),
       providesTags: (result) =>
         result?.data
-          ? result.data.map((course) => ({
+          ? result.data.data.map((course) => ({
               type: tagTypesValue.COURSE,
               id: course.id,
             }))

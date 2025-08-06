@@ -14,6 +14,7 @@ import {
   useGetFeaturesByCourseIdQuery,
 } from "@/redux/services/featuredApi";
 import { selectAllCourses } from "@/redux/Features/courseInfo";
+import CourseSelect from "@/components/form/CourseSelect";
 
 export function FeaturedList() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -24,6 +25,12 @@ export function FeaturedList() {
   const [selectedFeature, setSelectedFeature] = useState(null);
   const [featureInfoModalOpen, setFeatureInfoModalOpen] = useState(false);
   const [featureEditModalOpen, setFeatureEditModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (courses?.data?.length > 0 && !selectedCourseId) {
+      setSelectedCourseId(courses.data[0].id);
+    }
+  }, [courses, selectedCourseId]);
 
   const {
     data,
@@ -42,7 +49,7 @@ export function FeaturedList() {
     }
   );
   const [deleteFeatured] = useDeleteFeaturedMutation();
-
+  // console.log(data);
   const featuresData = data?.data?.data;
   // console.log(featuresData);
   const meta = data?.data?.meta;
@@ -50,6 +57,10 @@ export function FeaturedList() {
   useEffect(() => {
     setPage(1);
   }, [searchQuery]);
+  useEffect(() => {
+    setSearchQuery("");
+    setPage(1);
+  }, [selectedCourseId]);
 
   const sortedFeatures = useMemo(() => {
     return featuresData;
@@ -106,23 +117,13 @@ export function FeaturedList() {
       <p className="text-xs md:text-sm text-muted-foreground text-center mt-2">
         View, edit, or delete featured content, discounts, and offers.
       </p>
-      <div className="p-2 grid grid-cols-2">
-        <label className="text-xs md:text-base w-full font-medium text-gray-700 dark:text-gray-300">
-          Select Course
-        </label>
-        <select
-          value={selectedCourseId}
-          onChange={(e) => setSelectedCourseId(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded-md dark:bg-gray-800 dark:text-white text-xs md:text-sm"
-        >
-          <option value="">-- Select Course --</option>
-          {courses?.map((course) => (
-            <option key={course.id} value={course.id}>
-              {course.productName}
-            </option>
-          ))}
-        </select>
-      </div>
+      <CourseSelect
+        label="Select Course"
+        courses={courses?.data}
+        selectedCourseId={selectedCourseId}
+        onChange={setSelectedCourseId}
+      />
+
       <div className="p-2">
         <SearchBar
           searchQuery={searchQuery}
@@ -130,7 +131,6 @@ export function FeaturedList() {
           placeholder="Search by Feature Title..."
         />
       </div>
-
       {isLoading && (
         <div className="w-full flex justify-center py-8">
           <Loading />

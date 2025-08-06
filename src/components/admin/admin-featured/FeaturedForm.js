@@ -23,7 +23,7 @@ function FeaturedForm() {
   const courses = useSelector(selectAllCourses);
 
   const courseOptions =
-    courses?.map((course) => ({
+    courses?.data?.map((course) => ({
       label: course.productName,
       value: course.id,
     })) || [];
