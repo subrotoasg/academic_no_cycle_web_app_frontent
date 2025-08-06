@@ -1,17 +1,11 @@
 "use client";
 import React, { useEffect } from "react";
 import FeaturedCard from "../cards/FeaturedCard";
-import { useSelector } from "react-redux";
-// import { selectCourse } from "@/redux/Features/courseInfo";
 import { useGetFeaturesByCourseIdQuery } from "@/redux/services/featuredApi";
-import Loading from "@/app/loading";
-import AOS from "aos";
+
 import "aos/dist/aos.css";
 
-const Featured = () => {
-  // const course = useSelector(selectCourse);
-  // const courseId = course?.id;
-  const courseId = "a220ea44-dfb4-4d4d-a073-50f6bd7d6669";
+const Featured = ({ courseId }) => {
   const { data: featureData, isLoading } = useGetFeaturesByCourseIdQuery({
     courseId,
   });

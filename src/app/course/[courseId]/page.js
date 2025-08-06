@@ -4,7 +4,8 @@ import React from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import { useGetSubjectsByCourseIdQuery } from "@/redux/services/subjectsApi";
 import SubjectCard from "@/components/cards/SubjectCard";
-import SubjectFeature from "@/components/subject/SubjectFeature";
+import Featured from "@/components/featured/Featured";
+import NoticeBoard from "@/components/notice/NoticeBoard";
 
 function Course() {
   const params = useParams();
@@ -20,7 +21,9 @@ function Course() {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <p className="text-blue-500 text-xl font-medium">Loading subjects...</p>
+        <p className="text-blue-500 text-xl font-medium">
+          Loading Course Data...
+        </p>
       </div>
     );
   }
@@ -28,7 +31,10 @@ function Course() {
   return (
     <div className="container mx-auto pt-28">
       <div className="text-center mb-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-center text-blue-500 mb-8">
+        <h3 className="text-2xl md:text-4xl font-bold text-center text-blue-800 mb-8">
+          Course Title : {courseTitle}
+        </h3>
+        <h2 className="text-xl md:text-2xl font-bold text-center text-blue-500 mb-8">
           📚 Available Subjects
         </h2>
         <p className="text-xs md:text-lg text-gray-600 dark:text-gray-300 mt-2">
@@ -53,6 +59,13 @@ function Course() {
             </div>
           ))
         )}
+      </div>
+      <div>
+        <Featured courseId={courseId} />
+      </div>
+
+      <div className="my-10 md:my-20">
+        <NoticeBoard courseId={courseId} />
       </div>
     </div>
   );
