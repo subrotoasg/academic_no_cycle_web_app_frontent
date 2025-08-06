@@ -62,7 +62,7 @@ export default function AdminForm() {
         const { data: existingAdmin } = await dispatch(
           adminApiServices.endpoints.getAdminByEmailOrPhone.initiate(email)
         ).unwrap();
-        console.log(existingAdmin);
+        // console.log(existingAdmin);
         const existingId = existingAdmin?.data?.[0]?.id;
         if (existingId) {
           await assignCoursesToAdmins({

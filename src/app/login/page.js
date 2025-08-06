@@ -138,10 +138,10 @@ const Login = () => {
               >
                 <div className="space-y-1">
                   <h1 className="text-xl font-bold text-black dark:text-white">
-                    Admin Access
+                    Access Your Account
                   </h1>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Sign in to manage your dashboard.
+                    Sign in to your profile
                   </p>
                 </div>
                 <form onSubmit={handleLogin} className="space-y-3">

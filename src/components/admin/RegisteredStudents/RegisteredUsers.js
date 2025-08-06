@@ -76,7 +76,7 @@ export default function RegisteredStudents() {
   };
 
   const handleDelete = (id) => {
-    console.log(`Delete user with ID: ${id}`);
+    // console.log(`Delete user with ID: ${id}`);
   };
 
   return (

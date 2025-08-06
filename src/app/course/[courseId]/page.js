@@ -6,8 +6,9 @@ import { useGetSubjectsByCourseIdQuery } from "@/redux/services/subjectsApi";
 import SubjectCard from "@/components/cards/SubjectCard";
 import Featured from "@/components/featured/Featured";
 import NoticeBoard from "@/components/notice/NoticeBoard";
+import PrivateRoute from "@/PrivateRoute/PrivateRoute";
 
-function Course() {
+function CourseContent() {
   const params = useParams();
   const searchParams = useSearchParams();
 
@@ -16,7 +17,7 @@ function Course() {
 
   const { data: subjectData, isLoading } =
     useGetSubjectsByCourseIdQuery(courseId);
-  console.log(subjectData);
+  // console.log(subjectData);
 
   if (isLoading) {
     return (
@@ -27,7 +28,7 @@ function Course() {
       </div>
     );
   }
-  const subjects = subjectData?.data;
+  const subjects = subjectData?.data?.data;
   return (
     <div className="container mx-auto pt-28">
       <div className="text-center mb-6">
@@ -43,7 +44,7 @@ function Course() {
         </p>
       </div>
       <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-8 mx-5">
-        {subjects.length === 0 ? (
+        {!isLoading && (!subjects || subjects.length === 0) ? (
           <p className="text-red-500 text-lg font-semibold col-span-full text-center">
             No Subject Added yet.
           </p>
@@ -71,4 +72,12 @@ function Course() {
   );
 }
 
-export default Course;
+// export default Course;
+
+export default function Course() {
+  return (
+    <PrivateRoute>
+      <CourseContent />
+    </PrivateRoute>
+  );
+}

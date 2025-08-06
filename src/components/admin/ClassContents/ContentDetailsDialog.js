@@ -44,7 +44,7 @@ export default function ContentDetailsDialog({
     },
   ];
 
-  console.log(selectedContent);
+  // console.log(selectedContent);
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogTrigger asChild></DialogTrigger>
