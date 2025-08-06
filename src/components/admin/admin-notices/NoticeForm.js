@@ -10,7 +10,7 @@ import Swal from "sweetalert2";
 import { toast } from "sonner";
 import { useCreateNoticeRoutineMutation } from "@/redux/services/noticeRoutineApi";
 import { useSelector } from "react-redux";
-// import { selectCourse } from "@/redux/Features/courseInfo";
+import { selectAllCourses } from "@/redux/Features/courseInfo";
 
 export default function NoticeForm() {
   const [createNoticeRoutine, { isLoading }] = useCreateNoticeRoutineMutation();
@@ -18,15 +18,18 @@ export default function NoticeForm() {
   const [imagePreview, setImagePreview] = useState(null);
   const fileInputRef = useRef(null);
 
-  // const course = useSelector(selectCourse);
-
+  const courses = useSelector(selectAllCourses);
+  const courseOptions =
+    courses?.map((course) => ({
+      label: course.productName,
+      value: course.id,
+    })) || [];
   const types = [
     { label: "Routine", value: "Routine" },
     { label: "Notice", value: "Notice" },
   ];
 
   const defaultValues = {
-    courseTitle: "",
     type: "",
     title: "",
     description: "",
@@ -49,12 +52,6 @@ export default function NoticeForm() {
   const selectedType = watch("type");
   const startTimeValue =
     watch("startTime") || new Date().toISOString().slice(0, 16);
-
-  // useEffect(() => {
-  //   if (course?.title) {
-  //     setValue("courseTitle", course.title);
-  //   }
-  // }, [course, setValue]);
 
   const allowedImageTypes = [
     "image/jpeg",
@@ -93,7 +90,7 @@ export default function NoticeForm() {
 
     const formData = new FormData();
     const NoticeInfo = {
-      courseId: course.id,
+      courseId: data.courseId,
       title: data.title,
       type: data.type,
       description: data.description,
@@ -127,11 +124,12 @@ export default function NoticeForm() {
         onSubmit={handleSubmit(onSubmit)}
         className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-white dark:bg-gray-900 rounded-lg shadow-md"
       >
-        <InputField
-          label="Course Title"
-          name="courseTitle"
-          readOnly
-          // value={course?.title || ""}
+        <Dropdown
+          label="Select Course"
+          name="courseId"
+          className="tiro-bangla-text"
+          options={courseOptions}
+          rules={{ required: "Course is required" }}
         />
 
         <Dropdown
@@ -144,7 +142,7 @@ export default function NoticeForm() {
         <InputField
           label="Title"
           name="title"
-          placeholder="Notice Title"
+          placeholder="Enter Title"
           rules={{ required: "Title is required." }}
         />
 

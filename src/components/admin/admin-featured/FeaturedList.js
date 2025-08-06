@@ -44,7 +44,7 @@ export function FeaturedList() {
   const [deleteFeatured] = useDeleteFeaturedMutation();
 
   const featuresData = data?.data?.data;
-  console.log(featuresData);
+  // console.log(featuresData);
   const meta = data?.data?.meta;
   const totalPages = meta?.totalCount ? Math.ceil(meta.totalCount / limit) : 1;
   useEffect(() => {
