@@ -7,6 +7,7 @@ import PersistorProvider from "@/redux/Provider/PersistorProvider";
 import Footer from "@/components/footer/Footer";
 import AOSInitializer from "@/components/navbar/AOSInitializer";
 import BackToTopButton from "@/components/footer/upArrow";
+export const runtime = "edge";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
