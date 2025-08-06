@@ -6,7 +6,6 @@ import PaginationControls from "../utilities/PaginationControls";
 import Swal from "sweetalert2";
 import Loading from "../utilities/Loading";
 import { useSelector } from "react-redux";
-
 import { ChapterTable } from "./ChapterTable";
 import ChapterInfoEditDialog from "./ChapterInfoEditDialog";
 import {
@@ -27,8 +26,8 @@ export function ChapterList() {
   const [ChapterEditModalOpen, setChapterEditModalOpen] = useState(false);
 
   useEffect(() => {
-    if (courses?.length > 0 && !selectedCourseId) {
-      setSelectedCourseId(courses[0].id);
+    if (courses?.data?.length > 0 && !selectedCourseId) {
+      setSelectedCourseId(courses.data[0].id);
     }
   }, [courses, selectedCourseId]);
   const { data, isError, isLoading } = useGetCourseSubjectChaptersQuery(
@@ -42,10 +41,9 @@ export function ChapterList() {
       skip: !selectedCourseId,
     }
   );
-  // console.log(data);
-  const ChapterData = data?.data;
+
+  const ChapterData = data?.data?.data;
   const meta = data?.data?.meta;
-  // console.log(ChapterData);
   const totalPages = meta?.totalCount ? Math.ceil(meta.totalCount / limit) : 1;
   useEffect(() => {
     setPage(1);
@@ -108,7 +106,7 @@ export function ChapterList() {
 
       <CourseSelect
         label="Select Course"
-        courses={courses}
+        courses={courses?.data}
         selectedCourseId={selectedCourseId}
         onChange={setSelectedCourseId}
       />

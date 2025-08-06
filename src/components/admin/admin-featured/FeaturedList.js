@@ -27,8 +27,8 @@ export function FeaturedList() {
   const [featureEditModalOpen, setFeatureEditModalOpen] = useState(false);
 
   useEffect(() => {
-    if (courses?.length > 0 && !selectedCourseId) {
-      setSelectedCourseId(courses[0].id);
+    if (courses?.data?.length > 0 && !selectedCourseId) {
+      setSelectedCourseId(courses.data[0].id);
     }
   }, [courses, selectedCourseId]);
 
@@ -115,7 +115,7 @@ export function FeaturedList() {
       </p>
       <CourseSelect
         label="Select Course"
-        courses={courses}
+        courses={courses?.data}
         selectedCourseId={selectedCourseId}
         onChange={setSelectedCourseId}
       />

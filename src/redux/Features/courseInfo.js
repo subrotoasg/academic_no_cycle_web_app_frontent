@@ -27,6 +27,6 @@ export const { setCourses, clearCourses, setSelectedCourse } =
 
 export const selectAllCourses = (state) => state.course.courses;
 export const selectSelectedCourse = (courseId) => (state) => {
-  return state.course.courses.find((c) => c.id === courseId) || null;
+  return state.course.courses.data.find((c) => c.id === courseId) || null;
 };
 export default courseSlice.reducer;

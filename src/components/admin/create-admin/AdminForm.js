@@ -19,7 +19,7 @@ export default function AdminForm() {
   const courses = useSelector(selectAllCourses);
   // console.log(courses);
   const courseOptions =
-    courses?.map((course) => ({
+    courses?.data?.map((course) => ({
       label: course.productName,
       value: course.id,
     })) || [];

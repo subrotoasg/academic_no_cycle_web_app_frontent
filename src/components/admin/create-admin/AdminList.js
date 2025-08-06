@@ -19,14 +19,14 @@ export default function AdminList() {
   const [limit, setLimit] = useState(5);
   const [selectedCourseId, setSelectedCourseId] = useState("");
   const courses = useSelector(selectAllCourses);
-  const course = useSelector(
-    selectedCourseId ? selectSelectedCourse(selectedCourseId) : () => null
-  );
+  // const course = useSelector(
+  //   selectedCourseId ? selectSelectedCourse(selectedCourseId) : () => null
+  // );
 
-  console.log(course);
+  // console.log(course);
   useEffect(() => {
-    if (courses?.length > 0 && !selectedCourseId) {
-      setSelectedCourseId(courses[0].id);
+    if (courses?.data?.length > 0 && !selectedCourseId) {
+      setSelectedCourseId(courses.data[0].id);
     }
   }, [courses, selectedCourseId]);
 
@@ -63,7 +63,7 @@ export default function AdminList() {
       </p>
       <CourseSelect
         label="Select Course"
-        courses={courses}
+        courses={courses?.data}
         selectedCourseId={selectedCourseId}
         onChange={setSelectedCourseId}
       />

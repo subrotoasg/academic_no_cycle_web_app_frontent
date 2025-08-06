@@ -45,7 +45,7 @@ export default function ClassContentForm() {
   const courses = useSelector(selectAllCourses);
   // console.log(courses);
   const courseOptions =
-    courses?.map((course) => ({
+    courses?.data?.map((course) => ({
       label: course.productName,
       value: course.id,
     })) || [];
@@ -61,7 +61,7 @@ export default function ClassContentForm() {
   if (!isSubjectLoading) {
     const subjectData = subjects?.data;
     subjectOptions =
-      subjectData?.map((subject) => ({
+      subjectData?.data?.map((subject) => ({
         label: subject.title,
         value: subject.id,
       })) || [];
