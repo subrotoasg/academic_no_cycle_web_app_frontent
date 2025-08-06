@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "ACS Varsity & GST",
+  title: "ACS Varsity + GST Special Private Programme 2025 ",
   description: "Apar's Classroom 2025",
 };
 
