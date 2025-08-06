@@ -13,7 +13,7 @@ const CourseFeature = () => {
     refetch: refetchCourses,
   } = useGetAllCourseQuery({ limit: defaultLimit });
   console.log(courseData);
-  const courses = courseData?.data || [];
+  const courses = courseData?.data?.data || [];
 
   if (isLoading) {
     return (
