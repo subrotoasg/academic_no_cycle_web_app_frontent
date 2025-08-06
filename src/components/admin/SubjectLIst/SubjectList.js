@@ -15,6 +15,7 @@ import {
   useGetSubjectsByCourseIdQuery,
 } from "@/redux/services/subjectsApi";
 import { selectAllCourses } from "@/redux/Features/courseInfo";
+import CourseSelect from "@/components/form/CourseSelect";
 
 export function SubjectList() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -26,6 +27,11 @@ export function SubjectList() {
   const [SubjectInfoModalOpen, setSubjectInfoModalOpen] = useState(false);
   const [SubjectEditModalOpen, setSubjectEditModalOpen] = useState(false);
 
+  useEffect(() => {
+    if (courses?.length > 0 && !selectedCourseId) {
+      setSelectedCourseId(courses[0].id);
+    }
+  }, [courses, selectedCourseId]);
   const { data, isError, isLoading } = useGetCourseSubjectQuery(
     {
       page,
@@ -37,7 +43,7 @@ export function SubjectList() {
       skip: !selectedCourseId,
     }
   );
-  console.log(data);
+  // console.log(data);
 
   const SubjectData = data?.data;
   // console.log(SubjectData);
@@ -100,33 +106,16 @@ export function SubjectList() {
       </h1>
 
       <p className="text-xs md:text-sm text-muted-foreground text-center mt-2">
-        Browse, edit, or delete the uploaded Subjects
+        Uploaded Subjects Management
       </p>
 
-      <div className="p-2 grid grid-cols-2">
-        <label className="text-xs md:text-base w-full font-medium text-gray-700 dark:text-gray-300">
-          Select Course
-        </label>
-        <select
-          value={selectedCourseId}
-          onChange={(e) => setSelectedCourseId(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded-md dark:bg-gray-800 dark:text-white text-xs md:text-sm"
-        >
-          <option value="">-- Select Course --</option>
-          {courses?.map((course) => (
-            <option key={course.id} value={course.id}>
-              {course.productName}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className="p-2">
-        <SearchBar
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          placeholder="Search by title ..."
-        />
-      </div>
+      <CourseSelect
+        label="Select Course"
+        courses={courses}
+        selectedCourseId={selectedCourseId}
+        onChange={setSelectedCourseId}
+      />
+
       {isLoading && (
         <div className="w-full flex justify-center py-8">
           <Loading />
@@ -147,6 +136,13 @@ export function SubjectList() {
             </div>
           ) : (
             <>
+              <div className="p-2">
+                <SearchBar
+                  searchQuery={searchQuery}
+                  setSearchQuery={setSearchQuery}
+                  placeholder="Search by title ..."
+                />
+              </div>
               <SubjectsTable
                 Subjects={sortedSubject}
                 handleDelete={handleSubjectDelete}

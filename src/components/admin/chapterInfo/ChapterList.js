@@ -14,6 +14,7 @@ import {
   useGetCourseSubjectChaptersQuery,
 } from "@/redux/services/chapterAPi";
 import { selectAllCourses } from "@/redux/Features/courseInfo";
+import CourseSelect from "@/components/form/CourseSelect";
 
 export function ChapterList() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -36,10 +37,10 @@ export function ChapterList() {
       skip: !selectedCourseId,
     }
   );
-  console.log(data);
-  const ChapterData = data?.data?.data;
+  // console.log(data);
+  const ChapterData = data?.data;
   const meta = data?.data?.meta;
-  console.log(ChapterData);
+  // console.log(ChapterData);
   const totalPages = meta?.totalCount ? Math.ceil(meta.totalCount / limit) : 1;
   useEffect(() => {
     setPage(1);
@@ -100,30 +101,12 @@ export function ChapterList() {
         Browse, edit, or delete the uploaded Chapter
       </p>
 
-      <div className="p-2 grid grid-cols-2">
-        <label className="text-xs md:text-base w-full font-medium text-gray-700 dark:text-gray-300">
-          Select Course
-        </label>
-        <select
-          value={selectedCourseId}
-          onChange={(e) => setSelectedCourseId(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded-md dark:bg-gray-800 dark:text-white text-xs md:text-sm"
-        >
-          <option value="">-- Select Course --</option>
-          {courses?.map((course) => (
-            <option key={course.id} value={course.id}>
-              {course.productName}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className="p-2">
-        <SearchBar
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          placeholder="Search by title ..."
-        />
-      </div>
+      <CourseSelect
+        label="Select Course"
+        courses={courses}
+        selectedCourseId={selectedCourseId}
+        onChange={setSelectedCourseId}
+      />
 
       {isLoading && (
         <div className="w-full flex justify-center py-8">
@@ -145,6 +128,13 @@ export function ChapterList() {
             </div>
           ) : (
             <>
+              <div className="p-2">
+                <SearchBar
+                  searchQuery={searchQuery}
+                  setSearchQuery={setSearchQuery}
+                  placeholder="Search by title ..."
+                />
+              </div>
               <ChapterTable
                 Chapters={sortedChapter}
                 handleDelete={handleChapterDelete}
