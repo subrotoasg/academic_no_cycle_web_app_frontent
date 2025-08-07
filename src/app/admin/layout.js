@@ -19,7 +19,7 @@ export default function AdminLayout({ children }) {
     isSuccess,
     refetch: refetchCourses,
   } = useGetAllCourseQuery({ limit: defaultLimit });
-  // console.log(courseData);
+  console.log(courseData);
 
   useEffect(() => {
     if (isSuccess && courseData?.data) {

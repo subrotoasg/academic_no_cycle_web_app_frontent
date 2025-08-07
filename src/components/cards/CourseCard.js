@@ -8,10 +8,13 @@ import Typography from "@mui/material/Typography";
 import Link from "next/link";
 import { Modal } from "antd";
 import CourseAccessForm from "../form/CourseAccessForm";
+import { useSelector } from "react-redux";
+import { currentUser } from "@/redux/Features/authentication";
 
 export default function CourseCard({ course }) {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const permalink = course?.Permalink;
+  const user = useSelector(currentUser);
   const handleCardClick = () => {
     if (permalink) {
       window.open(permalink, "_blank");
@@ -67,20 +70,15 @@ export default function CourseCard({ course }) {
             Enroll Now
           </a>
 
-          {/* <Link
-          href={{
-            pathname: `/course/${course?.id}`,
-            query: { title: course?.productName },
-          }}
-          className="access-now-btn border border-gray-400 hover:bg-gray-100 text-gray-700 text-xs px-4 py-2 rounded hover:rounded-full"
-          onClick={(e) => e.stopPropagation()}
-        >
-          Access Now
-        </Link> */}
           <button
             onClick={(e) => {
               e.stopPropagation();
-              setIsModalOpen(true);
+              const isAuthenticated = !!user;
+              if (isAuthenticated) {
+                setIsModalOpen(true);
+              } else {
+                window.location.href = "/login";
+              }
             }}
             className="access-now-btn border border-gray-400 hover:bg-gray-100 text-gray-700 text-xs px-4 py-2 rounded hover:rounded-full"
           >
