@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   BarChart3,
   Users,
@@ -45,6 +45,7 @@ export const AdminSidebar = () => {
   const [hasMounted, setHasMounted] = useState(false);
   const [logOut] = useLogOutMutation();
   const dispatch = useDispatch();
+  const router = useRouter();
 
   useEffect(() => {
     setHasMounted(true);
@@ -81,7 +82,8 @@ export const AdminSidebar = () => {
           showConfirmButton: false,
         }).then(() => {
           // Safely redirect after modal closes
-          window.location.href = "/login";
+          // window.location.href = "/login";
+          router.push("/login");
         });
       } catch (error) {
         toast.error(

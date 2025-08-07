@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
@@ -50,6 +50,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const user = useSelector(currentUser);
   const menuRef = useRef(null);
+  const router = useRouter();
   const toggleRef = useRef(null);
   const dispatch = useDispatch();
   const [logOut] = useLogOutMutation();
@@ -77,7 +78,8 @@ export default function Navbar() {
           timer: 1500,
           showConfirmButton: false,
         }).then(() => {
-          window.location.href = "/";
+          // window.location.href = "/";
+          router.push("/");
         });
       } catch (error) {
         toast.error(
@@ -185,9 +187,9 @@ export default function Navbar() {
         ) : (
           <li>
             <NavItem
-              href="/profile"
+              href="/student/dashboard"
               icon={<FaUser />}
-              label="Profile"
+              label="My Dashboard"
               isMobile={isMobile}
             />
           </li>

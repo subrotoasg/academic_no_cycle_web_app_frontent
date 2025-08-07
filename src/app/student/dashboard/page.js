@@ -2,79 +2,85 @@
 
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import StudentRoute from "@/PrivateRoute/StudentRoute";
 import { motion } from "framer-motion";
-import { 
-  Atom, 
-  FlaskConical, 
-  Calculator, 
-  HeartPulse, 
-  BookOpenText, 
-  Languages 
+import {
+  Atom,
+  FlaskConical,
+  Calculator,
+  HeartPulse,
+  BookOpenText,
+  Languages,
 } from "lucide-react";
 
 const subjects = [
-  { 
-    name: "Physics", 
-    progress: 0, 
+  {
+    name: "Physics",
+    progress: 0,
     color: "bg-blue-500",
     icon: Atom,
     chaptersCompleted: 1,
-    totalChapters: 5
+    totalChapters: 5,
   },
-  { 
-    name: "Chemistry", 
-    progress: 0, 
+  {
+    name: "Chemistry",
+    progress: 0,
     color: "bg-green-500",
     icon: FlaskConical,
     chaptersCompleted: 2,
-    totalChapters: 5
+    totalChapters: 5,
   },
-  { 
-    name: "Mathematics", 
-    progress: 0, 
+  {
+    name: "Mathematics",
+    progress: 0,
     color: "bg-red-500",
     icon: Calculator,
     chaptersCompleted: 1,
-    totalChapters: 3
+    totalChapters: 3,
   },
-  { 
-    name: "Biology", 
-    progress: 0, 
+  {
+    name: "Biology",
+    progress: 0,
     color: "bg-purple-500",
     icon: HeartPulse,
     chaptersCompleted: 2,
-    totalChapters: 3
+    totalChapters: 3,
   },
-  { 
-    name: "Bangla", 
-    progress: 0, 
+  {
+    name: "Bangla",
+    progress: 0,
     color: "bg-yellow-500",
     icon: BookOpenText,
     chaptersCompleted: 2,
-    totalChapters: 5
+    totalChapters: 5,
   },
-  { 
-    name: "English", 
-    progress: 0, 
+  {
+    name: "English",
+    progress: 0,
     color: "bg-pink-500",
     icon: Languages,
     chaptersCompleted: 1,
-    totalChapters: 2
+    totalChapters: 2,
   },
 ];
 
-export default function StudentDashboard() {
-   const calculateProgress = (completed, total) => {
+function StudentDashboard() {
+  const calculateProgress = (completed, total) => {
     return Math.round((completed / total) * 100);
   };
   return (
     <div className="container mx-auto pt-28">
-      <h1 className="text-2xl md:text-3xl font-bold mb-6 text-center">My Courses</h1>
-      
+      <h1 className="text-2xl md:text-3xl font-bold mb-6 text-center">
+        My Courses
+      </h1>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {subjects.map((subject, index) => {
           const Icon = subject.icon;
-          const progress = calculateProgress(subject.chaptersCompleted, subject.totalChapters);
+          const progress = calculateProgress(
+            subject.chaptersCompleted,
+            subject.totalChapters
+          );
           return (
             <motion.div
               key={subject.name}
@@ -90,17 +96,22 @@ export default function StudentDashboard() {
                     </div>
                     <h2 className="text-xl font-semibold">{subject.name}</h2>
                   </div>
-                  <span className="text-sm text-gray-500">{subject.progress}%</span>
+                  <span className="text-sm text-gray-500">
+                    {subject.progress}%
+                  </span>
                 </div>
-                
+
                 <Progress
                   value={progress}
                   className="h-2"
                   indicatorClassName={"bg-gray-400"}
                 />
-                
+
                 <div className="mt-4 text-sm text-gray-500">
-                  <p>{subject.chaptersCompleted} out of {subject.totalChapters} chapters completed</p>
+                  <p>
+                    {subject.chaptersCompleted} out of {subject.totalChapters}{" "}
+                    chapters completed
+                  </p>
                 </div>
               </Card>
             </motion.div>
@@ -108,5 +119,12 @@ export default function StudentDashboard() {
         })}
       </div>
     </div>
+  );
+}
+export default function StudentProfile() {
+  return (
+    <StudentRoute>
+      <StudentDashboard />
+    </StudentRoute>
   );
 }
