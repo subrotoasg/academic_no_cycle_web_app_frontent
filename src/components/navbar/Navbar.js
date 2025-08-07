@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import {
   FaFacebook,
@@ -18,9 +18,12 @@ import {
 import { GoSun } from "react-icons/go";
 import { GrSchedule } from "react-icons/gr";
 import { Menu, X } from "lucide-react";
-import { currentUser } from "@/redux/Features/authentication";
+import { currentUser, removeUser } from "@/redux/Features/authentication";
 import { SiGoogleclassroom } from "react-icons/si";
 import { BiSolidDashboard } from "react-icons/bi";
+import { useLogOutMutation } from "@/redux/services/authApi";
+import { clearCourses } from "@/redux/Features/courseInfo";
+import Swal from "sweetalert2";
 
 const NAV_ITEMS = [
   {
@@ -48,7 +51,41 @@ export default function Navbar() {
   const user = useSelector(currentUser);
   const menuRef = useRef(null);
   const toggleRef = useRef(null);
+  const dispatch = useDispatch();
+  const [logOut] = useLogOutMutation();
 
+  const handleLogout = async () => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You are about to log out of your account.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, log out",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await logOut();
+        dispatch(removeUser());
+        dispatch(clearCourses());
+        Swal.fire({
+          title: "Logged out!",
+          text: "You have been successfully logged out.",
+          icon: "success",
+          timer: 1500,
+          showConfirmButton: false,
+        }).then(() => {
+          window.location.href = "/";
+        });
+      } catch (error) {
+        toast.error(
+          error?.response?.data?.message || "Logout failed. Please try again."
+        );
+      }
+    }
+  };
   useEffect(() => {
     setMounted(true);
 
@@ -199,6 +236,24 @@ export default function Navbar() {
                 <GoSun size={20} />
               ))}
           </Button>
+          {user ? (
+            <Button
+              onClick={handleLogout}
+              variant="secondary"
+              className="text-sm font-bold bg-blue-500 hover:bg-blue-800 text-white"
+            >
+              Logout
+            </Button>
+          ) : (
+            <Link href="/login">
+              <Button
+                variant="secondary"
+                className="text-sm font-bold bg-blue-500 hover:bg-blue-800 text-white"
+              >
+                Login
+              </Button>
+            </Link>
+          )}
 
           <Button
             onClick={toggleMenu}

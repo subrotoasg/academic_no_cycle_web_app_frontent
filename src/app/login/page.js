@@ -20,6 +20,7 @@ import {
 } from "@/redux/services/authApi";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 
 const Login = () => {
   const router = useRouter();
@@ -50,7 +51,7 @@ const Login = () => {
     setLoading(true);
     try {
       const response = await userLogin({ emailOrPhone }).unwrap();
-      if (response?.meta?.role === "admin") {
+      if (response?.meta?.role === "admin" || "student") {
         setStep("password");
       } else {
         toast.error("You are not authorized to access the admin panel.");
@@ -162,6 +163,14 @@ const Login = () => {
                     {loading ? "Continue..." : "Continue"}
                   </Button>
                 </form>
+                <p className="text-sm text-center text-gray-600 dark:text-gray-400">
+                  Don&apos;t have an account!
+                  <Link href="/student/signup" passHref>
+                    <button className="text-blue-500 hover:text-blue-600 ps-3 hover:cursor-pointer">
+                      Sign Up
+                    </button>
+                  </Link>
+                </p>
               </motion.div>
             )}
 
