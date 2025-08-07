@@ -51,7 +51,7 @@ const Login = () => {
     setLoading(true);
     try {
       const response = await userLogin({ emailOrPhone }).unwrap();
-      if (response?.meta?.role === "admin") {
+      if (response?.meta?.role === "admin" || "student") {
         setStep("password");
       } else {
         toast.error("You are not authorized to access the admin panel.");

@@ -35,7 +35,7 @@ import Swal from "sweetalert2";
 import { useLogOutMutation } from "@/redux/services/authApi";
 import { useDispatch } from "react-redux";
 import { removeUser } from "@/redux/Features/authentication";
-// import { clearCourse } from "@/redux/Features/courseInfo";
+import { clearCourses } from "@/redux/Features/courseInfo";
 
 export const AdminSidebar = () => {
   const pathname = usePathname();
@@ -72,7 +72,7 @@ export const AdminSidebar = () => {
       try {
         await logOut();
         dispatch(removeUser());
-        dispatch(clearCourse());
+        dispatch(clearCourses());
         Swal.fire({
           title: "Logged out!",
           text: "You have been successfully logged out.",
