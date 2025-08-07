@@ -1,8 +1,10 @@
 "use client";
 
+import EnrolledCourseCard from "@/components/cards/EnrolledCourseCard";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import StudentRoute from "@/PrivateRoute/StudentRoute";
+import { useGetMyCoursesQuery } from "@/redux/services/studentCourseApi";
 import { motion } from "framer-motion";
 import {
   Atom,
@@ -65,6 +67,12 @@ const subjects = [
 ];
 
 function StudentDashboard() {
+  const { data, isLoading, isError } = useGetMyCoursesQuery({
+    page: 1,
+    limit: 100,
+  });
+  const EnrolledCourses = data?.data?.data || [];
+  console.log("courseEnrolled", EnrolledCourses);
   const calculateProgress = (completed, total) => {
     return Math.round((completed / total) * 100);
   };
@@ -74,7 +82,7 @@ function StudentDashboard() {
         My Courses
       </h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {subjects.map((subject, index) => {
           const Icon = subject.icon;
           const progress = calculateProgress(
@@ -117,6 +125,14 @@ function StudentDashboard() {
             </motion.div>
           );
         })}
+      </div> */}
+
+      <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-4 md:py-8 p-4">
+        {EnrolledCourses.map((courseInfo, index) => (
+          <div key={index}>
+            <EnrolledCourseCard courseInfo={courseInfo} />
+          </div>
+        ))}
       </div>
     </div>
   );
