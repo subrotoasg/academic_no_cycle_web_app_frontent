@@ -30,8 +30,8 @@ export const AnimatedTestimonials = ({ testimonials, autoplay = true }) => {
     return Math.floor(Math.random() * 21) - 10;
   };
   return (
-    <div className="mx-auto max-w-md px-4 md:py-20 md:max-w-4xl md:px-8 lg:px-10">
-      <div className="text-center my-6">
+    <div className="mx-auto max-w-md px-4 md:py-10 md:max-w-4xl md:px-8 lg:px-10">
+      <div className="text-center my-2">
         {" "}
         <h2 className="text-2xl md:text-3xl font-bold text-center text-blue-500 mt-20">
           Our Successful students
