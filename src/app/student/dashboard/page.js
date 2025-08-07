@@ -1,0 +1,112 @@
+"use client";
+
+import { Card } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { motion } from "framer-motion";
+import { 
+  Atom, 
+  FlaskConical, 
+  Calculator, 
+  HeartPulse, 
+  BookOpenText, 
+  Languages 
+} from "lucide-react";
+
+const subjects = [
+  { 
+    name: "Physics", 
+    progress: 0, 
+    color: "bg-blue-500",
+    icon: Atom,
+    chaptersCompleted: 1,
+    totalChapters: 5
+  },
+  { 
+    name: "Chemistry", 
+    progress: 0, 
+    color: "bg-green-500",
+    icon: FlaskConical,
+    chaptersCompleted: 2,
+    totalChapters: 5
+  },
+  { 
+    name: "Mathematics", 
+    progress: 0, 
+    color: "bg-red-500",
+    icon: Calculator,
+    chaptersCompleted: 1,
+    totalChapters: 3
+  },
+  { 
+    name: "Biology", 
+    progress: 0, 
+    color: "bg-purple-500",
+    icon: HeartPulse,
+    chaptersCompleted: 2,
+    totalChapters: 3
+  },
+  { 
+    name: "Bangla", 
+    progress: 0, 
+    color: "bg-yellow-500",
+    icon: BookOpenText,
+    chaptersCompleted: 2,
+    totalChapters: 5
+  },
+  { 
+    name: "English", 
+    progress: 0, 
+    color: "bg-pink-500",
+    icon: Languages,
+    chaptersCompleted: 1,
+    totalChapters: 2
+  },
+];
+
+export default function StudentDashboard() {
+   const calculateProgress = (completed, total) => {
+    return Math.round((completed / total) * 100);
+  };
+  return (
+    <div className="container mx-auto pt-28">
+      <h1 className="text-2xl md:text-3xl font-bold mb-6 text-center">My Courses</h1>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {subjects.map((subject, index) => {
+          const Icon = subject.icon;
+          const progress = calculateProgress(subject.chaptersCompleted, subject.totalChapters);
+          return (
+            <motion.div
+              key={subject.name}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: index * 0.1 }}
+            >
+              <Card className="p-4 hover:shadow-lg transition-shadow cursor-pointer">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <div className={`p-2 rounded-lg ${subject.color}`}>
+                      <Icon className="w-5 h-5 text-white" />
+                    </div>
+                    <h2 className="text-xl font-semibold">{subject.name}</h2>
+                  </div>
+                  <span className="text-sm text-gray-500">{subject.progress}%</span>
+                </div>
+                
+                <Progress
+                  value={progress}
+                  className="h-2"
+                  indicatorClassName={"bg-gray-400"}
+                />
+                
+                <div className="mt-4 text-sm text-gray-500">
+                  <p>{subject.chaptersCompleted} out of {subject.totalChapters} chapters completed</p>
+                </div>
+              </Card>
+            </motion.div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
