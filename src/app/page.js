@@ -15,7 +15,7 @@ export default function Home() {
         <HeroSection />
       </div>
 
-      <div className="my-10 md:my-20">
+      <div className="my-14">
         <CourseFeature />
       </div>
 

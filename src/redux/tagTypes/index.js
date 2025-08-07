@@ -5,6 +5,7 @@ export const tagTypesValue = {
   SUBJECT: "subject",
   CHAPTER: "chapter",
   FEATURED: "featured",
+  MYCOURSES: "mycourses",
   CLASSCONTENT: "classContent",
   NOTICEROUTINE: "noticeRoutine",
 };

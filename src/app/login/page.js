@@ -25,7 +25,6 @@ import Link from "next/link";
 const Login = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-
   const [step, setStep] = useState("email");
   const [emailOrPhone, setEmailOrPhone] = useState("");
   const [password, setPassword] = useState("");
@@ -39,9 +38,21 @@ const Login = () => {
   const user = useSelector(currentUser);
 
   // Prevent redirect before password set
+  // useEffect(() => {
+  //   if (user && step !== "newPassword") {
+  //     router.replace(user.role === "admin" ? "/admin" : "/");
+  //   }
+  // }, [user, router, step]);
+
   useEffect(() => {
     if (user && step !== "newPassword") {
-      router.replace(user.role === "admin" ? "/admin" : "/");
+      if (user.role === "admin") {
+        router.replace("/admin");
+      } else if (user.role === "student") {
+        router.replace("/student/dashboard");
+      } else {
+        router.replace("/");
+      }
     }
   }, [user, router, step]);
 
@@ -79,7 +90,14 @@ const Login = () => {
       } else {
         dispatch(setUserFromToken(token));
         toast.success("Login Successful!");
-        router.push("/admin");
+        const role = response?.meta?.role || response?.data?.role;
+        if (role === "admin") {
+          router.push("/admin");
+        } else if (role === "student") {
+          router.push("/student/dashboard");
+        } else {
+          router.push("/");
+        }
       }
 
       setPassword("");

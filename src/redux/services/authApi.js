@@ -22,15 +22,6 @@ const authApiServices = baseApi.injectEndpoints({
       invalidatesTags: [tagTypesValue.AUTH],
     }),
 
-    studentSignIn: builder.mutation({
-      query: (data) => ({
-        url: "/student-signin",
-        method: "POST",
-        body: data,
-      }),
-      invalidatesTags: [tagTypesValue.AUTH],
-    }),
-
     verifyLogin: builder.mutation({
       query: (data) => ({
         url: "/verify-login",
@@ -62,7 +53,6 @@ const authApiServices = baseApi.injectEndpoints({
 export const {
   useUserLoginMutation,
   useStudentSignUpMutation,
-  useStudentSignInMutation,
   useVerifyLoginMutation,
   useChangePasswordMutation,
   useLogOutMutation,

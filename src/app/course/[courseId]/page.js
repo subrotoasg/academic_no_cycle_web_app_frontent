@@ -6,7 +6,7 @@ import { useGetSubjectsByCourseIdQuery } from "@/redux/services/subjectsApi";
 import SubjectCard from "@/components/cards/SubjectCard";
 import Featured from "@/components/featured/Featured";
 import NoticeBoard from "@/components/notice/NoticeBoard";
-import PrivateRoute from "@/PrivateRoute/PrivateRoute";
+import StudentRoute from "@/PrivateRoute/StudentRoute";
 
 function CourseContent() {
   const params = useParams();
@@ -36,17 +36,17 @@ function CourseContent() {
           Course Title : {courseTitle}
         </h3>
         <h2 className="text-xl md:text-2xl font-bold text-center text-blue-500 mb-8">
-          📚 Available Subjects
+          📚 Available Classes
         </h2>
         <p className="text-xs md:text-lg text-gray-600 dark:text-gray-300 mt-2">
-          Explore the subjects available in the course and find the perfect fit
+          Explore the classes available in the course and find the perfect fit
           for your academic path.
         </p>
       </div>
       <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-8 mx-5">
         {!isLoading && (!subjects || subjects.length === 0) ? (
           <p className="text-red-500 text-lg font-semibold col-span-full text-center">
-            No Subject Added yet.
+            No Class Added yet.
           </p>
         ) : (
           subjects.map((cs, index) => (
@@ -72,12 +72,10 @@ function CourseContent() {
   );
 }
 
-// export default Course;
-
 export default function Course() {
   return (
-    <PrivateRoute>
+    <StudentRoute>
       <CourseContent />
-    </PrivateRoute>
+    </StudentRoute>
   );
 }

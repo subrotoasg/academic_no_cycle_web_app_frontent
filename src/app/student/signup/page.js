@@ -52,10 +52,7 @@ const StudentSignUp = () => {
     setLoading(true);
     try {
       const res = await studentSignUp(formData).unwrap();
-      console.log(res);
       const token = res?.data?.authToken;
-      console.log(token);
-
       if (res?.success) {
         dispatch(setUserFromToken(token));
         toast.success(res.message);
