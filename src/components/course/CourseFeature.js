@@ -4,7 +4,7 @@ import Loading from "@/app/loading";
 import CourseCard from "../cards/CourseCard";
 import { useGetAllCourseQuery } from "@/redux/services/courseApi";
 
-const defaultLimit = 100;
+const defaultLimit = 1000;
 const CourseFeature = () => {
   const {
     data: courseData,
@@ -12,7 +12,7 @@ const CourseFeature = () => {
     isError,
     refetch: refetchCourses,
   } = useGetAllCourseQuery({ limit: defaultLimit });
-  console.log(courseData);
+  // console.log(courseData);
   const courses = courseData?.data?.data || [];
 
   if (isLoading) {

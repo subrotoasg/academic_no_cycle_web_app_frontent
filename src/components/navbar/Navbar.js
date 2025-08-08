@@ -189,7 +189,7 @@ export default function Navbar() {
             <NavItem
               href="/student/dashboard"
               icon={<FaUser />}
-              label="My Dashboard"
+              label="My Courses"
               isMobile={isMobile}
             />
           </li>
