@@ -11,7 +11,7 @@ export default function EnrolledCourseCard({ courseInfo }) {
   const router = useRouter();
   const { courseId, course } = courseInfo;
 
-  const courseTitle = course?.productName?.replace(/\s+/g, "-") || "course";
+  const courseTitle = course?.productFullName?.replace(/\s+/g, "-") || "course";
 
   const queryParams = new URLSearchParams({
     title: courseTitle,

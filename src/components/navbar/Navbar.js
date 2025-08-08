@@ -24,6 +24,7 @@ import { BiSolidDashboard } from "react-icons/bi";
 import { useLogOutMutation } from "@/redux/services/authApi";
 import { clearCourses } from "@/redux/Features/courseInfo";
 import Swal from "sweetalert2";
+import { clearEnrolledCourses } from "@/redux/Features/mycourses";
 
 const NAV_ITEMS = [
   {
@@ -71,6 +72,7 @@ export default function Navbar() {
         await logOut();
         dispatch(removeUser());
         dispatch(clearCourses());
+        dispatch(clearEnrolledCourses());
         Swal.fire({
           title: "Logged out!",
           text: "You have been successfully logged out.",
