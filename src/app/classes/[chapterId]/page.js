@@ -13,13 +13,30 @@ function Class() {
   const subjectChapterId = params.chapterId;
   const chapterTitle = searchParams.get("title");
 
-  const { data: chapterContentsData, isLoading } =
-    useGetClassContentsBySubjectChapterIdQuery(subjectChapterId);
+  const {
+    data: chapterContentsData,
+    isLoading,
+    isError,
+  } = useGetClassContentsBySubjectChapterIdQuery(subjectChapterId);
 
   if (isLoading) {
     return (
       <div className="mt-20">
         <Loading />
+      </div>
+    );
+  }
+  {
+    isError && (
+      <div className="text-center py-20 text-lg font-medium text-red-500">
+        Failed to load data, please try again.
+      </div>
+    );
+  }
+  {
+    !isLoading && !isError && chapterContentsData?.data.length === 0 && (
+      <div className="text-center py-20 text-lg font-medium text-gray-500">
+        You are not enrolled in any courses yet.
       </div>
     );
   }

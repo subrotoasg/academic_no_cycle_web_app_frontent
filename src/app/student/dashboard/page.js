@@ -131,9 +131,15 @@ function StudentDashboard() {
         </div>
       )}
 
-      {(isError || (!isLoading && EnrolledCourses.length === 0)) && (
+      {isError && (
         <div className="text-center py-20 text-lg font-medium text-red-500">
-          Failed to load courses info, please try again
+          Failed to load courses info, please try again.
+        </div>
+      )}
+
+      {!isLoading && !isError && EnrolledCourses.length === 0 && (
+        <div className="text-center py-20 text-lg font-medium text-gray-500">
+          You are not enrolled in any courses yet.
         </div>
       )}
 
