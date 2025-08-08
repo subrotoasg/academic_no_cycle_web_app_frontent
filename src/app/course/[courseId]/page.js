@@ -19,12 +19,12 @@ function CourseContent() {
   const subjects = subjectData?.data;
 
   return (
-    <div className="container mx-auto pt-28">
+    <div className="container mx-auto mt-20 md:mt-28 p-1">
       <div className="text-center mb-6">
-        <h3 className="text-2xl md:text-4xl font-bold text-center text-blue-800 mb-8">
-          Course Title : {courseTitle}
+        <h3 className="text-2xl md:text-5xl font-bold text-center text-blue-700 mb-8">
+          {courseTitle}
         </h3>
-        <h2 className="text-xl md:text-2xl font-bold text-center text-blue-500 mb-8">
+        <h2 className="text-xl md:text-3xl font-bold text-center text-blue-500 my-10">
           📚 Available Classes
         </h2>
         <p className="text-xs md:text-lg text-gray-600 dark:text-gray-300 mt-2">
@@ -55,7 +55,7 @@ function CourseContent() {
         )}
       </div>
 
-      <div>
+      <div className="my-10 md:my-20">
         <Featured courseId={courseId} />
       </div>
       <div className="my-10 md:my-20">

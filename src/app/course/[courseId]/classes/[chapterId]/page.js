@@ -29,14 +29,7 @@ function Class() {
   {
     isError && (
       <div className="text-center py-20 text-lg font-medium text-red-500">
-        Failed to load data, please try again.
-      </div>
-    );
-  }
-  {
-    !isLoading && !isError && chapterContentsData?.data.length === 0 && (
-      <div className="text-center py-20 text-lg font-medium text-gray-500">
-        You are not enrolled in any courses yet.
+        Failed to load chapter data, please try again.
       </div>
     );
   }

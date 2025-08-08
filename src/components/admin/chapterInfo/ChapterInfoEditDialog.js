@@ -16,7 +16,11 @@ import { toast } from "sonner";
 import Swal from "sweetalert2";
 import { useUpdateCourseSubjectChapterMutation } from "@/redux/services/chapterAPi";
 
-export default function ChapterImageEditDialog({ isOpen, onOpenChange, chapter }) {
+export default function ChapterImageEditDialog({
+  isOpen,
+  onOpenChange,
+  chapter,
+}) {
   const methods = useForm();
   const { handleSubmit } = methods;
 
@@ -29,7 +33,11 @@ export default function ChapterImageEditDialog({ isOpen, onOpenChange, chapter }
 
   useEffect(() => {
     if (chapter) {
-      setImagePreview(chapter?.courseSubjectChapterImage || chapter?.chapter?.chapterImage || "/placeholder.jpg");
+      setImagePreview(
+        chapter?.courseSubjectChapterImage ||
+          chapter?.chapter?.chapterImage ||
+          "/placeholder.jpg"
+      );
       setSelectedFile(null);
     }
   }, [chapter]);
@@ -88,13 +96,21 @@ export default function ChapterImageEditDialog({ isOpen, onOpenChange, chapter }
       <DialogTrigger asChild></DialogTrigger>
       <DialogContent className="w-3xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-2xl text-center">Edit Chapter Image</DialogTitle>
+          <DialogTitle className="text-2xl text-center">
+            Edit Chapter Image
+          </DialogTitle>
         </DialogHeader>
 
         <FormProvider {...methods}>
-          <form onSubmit={handleSubmit(handleFormSubmit)} className="grid grid-cols-1 gap-4 p-4">
+          <form
+            onSubmit={handleSubmit(handleFormSubmit)}
+            className="grid grid-cols-1 gap-4 p-4"
+          >
             <div>
-              <label htmlFor="chapter-image-upload" className="block text-sm font-medium">
+              <label
+                htmlFor="chapter-image-upload"
+                className="block text-sm font-medium"
+              >
                 Upload Chapter Image
               </label>
 
@@ -124,14 +140,14 @@ export default function ChapterImageEditDialog({ isOpen, onOpenChange, chapter }
                 <Button
                   type="submit"
                   disabled={loading}
-                  className="bg-green-700 text-white"
+                  className="bg-green-600 text-white hover:bg-green-800"
                 >
                   {loading ? "Updating..." : "Update"}
                 </Button>
                 <Button
                   type="button"
                   onClick={() => onOpenChange(false)}
-                  className="bg-red-600 text-white"
+                  className="bg-red-600 text-white hover:bg-red-800"
                 >
                   Cancel
                 </Button>
