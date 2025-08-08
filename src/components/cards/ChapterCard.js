@@ -9,11 +9,13 @@ function ChapterCard({ chapter }) {
     chapter?.courseSubjectChapterImage ||
     chapter?.chapter?.chapterImage ||
     "/placeholder-image.png";
-
+  // console.log(chapter);
+  const courseId = chapter?.courseSubject?.course?.id;
   return (
     <Link
       href={{
-        pathname: `/classes/${chapter?.id}`,
+        // pathname: `/classes/${chapter?.id}`,
+        pathname: `/course/${courseId}/classes/${chapter?.id}`,
         query: {
           title: chapter?.chapter?.chapterName,
         },

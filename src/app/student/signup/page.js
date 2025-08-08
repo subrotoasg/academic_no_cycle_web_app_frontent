@@ -47,7 +47,6 @@ const StudentSignUp = () => {
         "Password must be at least 8 characters and contain a number"
       );
     }
-    console.log(formData);
 
     setLoading(true);
     try {

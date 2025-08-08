@@ -16,7 +16,7 @@ const SubjectCard = ({ courseSubject }) => {
     "/placeholder-image.png";
 
   const title = courseSubject?.subject?.title || "Untitled Subject";
-
+  const courseId = courseSubject?.course?.id;
   return (
     <Card
       sx={{
@@ -31,7 +31,8 @@ const SubjectCard = ({ courseSubject }) => {
     >
       <Link
         href={{
-          pathname: `/subject/${courseSubject?.id}`,
+          // pathname: `/subject/${courseSubject?.id}`,
+          pathname: `/course/${courseId}/subject/${courseSubject?.id}`,
           query: { title },
         }}
         passHref

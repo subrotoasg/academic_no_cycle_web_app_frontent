@@ -4,6 +4,8 @@ import { useGetClassContentsBySubjectChapterIdQuery } from "@/redux/services/con
 import React, { useState } from "react";
 import ReactPlayer from "react-player/youtube";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSelector } from "react-redux";
+import { currentUser } from "@/redux/Features/authentication";
 
 const getDrivePreviewURL = (id) =>
   `https://drive.google.com/file/d/${id}/preview`;
@@ -38,6 +40,9 @@ const PDFViewer = ({ id, title }) => {
 };
 
 const VideoHolder = ({ classContent, classTitle }) => {
+  const user = useSelector(currentUser);
+  // console.log(user);
+  const isAdmin = user?.role === "admin";
   const [activeTab, setActiveTab] = useState(null);
 
   const toggleTab = (key) => {
@@ -48,6 +53,9 @@ const VideoHolder = ({ classContent, classTitle }) => {
     useGetClassContentsBySubjectChapterIdQuery(
       classContent?.courseSubjectChapter?.id
     );
+  const courseId =
+    chapterContentsData?.data[0]?.courseSubjectChapter?.courseSubject?.course
+      ?.id;
   const chapterContents = chapterContentsData?.data;
 
   return (
@@ -101,7 +109,11 @@ const VideoHolder = ({ classContent, classTitle }) => {
                   chapterContents.map((content, index) => (
                     <motion.a
                       key={content.id}
-                      href={`/content/${content.id}?title=${content.classTitle}`}
+                      href={
+                        isAdmin
+                          ? `/admin/content/${content.id}?title=${content.classTitle}`
+                          : `/course/${courseId}/content/${content.id}?title=${content.classTitle}`
+                      }
                       className="block p-2 rounded-lg bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-300 shadow-md"
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}

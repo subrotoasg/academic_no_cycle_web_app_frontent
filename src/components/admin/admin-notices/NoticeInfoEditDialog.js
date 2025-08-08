@@ -232,7 +232,7 @@ export default function NoticeInfoEditDialog({
               <Button
                 type="submit"
                 variant="primary"
-                className="bg-green-700 text-white"
+                className="bg-green-600 text-white hover:bg-green-800"
                 disabled={isLoading}
               >
                 {isLoading ? "Updating..." : "Update"}
@@ -240,7 +240,7 @@ export default function NoticeInfoEditDialog({
               <Button
                 variant="warning"
                 onClick={() => onOpenChange(false)}
-                className="bg-red-600 text-white"
+                className="bg-red-600 text-white hover:bg-red-800"
               >
                 Cancel
               </Button>

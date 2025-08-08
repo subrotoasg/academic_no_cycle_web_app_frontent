@@ -43,10 +43,9 @@ export function SubjectList() {
       skip: !selectedCourseId,
     }
   );
-  // console.log(data);
 
   const SubjectData = data?.data;
-  // console.log(SubjectData);
+
   const meta = data?.data?.meta;
 
   const totalPages = meta?.totalCount ? Math.ceil(meta.totalCount / limit) : 1;

@@ -96,8 +96,8 @@ export default function FeaturedInfoEditDialog({
         title: "Featured Info Successfully Updated!",
         timer: 1500,
       });
-      await refetchFeatures();
       onOpenChange(false);
+      await refetchFeatures();
     } catch (error) {
       toast.error(error.message || "Failed to update Featured");
     }
@@ -193,7 +193,7 @@ export default function FeaturedInfoEditDialog({
               <Button
                 type="submit"
                 variant="primary"
-                className="bg-green-700 text-white"
+                className="bg-green-600 text-white hover:bg-green-800"
                 disabled={isLoading}
               >
                 {isLoading ? "Updating..." : "Update"}
@@ -201,7 +201,7 @@ export default function FeaturedInfoEditDialog({
               <Button
                 variant="warning"
                 onClick={() => onOpenChange(false)}
-                className="bg-red-600 text-white"
+                className="bg-red-600 text-white hover:bg-red-800"
               >
                 Cancel
               </Button>

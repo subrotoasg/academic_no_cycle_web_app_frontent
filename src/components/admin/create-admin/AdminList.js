@@ -23,7 +23,6 @@ export default function AdminList() {
   //   selectedCourseId ? selectSelectedCourse(selectedCourseId) : () => null
   // );
 
-  // console.log(course);
   useEffect(() => {
     if (courses?.data?.length > 0 && !selectedCourseId) {
       setSelectedCourseId(courses.data[0].id);
@@ -41,7 +40,7 @@ export default function AdminList() {
       skip: !selectedCourseId,
     }
   );
-  // console.log(data);
+
   const meta = data?.data?.meta;
   const adminData = data?.data?.data;
   const totalPages = meta?.totalCount ? Math.ceil(meta.totalCount / limit) : 1;

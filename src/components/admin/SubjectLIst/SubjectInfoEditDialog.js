@@ -21,7 +21,6 @@ export default function SubjectsImageEditDialog({
   onOpenChange,
   Subject,
 }) {
-  // console.log(Subject)
   const methods = useForm();
   const { handleSubmit } = methods;
 
@@ -141,14 +140,14 @@ export default function SubjectsImageEditDialog({
                 <Button
                   type="submit"
                   disabled={loading}
-                  className="bg-green-700 text-white"
+                  className="bg-green-600 text-white hover:bg-green-800"
                 >
                   {loading ? "Updating..." : "Update"}
                 </Button>
                 <Button
                   type="button"
                   onClick={() => onOpenChange(false)}
-                  className="bg-red-600 text-white"
+                  className="bg-red-600 text-white hover:bg-red-800"
                 >
                   Cancel
                 </Button>

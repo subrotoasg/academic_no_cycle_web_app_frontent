@@ -17,7 +17,6 @@ const NoticeBoard = ({ courseId }) => {
     const endDate = new Date(notice.endTime);
     return endDate >= today && notice.type === "Notice";
   });
-  //  console.log( filteredNotices)
 
   if (!notices || filteredNotices.length === 0) {
     return null;

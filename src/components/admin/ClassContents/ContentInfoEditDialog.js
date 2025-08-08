@@ -267,7 +267,7 @@ export default function ContentInfoEditDialog({
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="bg-green-700 text-white"
+                className="bg-green-600 text-white hover:bg-green-800"
               >
                 {isLoading ? "Updating..." : "Update"}
               </Button>
@@ -275,7 +275,7 @@ export default function ContentInfoEditDialog({
               <Button
                 variant="warning"
                 onClick={() => onOpenChange(false)}
-                className="bg-red-600 text-white"
+                className="bg-red-600 text-white hover:bg-red-800"
               >
                 Cancel
               </Button>

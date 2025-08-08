@@ -53,7 +53,7 @@ const ContentList = () => {
   const [deleteClassContent] = useDeleteClassContentMutation();
 
   const classContentsData = data?.data?.data;
-  // console.log(classContentsData);
+
   const meta = data?.data?.meta;
   const totalPages = meta?.totalCount ? Math.ceil(meta.totalCount / limit) : 1;
   useEffect(() => {
@@ -80,7 +80,7 @@ const ContentList = () => {
 
   const handleRedirect = (content) => {
     const query = new URLSearchParams({ title: content.classTitle }).toString();
-    const url = `/content/${content.id}?${query}`;
+    const url = `/admin/content/${content.id}?${query}`;
     window.open(url, "_blank");
   };
   const [sortConfig, setSortConfig] = useState({

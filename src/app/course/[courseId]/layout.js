@@ -26,7 +26,11 @@ function ActualLayoutLogic({ children }) {
   }, [isLoading, isEnrolled, router]);
 
   if (isLoading || !courses.length) {
-    return <div className="text-center py-20">Checking course access...</div>;
+    return (
+      <div className="text-center mt-20 md:mt-36">
+        Checking course access...
+      </div>
+    );
   }
 
   if (!isEnrolled) {
