@@ -49,9 +49,9 @@ export function FeaturedList() {
     }
   );
   const [deleteFeatured] = useDeleteFeaturedMutation();
-  // console.log(data);
+
   const featuresData = data?.data?.data;
-  // console.log(featuresData);
+
   const meta = data?.data?.meta;
   const totalPages = meta?.totalCount ? Math.ceil(meta.totalCount / limit) : 1;
   useEffect(() => {

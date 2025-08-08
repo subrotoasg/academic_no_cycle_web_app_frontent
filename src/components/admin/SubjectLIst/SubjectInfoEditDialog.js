@@ -21,7 +21,6 @@ export default function SubjectsImageEditDialog({
   onOpenChange,
   Subject,
 }) {
-  // console.log(Subject)
   const methods = useForm();
   const { handleSubmit } = methods;
 

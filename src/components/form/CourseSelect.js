@@ -8,7 +8,6 @@ function CourseSelect({
   selectedCourseId,
   onChange,
 }) {
-  //   console.log(courses);
   return (
     <div className="p-2 pt-5 grid grid-cols-2 justify-center items-center">
       <label className="text-xs md:text-base w-full font-medium text-gray-700 dark:text-gray-300">

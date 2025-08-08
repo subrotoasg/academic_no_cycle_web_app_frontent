@@ -17,7 +17,7 @@ import Dropdown from "@/components/form/Dropdown";
 
 export default function AdminForm() {
   const courses = useSelector(selectAllCourses);
-  // console.log(courses);
+
   const courseOptions =
     courses?.data?.map((course) => ({
       label: course.productFullName,
@@ -62,7 +62,7 @@ export default function AdminForm() {
         const { data: existingAdmin } = await dispatch(
           adminApiServices.endpoints.getAdminByEmailOrPhone.initiate(email)
         ).unwrap();
-        // console.log(existingAdmin);
+
         const existingId = existingAdmin?.data?.[0]?.id;
         if (existingId) {
           await assignCoursesToAdmins({

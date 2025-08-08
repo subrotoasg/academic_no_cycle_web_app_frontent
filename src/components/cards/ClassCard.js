@@ -6,7 +6,6 @@ import React from "react";
 import { FiArrowUpRight } from "react-icons/fi";
 
 function ClassCard({ content }) {
-  // console.log(content);
   const {
     id,
     classTitle,

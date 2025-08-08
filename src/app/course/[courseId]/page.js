@@ -15,10 +15,8 @@ function CourseContent() {
 
   const { data: subjectData, isLoading } =
     useGetSubjectsByCourseIdQuery(courseId);
-  console.log(subjectData);
 
   const subjects = subjectData?.data;
-  console.log(subjects);
 
   return (
     <div className="container mx-auto pt-28">

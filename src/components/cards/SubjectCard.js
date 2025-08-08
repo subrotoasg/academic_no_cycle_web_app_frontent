@@ -10,7 +10,6 @@ import Typography from "@mui/material/Typography";
 import CardActionArea from "@mui/material/CardActionArea";
 
 const SubjectCard = ({ courseSubject }) => {
-  // console.log(courseSubject);
   const imageUrl =
     courseSubject?.courseSubjectImage ||
     courseSubject?.subject?.subjectImage ||
