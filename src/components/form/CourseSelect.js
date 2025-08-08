@@ -22,7 +22,7 @@ function CourseSelect({
         <option value="">-- Select Course --</option>
         {courses?.map((course) => (
           <option key={course.id} value={course.id}>
-            {course.productName}
+            {course.productFullName}
           </option>
         ))}
       </select>

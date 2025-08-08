@@ -6,6 +6,7 @@ import React from "react";
 import { FiArrowUpRight } from "react-icons/fi";
 
 function ClassCard({ content }) {
+  // console.log(content);
   const {
     id,
     classTitle,
@@ -15,11 +16,12 @@ function ClassCard({ content }) {
     practiceSheet,
     solutionSheet,
   } = content || {};
-
+  const courseId = content?.courseSubjectChapter?.courseSubject?.course?.id;
   return (
     <Link
       href={{
-        pathname: `/content/${id}`,
+        // pathname: `/content/${id}`,
+        pathname: `/course/${courseId}/content/${id}`,
         query: { title: classTitle },
       }}
       className="block w-60 md:w-72 max-w-xs mx-auto rounded-lg shadow-lg overflow-hidden bg-indigo-100 dark:bg-gray-900"

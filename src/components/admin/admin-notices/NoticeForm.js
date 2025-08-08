@@ -21,7 +21,7 @@ export default function NoticeForm() {
   const courses = useSelector(selectAllCourses);
   const courseOptions =
     courses?.data?.map((course) => ({
-      label: course.productName,
+      label: course.productFullName,
       value: course.id,
     })) || [];
   const types = [

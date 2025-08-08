@@ -24,7 +24,7 @@ function FeaturedForm() {
 
   const courseOptions =
     courses?.data?.map((course) => ({
-      label: course.productName,
+      label: course.productFullName,
       value: course.id,
     })) || [];
 

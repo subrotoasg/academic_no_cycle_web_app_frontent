@@ -80,7 +80,7 @@ const ContentList = () => {
 
   const handleRedirect = (content) => {
     const query = new URLSearchParams({ title: content.classTitle }).toString();
-    const url = `/content/${content.id}?${query}`;
+    const url = `/admin/content/${content.id}?${query}`;
     window.open(url, "_blank");
   };
   const [sortConfig, setSortConfig] = useState({

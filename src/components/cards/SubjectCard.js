@@ -10,13 +10,14 @@ import Typography from "@mui/material/Typography";
 import CardActionArea from "@mui/material/CardActionArea";
 
 const SubjectCard = ({ courseSubject }) => {
+  // console.log(courseSubject);
   const imageUrl =
     courseSubject?.courseSubjectImage ||
     courseSubject?.subject?.subjectImage ||
     "/placeholder-image.png";
 
   const title = courseSubject?.subject?.title || "Untitled Subject";
-
+  const courseId = courseSubject?.course?.id;
   return (
     <Card
       sx={{
@@ -31,7 +32,8 @@ const SubjectCard = ({ courseSubject }) => {
     >
       <Link
         href={{
-          pathname: `/subject/${courseSubject?.id}`,
+          // pathname: `/subject/${courseSubject?.id}`,
+          pathname: `/course/${courseId}/subject/${courseSubject?.id}`,
           query: { title },
         }}
         passHref

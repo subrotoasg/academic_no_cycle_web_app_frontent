@@ -46,7 +46,7 @@ export default function ClassContentForm() {
   // console.log(courses);
   const courseOptions =
     courses?.data?.map((course) => ({
-      label: course.productName,
+      label: course.productFullName,
       value: course.id,
     })) || [];
   const { data: subjects, isLoading: isSubjectLoading } = useGetSubjectsQuery();
