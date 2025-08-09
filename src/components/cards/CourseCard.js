@@ -10,6 +10,7 @@ import { Modal } from "antd";
 import CourseAccessForm from "../form/CourseAccessForm";
 import { useSelector } from "react-redux";
 import { currentUser } from "@/redux/Features/authentication";
+import CourseSubCategoryPill from "../admin/utilities/CourseSubjectCategoryPill";
 
 export default function CourseCard({ course }) {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
@@ -44,20 +45,8 @@ export default function CourseCard({ course }) {
           >
             {course?.productFullName}
           </Typography>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            className="truncate"
-          >
-            Category: {course?.Category || "N/A"}
-          </Typography>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            className="truncate"
-          >
-            Subcategory: {course?.SubCategory || "N/A"}
-          </Typography>
+
+          <CourseSubCategoryPill subCategory={course?.SubCategory} />
         </CardContent>
         <CardActions className="flex justify-center items-center pb-2">
           <a
