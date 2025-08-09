@@ -10,8 +10,8 @@ import Swal from "sweetalert2";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { useSelector } from "react-redux";
-import { useGetSubjectsQuery } from "@/redux/services/subjectsApi";
-import { useGetChaptersBySubjectIdQuery } from "@/redux/services/chapterAPi";
+import { useGetSubjectsByCourseIdQuery } from "@/redux/services/subjectsApi";
+import { useGetChaptersByCourseSubjectIdQuery } from "@/redux/services/chapterAPi";
 import { useCreateClassContentMutation } from "@/redux/services/contentsApi";
 import { selectAllCourses } from "@/redux/Features/courseInfo";
 
@@ -39,6 +39,7 @@ export default function ClassContentForm() {
   const videoId = useWatch({ control, name: "videoId" });
   const [selectedFile, setSelectedFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const selectedCourseId = useWatch({ control, name: "courseId" });
   const selectedSubjectId = useWatch({ control, name: "subject" });
   const fileInputRef = useRef(null);
 
@@ -49,30 +50,44 @@ export default function ClassContentForm() {
       label: course.productFullName,
       value: course.id,
     })) || [];
-  const { data: subjects, isLoading: isSubjectLoading } = useGetSubjectsQuery();
+  // const { data: subjects, isLoading: isSubjectLoading } = useGetSubjectsQuery();
+  const {
+    data: subjects,
+    isLoading: isSubjectLoading,
+    isError: isSubjectError,
+  } = useGetSubjectsByCourseIdQuery(selectedCourseId, {
+    skip: !selectedCourseId,
+  });
   const { data: chapters, isLoading: isChapterLoading } =
-    useGetChaptersBySubjectIdQuery(selectedSubjectId, {
+    useGetChaptersByCourseSubjectIdQuery(selectedSubjectId, {
       skip: !selectedSubjectId,
     });
   const [createClassContent, { isLoading }] = useCreateClassContentMutation();
-  let subjectOptions;
-  let chapterOptions = [];
 
-  if (!isSubjectLoading) {
-    const subjectData = subjects?.data;
-    subjectOptions =
-      subjectData?.data?.map((subject) => ({
-        label: subject.title,
-        value: subject.id,
-      })) || [];
-  }
+  const subjectOptions =
+    !isSubjectLoading && subjects?.data
+      ? subjects?.data?.map((sub) => ({
+          label: sub.subject.title,
+          value: sub.id,
+        })) || []
+      : [];
 
-  if (!isChapterLoading && chapters?.data && Array.isArray(chapters.data)) {
-    chapterOptions = chapters.data.map((ch) => ({
-      label: ch.chapterName,
-      value: ch.id,
-    }));
-  }
+  const chapterOptions =
+    !isChapterLoading && chapters?.data && Array.isArray(chapters.data)
+      ? chapters.data.map((ch) => ({
+          label: ch.chapter.chapterName,
+          value: ch.id,
+        }))
+      : [];
+
+  useEffect(() => {
+    setValue("subject", "");
+    setValue("chapter", "");
+  }, [selectedCourseId, setValue]);
+
+  useEffect(() => {
+    setValue("chapter", "");
+  }, [selectedSubjectId, setValue]);
 
   const handleFileChange = (e) => {
     const file = e.target.files?.[0];
@@ -97,9 +112,9 @@ export default function ClassContentForm() {
 
     const formData = new FormData();
     const contentInfo = {
-      courseId: data.courseId,
-      subjectId: selectedSubjectId,
-      chapterId: data.chapter,
+      // courseId: data.courseId,
+      // subjectId: selectedSubjectId,
+      courseSubjectChapterId: data.chapter,
       hostingType: data.type,
       classTitle: data.title,
       classNo: data.classNumber,

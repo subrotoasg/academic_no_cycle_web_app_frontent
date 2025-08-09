@@ -6,7 +6,7 @@ const classContentApiServices = baseApi.injectEndpoints({
     // Create Class Content
     createClassContent: builder.mutation({
       query: (formData) => ({
-        url: "/class/add-content",
+        url: "/class",
         method: "POST",
         body: formData,
       }),
@@ -29,10 +29,7 @@ const classContentApiServices = baseApi.injectEndpoints({
       query: (queryParams) => {
         const { courseId, ...params } = queryParams;
 
-        const url = quearyUrlGenerator(
-          `/class/all-info/${courseId}`,
-          params
-        );
+        const url = quearyUrlGenerator(`/class/all-info/${courseId}`, params);
         return {
           url,
           method: "GET",

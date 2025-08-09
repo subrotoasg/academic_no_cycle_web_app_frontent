@@ -24,12 +24,9 @@ export default function NoticeForm() {
       label: course.productFullName,
       value: course.id,
     })) || [];
-  const types = [
-    { label: "Routine", value: "Routine" },
-    { label: "Notice", value: "Notice" },
-  ];
 
   const defaultValues = {
+    courseId: "",
     type: "",
     title: "",
     description: "",
@@ -49,16 +46,9 @@ export default function NoticeForm() {
     formState: { isSubmitting },
   } = methods;
 
-  const selectedType = watch("type");
   const startTimeValue =
     watch("startTime") || new Date().toISOString().slice(0, 16);
-
-  const allowedImageTypes = [
-    "image/jpeg",
-    "image/png",
-    "image/webp",
-    "image/jpg",
-  ];
+  const typeValue = watch("type");
 
   const handleFileChange = (e) => {
     const file = e.target.files?.[0];
@@ -76,15 +66,8 @@ export default function NoticeForm() {
   };
 
   const onSubmit = async (data) => {
-    if (data.type !== "Routine" && !selectedFile) {
+    if ((data.type === "Notice" || data.type === "Routine") && !selectedFile) {
       toast.error("Please upload an image file");
-      return;
-    }
-
-    if (selectedFile && !allowedImageTypes.includes(selectedFile.type)) {
-      toast.error(
-        "Invalid image file type. Please upload JPG, JPEG, PNG, or WEBP."
-      );
       return;
     }
 
@@ -99,20 +82,23 @@ export default function NoticeForm() {
       ...(data.type === "Routine" && { url: data.routineUrl }),
     };
 
-    if (selectedFile && data.type !== "Routine") {
+    if (selectedFile) {
       formData.append("file", selectedFile);
     }
 
     formData.append("data", JSON.stringify(NoticeInfo));
 
     try {
-      await createNoticeRoutine(formData).unwrap();
-      Swal.fire({
-        icon: "success",
-        title: "Notice Successfully Created",
-        timer: 1000,
-      });
-      resetForm();
+      const res = await createNoticeRoutine(formData).unwrap();
+      if (res?.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Notice Successfully Created",
+          timer: 1000,
+        });
+        setIsModalOpen(false);
+        resetForm();
+      }
     } catch (err) {
       toast.error(err?.data?.message || "Notice Creation Failed. Try Again!");
     }
@@ -124,26 +110,36 @@ export default function NoticeForm() {
         onSubmit={handleSubmit(onSubmit)}
         className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-white dark:bg-gray-900 rounded-lg shadow-md"
       >
+        {/* Course Dropdown */}
         <Dropdown
           label="Select Course"
           name="courseId"
-          className="tiro-bangla-text"
           options={courseOptions}
-          rules={{ required: "Course is required" }}
+          rules={{ required: "Course selection is required." }}
         />
 
+        {/* Type Dropdown */}
         <Dropdown
           label="Type"
           name="type"
-          options={types}
+          options={[
+            { label: "Routine", value: "Routine" },
+            { label: "Notice", value: "Notice" },
+          ]}
           rules={{ required: "Please select a type." }}
         />
 
         <InputField
           label="Title"
           name="title"
-          placeholder="Enter Title"
-          rules={{ required: "Title is required." }}
+          placeholder="Notice Title"
+          rules={{
+            required: "Title is required.",
+            minLength: {
+              value: 3,
+              message: "Title must be at least 3 characters",
+            },
+          }}
         />
 
         <InputField
@@ -153,8 +149,8 @@ export default function NoticeForm() {
           rules={{
             required: "Description is required.",
             minLength: {
-              value: 4,
-              message: "Description must be at least 4 characters long.",
+              value: 3,
+              message: "Description must be at least 3 characters",
             },
           }}
           textarea
@@ -167,16 +163,9 @@ export default function NoticeForm() {
           min={new Date().toISOString().slice(0, 16)}
           rules={{
             required: "Start time is required.",
-            validate: (value) => {
-              const inputDate = new Date(value);
-              const today = new Date();
-              inputDate.setHours(0, 0, 0, 0);
-              today.setHours(0, 0, 0, 0);
-              return (
-                inputDate >= today ||
-                "Start date must be today or in the future."
-              );
-            },
+            validate: (value) =>
+              new Date(value) >= new Date() ||
+              "Start time must be in the future.",
           }}
         />
 
@@ -187,58 +176,44 @@ export default function NoticeForm() {
           min={startTimeValue}
           rules={{
             required: "End time is required.",
-            validate: (value) => {
-              const start = new Date(getValues("startTime"));
-              const end = new Date(value);
-              return end > start || "End time must be after start time.";
-            },
+            validate: (value) =>
+              new Date(value) > new Date(getValues("startTime")) ||
+              "End time must be after start time.",
           }}
         />
 
-        {/* Show Routine URL only when type is Routine */}
-        {selectedType === "Routine" && (
-          <InputField
-            label="Routine File URL"
-            name="routineUrl"
-            placeholder="https://example.com/routine.pdf"
-            rules={{
-              required: "Routine URL is required.",
-            }}
+        {/* Conditional Input */}
+
+        <div className="md:col-span-2">
+          <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">
+            Upload Image
+          </label>
+          <Input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            required
+            className="w-full border rounded-md dark:bg-gray-800 dark:text-white dark:border-gray-700"
           />
-        )}
+          {imagePreview && (
+            <div className="mt-3 w-32 h-32 relative border rounded-md overflow-hidden">
+              <Image
+                src={imagePreview}
+                alt="Image Preview"
+                fill
+                className="object-cover"
+              />
+            </div>
+          )}
+        </div>
 
-        {/* Show image upload if type is not Routine */}
-        {selectedType !== "Routine" && (
-          <div className="md:col-span-2">
-            <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">
-              Upload Image
-            </label>
-            <Input
-              ref={fileInputRef}
-              type="file"
-              accept=".jpg,.jpeg,.png,.webp"
-              onChange={handleFileChange}
-              required
-              className="w-full border rounded-md dark:bg-gray-800 dark:text-white dark:border-gray-700"
-            />
-            {imagePreview && (
-              <div className="mt-3 w-32 h-32 relative border rounded-md overflow-hidden">
-                <Image
-                  src={imagePreview}
-                  alt="Image Preview"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            )}
-          </div>
-        )}
-
+        {/* Submit Button */}
         <div className="md:col-span-2">
           <button
             type="submit"
             disabled={isLoading || isSubmitting}
-            className="w-full bg-blue-400 text-sm md:text-base text-white py-2 px-4 rounded-sm hover:rounded-3xl hover:bg-blue-700 transition flex justify-center items-center dark:bg-blue-500 dark:hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-blue-400 text-xs md:text-base text-white py-2 px-4 rounded-sm hover:rounded-3xl hover:bg-blue-700 transition flex justify-center items-center dark:bg-blue-500 dark:hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading || isSubmitting ? "Submitting..." : "Add Notice"}
           </button>
