@@ -39,9 +39,9 @@ const PDFViewer = ({ id, title }) => {
   );
 };
 
-const VideoHolder = ({ classContent, classTitle }) => {
+const VideoHolder = ({ classContent }) => {
   const user = useSelector(currentUser);
-  // console.log(user);
+  // console.log(classContent);
   const isAdmin = user?.role === "admin";
   const [activeTab, setActiveTab] = useState(null);
 
@@ -87,7 +87,7 @@ const VideoHolder = ({ classContent, classTitle }) => {
               transition={{ delay: 0.3, duration: 0.5 }}
             >
               <h1 className="text-xl md:text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-5xl">
-                {classTitle}
+                {classContent?.classTitle}
               </h1>
               <p className="mt-4 text-xs md:text-xl text-gray-600 dark:text-gray-300">
                 {classContent?.description}

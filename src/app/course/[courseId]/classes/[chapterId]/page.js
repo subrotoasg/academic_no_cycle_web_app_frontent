@@ -1,17 +1,15 @@
 "use client";
 
 import React from "react";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import ClassCard from "@/components/cards/ClassCard";
 import Loading from "@/components/admin/utilities/Loading";
 import { useGetClassContentsBySubjectChapterIdQuery } from "@/redux/services/contentsApi";
 
 function Class() {
   const params = useParams();
-  const searchParams = useSearchParams();
 
   const subjectChapterId = params.chapterId;
-  const chapterTitle = searchParams.get("title");
 
   const {
     data: chapterContentsData,
@@ -42,7 +40,7 @@ function Class() {
     <div className="w-full mt-24">
       <div className="text-center mb-6">
         <h1 className="pt-3 text-center font-bold text-2xl md:text-3xl mb-5 text-blue-500">
-          Chapter: {chapterTitle}
+          Chapter Details
         </h1>
       </div>
 
