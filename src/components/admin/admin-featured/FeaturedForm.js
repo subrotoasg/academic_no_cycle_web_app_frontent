@@ -84,7 +84,7 @@ function FeaturedForm() {
       type: data.type,
       description: data.description,
       coupne: data.coupon,
-      url: data.link,
+      url: "https://apars.shop/shop",
     };
 
     formData.append("file", selectedFile);
@@ -143,12 +143,6 @@ function FeaturedForm() {
             rules={{ required: "Coupon code is required for Coupon type." }}
           />
         )}
-        <InputField
-          label="External Link"
-          name="link"
-          type="url"
-          placeholder="https://example.com"
-        />
         {/* File Upload with Preview */}
         <div className="md:col-span-2">
           <Label className="mb-1 block">File Upload</Label>

@@ -7,10 +7,7 @@ import { useGetChaptersByCourseSubjectIdQuery } from "@/redux/services/chapterAP
 
 function Subject() {
   const params = useParams();
-  const searchParams = useSearchParams();
-
   const courseSubjectId = params?.subjectId;
-  const subjectTitle = searchParams.get("title");
 
   const {
     data: subjectChapterData,
@@ -21,6 +18,7 @@ function Subject() {
   });
 
   const subjectChapters = subjectChapterData?.data;
+  console.log(subjectChapters);
 
   if (isLoading || !courseSubjectId) {
     return (
@@ -42,7 +40,7 @@ function Subject() {
     <div className="mt-24 mx-5">
       <div className="text-center mb-12">
         <h1 className="pt-3 text-center font-bold text-2xl sm:text-3xl mb-5 text-blue-500">
-          {subjectTitle || "Subject"}
+          Subject Details
         </h1>
       </div>
 

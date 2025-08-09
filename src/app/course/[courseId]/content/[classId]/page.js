@@ -9,10 +9,8 @@ import React from "react";
 
 const Videos = () => {
   const params = useParams();
-  const searchParams = useSearchParams();
 
   const classId = params.classId;
-  const classTitle = searchParams.get("title");
 
   const {
     data: classContentData,
@@ -44,7 +42,7 @@ const Videos = () => {
         </p>
       ) : (
         <>
-          <VideoHolder classContent={classContent} classTitle={classTitle} />
+          <VideoHolder classContent={classContent} />
           <div className="md:px-20">
             <Comments />
           </div>

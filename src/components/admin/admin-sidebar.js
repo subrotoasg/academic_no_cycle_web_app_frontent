@@ -125,19 +125,6 @@ export const AdminSidebar = () => {
       icon: Bell,
       badge: "Beta",
     },
-    {
-      title: (
-        <span className="flex items-center gap-2">
-          Registered Students{" "}
-          <span className="text-xs text-muted-foreground">
-            {" "}
-            <Construction className="w-4 h-4 text-red-600" />
-          </span>
-        </span>
-      ),
-      href: "/admin/RegisteredStudents",
-      icon: Users,
-    },
   ];
 
   if (!hasMounted) {

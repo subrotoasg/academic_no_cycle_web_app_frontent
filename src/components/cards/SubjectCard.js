@@ -15,7 +15,7 @@ const SubjectCard = ({ courseSubject }) => {
     courseSubject?.subject?.subjectImage ||
     "/placeholder-image.png";
 
-  const title = courseSubject?.subject?.title || "Untitled Subject";
+  const title = courseSubject?.subject?.title;
   const courseId = courseSubject?.course?.id;
   return (
     <Card

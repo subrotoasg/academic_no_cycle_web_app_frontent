@@ -1,29 +1,38 @@
 "use client";
 import React from "react";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useGetSubjectsByCourseIdQuery } from "@/redux/services/subjectsApi";
 import SubjectCard from "@/components/cards/SubjectCard";
 import Featured from "@/components/featured/Featured";
 import NoticeBoard from "@/components/notice/NoticeBoard";
+import Loading from "@/app/admin/loading";
 
 function CourseContent() {
   const params = useParams();
-  const searchParams = useSearchParams();
 
   const courseId = params?.courseId;
-  const courseTitle = searchParams.get("title");
 
   const { data: subjectData, isLoading } =
     useGetSubjectsByCourseIdQuery(courseId);
 
+  if (isLoading) {
+    return <Loading />;
+  }
   const subjects = subjectData?.data;
-
+  const hasSubjects = subjects && subjects.length > 0;
+  const courseTitle = hasSubjects ? subjects[0].course.productFullName : null;
   return (
     <div className="container mx-auto mt-20 md:mt-28 p-1">
       <div className="text-center mb-6">
-        <h3 className="text-2xl md:text-5xl font-bold text-center text-blue-700 mb-8">
-          {courseTitle}
-        </h3>
+        {hasSubjects ? (
+          <h3 className="text-2xl md:text-5xl font-bold text-center text-blue-700 mb-8">
+            {courseTitle}
+          </h3>
+        ) : (
+          <h3 className="text-2xl md:text-5xl font-bold text-center text-blue-700 mb-8">
+            Course Details
+          </h3>
+        )}
         <h2 className="text-xl md:text-3xl font-bold text-center text-blue-500 my-10">
           📚 Available Classes
         </h2>
