@@ -14,7 +14,7 @@ function StudentDashboard() {
     isLoading: enrolledLoading,
     isError: enrolledError,
   } = useGetMyCoursesQuery({ page: 1, limit: 100 });
-
+  console.log(enrolledData);
   const {
     data: allCourseData,
     isLoading: allLoading,

@@ -14,16 +14,33 @@ function ActualLayoutLogic({ children }) {
     (state) => state.studentCourses.enrolledCourses
   );
 
+  const allowedArchives = useSelector(
+    (state) => state.archiveAccess.allowedArchiveCourseIds
+  );
+
   const { data, isLoading } = useGetMyCoursesQuery({ page: 1, limit: 100 });
   const courses = enrolledCourses || data?.data?.data || [];
 
-  const isEnrolled = courses?.some((c) => c.courseId === courseId);
+  const isEnrolledOrArchiveAllowed =
+    courses?.some((c) => c.courseId === courseId) ||
+    allowedArchives.includes(courseId);
 
+  // const isEnrolled = courses?.some((c) => c.courseId === courseId);
+
+  // useEffect(() => {
+  //   if (!isLoading && !isEnrolled) {
+  //     router.replace("/unauthorized");
+  //   }
+  // }, [isLoading, isEnrolled, router]);
   useEffect(() => {
-    if (!isLoading && !isEnrolled) {
+    if (!isLoading && !isEnrolledOrArchiveAllowed) {
       router.replace("/unauthorized");
     }
-  }, [isLoading, isEnrolled, router]);
+  }, [isLoading, isEnrolledOrArchiveAllowed, router]);
+
+  if (!isEnrolledOrArchiveAllowed) {
+    return null;
+  }
 
   if (isLoading || !courses.length) {
     return (
@@ -33,9 +50,9 @@ function ActualLayoutLogic({ children }) {
     );
   }
 
-  if (!isEnrolled) {
-    return null;
-  }
+  // if (!isEnrolled) {
+  //   return null;
+  // }
 
   return <>{children}</>;
 }

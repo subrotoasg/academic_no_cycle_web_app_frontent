@@ -25,11 +25,12 @@ import { useLogOutMutation } from "@/redux/services/authApi";
 import { clearCourses } from "@/redux/Features/courseInfo";
 import Swal from "sweetalert2";
 import { clearEnrolledCourses } from "@/redux/Features/mycourses";
+import { clearArchiveAccess } from "@/redux/Features/archiveAccess";
 
 const NAV_ITEMS = [
   {
     name: "Group",
-    url: "https://www.facebook.com/groups/acs.hsc24.frb",
+    url: "https://www.facebook.com/AparsClassroom/",
     icon: <FaFacebook size={18} />,
   },
   {
@@ -37,11 +38,11 @@ const NAV_ITEMS = [
     url: "https://www.youtube.com/c/aparsclassroom",
     icon: <FaYoutube size={18} />,
   },
-  {
-    name: "Contact",
-    url: "https://www.messenger.com/login.php?next=https%3A%2F%2Fwww.messenger.com%2Ft%2F103533265542288%2F",
-    icon: <FaFacebookMessenger size={18} />,
-  },
+  // {
+  //   name: "Contact",
+  //   url: "https://www.messenger.com/login.php?next=https%3A%2F%2Fwww.messenger.com%2Ft%2F103533265542288%2F",
+  //   icon: <FaFacebookMessenger size={18} />,
+  // },
 ];
 
 export default function Navbar() {
@@ -73,6 +74,7 @@ export default function Navbar() {
         dispatch(removeUser());
         dispatch(clearCourses());
         dispatch(clearEnrolledCourses());
+        dispatch(clearArchiveAccess());
         Swal.fire({
           title: "Logged out!",
           text: "You have been successfully logged out.",
@@ -226,7 +228,7 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-3">
-          <Button
+          {/* <Button
             onClick={toggleTheme}
             variant="outline"
             size="icon"
@@ -239,7 +241,7 @@ export default function Navbar() {
               ) : (
                 <GoSun size={20} />
               ))}
-          </Button>
+          </Button> */}
           {user ? (
             <Button
               onClick={handleLogout}

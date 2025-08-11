@@ -5,6 +5,7 @@ import persistReducer from "redux-persist/es/persistReducer";
 import authReducer from "../Features/authentication";
 import courseReducer from "../Features/courseInfo";
 import studentCoursesReducer from "../Features/mycourses";
+import archiveAccessReducer from "../Features/archiveAccess";
 
 const persistConfig = {
   key: "auth",
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   auth: authReducer,
   course: courseReducer,
   studentCourses: studentCoursesReducer,
+  archiveAccess: archiveAccessReducer,
   [baseApi.reducerPath]: baseApi.reducer,
 });
 
