@@ -14,9 +14,7 @@ function StudentDashboard() {
     isLoading: enrolledLoading,
     isError: enrolledError,
   } = useGetMyCoursesQuery({ page: 1, limit: 100 });
-  // console.log(enrolledData);
 
-  // Fetch all courses
   const {
     data: allCourseData,
     isLoading: allLoading,
@@ -25,15 +23,13 @@ function StudentDashboard() {
 
   const EnrolledCourses = enrolledData?.data?.data || [];
   const AllCourses = allCourseData?.data?.data || [];
-  console.log(EnrolledCourses);
-  // Mark courses as enrolled or not
-  const mergedCourses = AllCourses.map((course) => {
-    const isEnrolled = EnrolledCourses.some((en) => en.courseId === course.id);
+
+  const mergedCourses = AllCourses?.map((course) => {
+    const isEnrolled = EnrolledCourses?.some((en) => en.courseId === course.id);
     return { ...course, isEnrolled };
   });
 
-  // Sort: enrolled courses first
-  const sortedCourses = mergedCourses.sort((a, b) => {
+  const sortedCourses = mergedCourses?.sort((a, b) => {
     if (a.isEnrolled === b.isEnrolled) return 0;
     return a.isEnrolled ? -1 : 1;
   });
