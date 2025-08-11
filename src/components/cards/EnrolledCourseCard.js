@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 export default function EnrolledCourseCard({ courseInfo }) {
-  // console.log(courseInfo);
+  console.log(courseInfo);
   const router = useRouter();
   const { courseId, course } = courseInfo;
 
