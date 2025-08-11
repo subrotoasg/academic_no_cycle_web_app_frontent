@@ -36,6 +36,7 @@ export function FeaturedList() {
     data,
     isLoading,
     isError,
+    isFetching,
     refetch: refetchFeatures,
   } = useGetFeaturesByCourseIdQuery(
     {
@@ -131,19 +132,19 @@ export function FeaturedList() {
           placeholder="Search by Feature Title..."
         />
       </div>
-      {isLoading && (
+      {(isLoading || isFetching) && (
         <div className="w-full flex justify-center py-8">
           <Loading />
         </div>
       )}
 
-      {isError && !isLoading && (
+      {isError && !(isLoading || isFetching) && (
         <div className="text-center text-red-500 py-4">
           Failed to load Features.
         </div>
       )}
 
-      {!isLoading && !isError && (
+      {!(isLoading || isFetching) && !isError && (
         <>
           {!selectedCourseId || sortedFeatures.length === 0 ? (
             <div className="text-center text-gray-500 py-4">

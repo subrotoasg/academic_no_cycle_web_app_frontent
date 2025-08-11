@@ -29,17 +29,18 @@ export default function AdminList() {
     }
   }, [courses, selectedCourseId]);
 
-  const { data, isLoading, isError, refetch } = useGetAdminsByCourseIdQuery(
-    {
-      page,
-      limit,
-      searchTerm: searchQuery,
-      courseId: selectedCourseId,
-    },
-    {
-      skip: !selectedCourseId,
-    }
-  );
+  const { data, isLoading, isFetching, isError, refetch } =
+    useGetAdminsByCourseIdQuery(
+      {
+        page,
+        limit,
+        searchTerm: searchQuery,
+        courseId: selectedCourseId,
+      },
+      {
+        skip: !selectedCourseId,
+      }
+    );
 
   const meta = data?.data?.meta;
   const adminData = data?.data?.data;
@@ -78,19 +79,19 @@ export default function AdminList() {
           placeholder="Search by email"
         />
       </div>
-      {isLoading && (
+      {(isLoading || isFetching) && (
         <div className="w-full flex justify-center py-8">
           <Loading />
         </div>
       )}
 
-      {isError && !isLoading && (
+      {isError && !(isLoading || isFetching) && (
         <div className="text-center text-red-500 py-4">
           Failed to load admins.
         </div>
       )}
 
-      {!isLoading && !isError && (
+      {!(isLoading || isFetching) && !isError && (
         <>
           {sortedData.length === 0 ? (
             <div className="text-center text-gray-500 py-4">

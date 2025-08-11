@@ -20,7 +20,7 @@ export default function CourseAccessForm({ setIsModalOpen }) {
   const onSubmit = async ({ accessCode }) => {
     try {
       const res = await redeemCourse(accessCode).unwrap();
-      console.log(res);
+      // console.log(res);
 
       if (res.success) {
         Swal.fire({

@@ -16,7 +16,7 @@ const CourseFeature = () => {
     isLoading,
     isError,
   } = useGetAllCourseQuery({ limit: defaultLimit });
-  console.log(courseData);
+  // console.log(courseData);
 
   const courses = useMemo(() => {
     return courseData?.data?.data || [];
@@ -30,11 +30,9 @@ const CourseFeature = () => {
     return ["All", ...unique];
   }, [courses]);
 
-  // State for selected tab/category
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [hoveredCategory, setHoveredCategory] = useState(null);
 
-  // Sort courses numerically by productName’s numeric part
   const sortedCourses = useMemo(() => {
     return [...courses].sort((a, b) => {
       const numA = parseInt(a.productName?.replace(/[^\d]/g, ""));
@@ -43,7 +41,6 @@ const CourseFeature = () => {
     });
   }, [courses]);
 
-  // Filter courses by selected category
   const filteredCourses = useMemo(() => {
     if (selectedCategory === "All") return sortedCourses;
     return sortedCourses.filter(

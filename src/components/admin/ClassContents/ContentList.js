@@ -37,6 +37,7 @@ const ContentList = () => {
     data,
     isLoading,
     isError,
+    isFetching,
     refetch: refetchClassContents,
   } = useGetAllClassContentsQuery(
     {
@@ -162,19 +163,19 @@ const ContentList = () => {
         />
       </div>
 
-      {isLoading && (
+      {(isLoading || isFetching) && (
         <div className="w-full flex justify-center py-8">
           <Loading />
         </div>
       )}
 
-      {isError && !isLoading && (
+      {isError && !(isLoading || isFetching) && (
         <div className="text-center text-red-500 py-4">
           Failed to load contents.
         </div>
       )}
 
-      {!isLoading && !isError && (
+      {!(isLoading || isFetching) && !isError && (
         <>
           {!selectedCourseId || sortedData?.length === 0 ? (
             <div className="text-center text-gray-500 py-4">

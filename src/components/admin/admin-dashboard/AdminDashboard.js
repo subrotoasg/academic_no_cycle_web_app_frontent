@@ -63,7 +63,6 @@ function AdminDashboard() {
   const notices = noticeData?.data?.data.length || 0;
 
   const staticData = {
-    students: 1234,
     admins: admins,
     videos: videos,
     features: features,
@@ -78,14 +77,6 @@ function AdminDashboard() {
   ];
 
   const statsData = [
-    {
-      title: "Students",
-      value: staticData.students,
-      icon: Users,
-      subtitle: "+12% from last month",
-      link: "/admin/RegisteredStudents",
-    },
-
     {
       title: "Admins",
       value: staticData.admins,

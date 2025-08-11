@@ -40,7 +40,7 @@ const DashboardCharts = ({ stats, statsData }) => {
 
   return (
     <div className="gap-2 md:gap-6 mt-10">
-      <div
+      {/* <div
         className="bg-white dark:bg-gray-800 rounded-2xl p-2 md:p-4 shadow-md"
         data-aos="fade-right"
       >
@@ -57,7 +57,7 @@ const DashboardCharts = ({ stats, statsData }) => {
             <Bar dataKey="value" fill="#4773e1" radius={[5, 5, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
-      </div>
+      </div> */}
       <div
         className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 p-3 mt-6"
         data-aos="fade-up"
@@ -69,7 +69,7 @@ const DashboardCharts = ({ stats, statsData }) => {
               title={data.title}
               value={data.value}
               icon={data.icon}
-              subtitle={data.subtitle}
+              // subtitle={data.subtitle}
             />
           </Link>
         ))}

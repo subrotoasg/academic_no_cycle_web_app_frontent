@@ -17,13 +17,22 @@ function Class() {
     isError,
   } = useGetClassContentsBySubjectChapterIdQuery(subjectChapterId);
 
-  if (isLoading) {
+  const chapterContents = chapterContentsData?.data;
+  // console.log(chapterContents);
+
+  const chapterTitle =
+    chapterContents && chapterContents.length > 0
+      ? chapterContents[0].courseSubjectChapter?.chapter?.chapterName
+      : "Chapter Details";
+
+  if (isLoading || !subjectChapterId) {
     return (
       <div className="mt-20">
         <Loading />
       </div>
     );
   }
+
   {
     isError && (
       <div className="text-center py-20 text-lg font-medium text-red-500">
@@ -32,15 +41,15 @@ function Class() {
     );
   }
 
-  const chapterContents = chapterContentsData?.data
-    ?.slice()
-    .sort((a, b) => Number(a.classNo) - Number(b.classNo));
+  // const chapterContents = chapterContentsData?.data
+  //   ?.slice()
+  //   .sort((a, b) => Number(a.classNo) - Number(b.classNo));
 
   return (
     <div className="w-full mt-24">
       <div className="text-center mb-6">
         <h1 className="pt-3 text-center font-bold text-2xl md:text-3xl mb-5 text-blue-500">
-          Chapter Details
+          {chapterTitle}
         </h1>
       </div>
 

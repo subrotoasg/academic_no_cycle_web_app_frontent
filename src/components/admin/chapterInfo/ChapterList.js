@@ -30,17 +30,18 @@ export function ChapterList() {
       setSelectedCourseId(courses.data[0].id);
     }
   }, [courses, selectedCourseId]);
-  const { data, isError, isLoading } = useGetCourseSubjectChaptersQuery(
-    {
-      page,
-      limit,
-      searchTerm: searchQuery,
-      courseId: selectedCourseId,
-    },
-    {
-      skip: !selectedCourseId,
-    }
-  );
+  const { data, isError, isLoading, isFetching } =
+    useGetCourseSubjectChaptersQuery(
+      {
+        page,
+        limit,
+        searchTerm: searchQuery,
+        courseId: selectedCourseId,
+      },
+      {
+        skip: !selectedCourseId,
+      }
+    );
 
   const ChapterData = data?.data?.data;
   const meta = data?.data?.meta;
@@ -124,19 +125,19 @@ export function ChapterList() {
         />
       </div>
 
-      {isLoading && (
+      {(isLoading || isFetching) && (
         <div className="w-full flex justify-center py-8">
           <Loading />
         </div>
       )}
 
-      {isError && !isLoading && (
+      {isError && !(isLoading || isFetching) && (
         <div className="text-center text-red-500 py-4">
           Failed to load Chapters.
         </div>
       )}
 
-      {!isLoading && !isError && (
+      {!(isLoading || isFetching) && !isError && (
         <>
           {!selectedCourseId || sortedChapter.length === 0 ? (
             <div className="text-center text-gray-500 py-4">

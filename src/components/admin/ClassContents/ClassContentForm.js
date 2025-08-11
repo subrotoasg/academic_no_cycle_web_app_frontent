@@ -46,7 +46,6 @@ export default function ClassContentForm() {
   const fileInputRef = useRef(null);
 
   const courses = useSelector(selectAllCourses);
-
   const courseOptions =
     courses?.data?.map((course) => ({
       label: course.productFullName,
@@ -60,27 +59,30 @@ export default function ClassContentForm() {
   } = useGetSubjectsByCourseIdQuery(selectedCourseId, {
     skip: !selectedCourseId,
   });
+
   const { data: chapters, isLoading: isChapterLoading } =
     useGetChaptersByCourseSubjectIdQuery(selectedSubjectId, {
       skip: !selectedSubjectId,
     });
   const [createClassContent, { isLoading }] = useCreateClassContentMutation();
 
-  const subjectOptions =
-    !isSubjectLoading && subjects?.data
-      ? subjects?.data?.map((sub) => ({
-          label: sub.subject.title,
-          value: sub.id,
-        })) || []
-      : [];
+  const subjectOptions = isSubjectLoading
+    ? [{ label: "Loading subjects...", value: "" }]
+    : subjects?.data?.length
+    ? subjects.data.map((sub) => ({
+        label: sub.subject.title,
+        value: sub.id,
+      }))
+    : [{ label: "No subjects available", value: "" }];
 
-  const chapterOptions =
-    !isChapterLoading && chapters?.data && Array.isArray(chapters.data)
-      ? chapters.data.map((ch) => ({
-          label: ch.chapter.chapterName,
-          value: ch.id,
-        }))
-      : [];
+  const chapterOptions = isChapterLoading
+    ? [{ label: "Loading chapters...", value: "" }]
+    : chapters?.data?.length
+    ? chapters.data.map((ch) => ({
+        label: ch.chapter.chapterName,
+        value: ch.id,
+      }))
+    : [{ label: "No chapters added yet", value: "" }];
 
   useEffect(() => {
     setValue("subject", "");
@@ -164,23 +166,19 @@ export default function ClassContentForm() {
           options={types}
           rules={{ required: "Hosting type is required" }}
         />
-        <Dropdown
-          label="Select Subject"
-          name="subject"
-          className="tiro-bangla-text"
-          options={subjectOptions}
-          rules={{ required: "Subject is required" }}
-        />
+        {selectedCourseId && (
+          <Dropdown
+            label="Select Subject"
+            name="subject"
+            options={subjectOptions}
+            rules={{ required: "Subject is required" }}
+          />
+        )}
         {selectedSubjectId && (
           <Dropdown
             label="Select Chapter"
             name="chapter"
-            className="tiro-bangla-text"
-            options={
-              chapterOptions.length > 0
-                ? chapterOptions
-                : [{ label: "No chapters added yet", value: "" }]
-            }
+            options={chapterOptions}
             rules={{ required: "Chapter is required" }}
           />
         )}

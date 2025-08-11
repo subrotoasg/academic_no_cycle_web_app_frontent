@@ -18,7 +18,11 @@ function Subject() {
   });
 
   const subjectChapters = subjectChapterData?.data;
-  console.log(subjectChapters);
+
+  const subjectName =
+    subjectChapters && subjectChapters.length > 0
+      ? subjectChapters[0].courseSubject?.subject?.title
+      : "Subject Details";
 
   if (isLoading || !courseSubjectId) {
     return (
@@ -40,7 +44,7 @@ function Subject() {
     <div className="mt-24 mx-5">
       <div className="text-center mb-12">
         <h1 className="pt-3 text-center font-bold text-2xl sm:text-3xl mb-5 text-blue-500">
-          Subject Details
+          {subjectName}
         </h1>
       </div>
 
