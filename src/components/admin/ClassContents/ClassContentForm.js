@@ -52,7 +52,7 @@ export default function ClassContentForm() {
       label: course.productFullName,
       value: course.id,
     })) || [];
-  // const { data: subjects, isLoading: isSubjectLoading } = useGetSubjectsQuery();
+
   const {
     data: subjects,
     isLoading: isSubjectLoading,
@@ -114,8 +114,6 @@ export default function ClassContentForm() {
 
     const formData = new FormData();
     const contentInfo = {
-      // courseId: data.courseId,
-      // subjectId: selectedSubjectId,
       courseSubjectChapterId: data.chapter,
       hostingType: data.type,
       classTitle: data.title,
@@ -144,7 +142,7 @@ export default function ClassContentForm() {
   // Helper to generate Bunny Storage Zone video URL
   const getBunnyVideoUrl = (videoId) => {
     if (!videoId) return "";
-    return `${STORAGE_ZONE_BASE}/${videoId}.mp4`; // Assuming teacher provides file name without extension
+    return `${STORAGE_ZONE_BASE}/${videoId}.mp4`;
   };
 
   return (
