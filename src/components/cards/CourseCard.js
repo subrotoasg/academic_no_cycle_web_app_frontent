@@ -17,13 +17,16 @@ export default function CourseCard({ course }) {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const permalink = course?.Permalink;
   const user = useSelector(currentUser);
+
+  const isEnrolled = course?.isEnrolled === true;
+
   const handleCardClick = () => {
-    if (permalink) {
+    if (isEnrolled) {
+      window.location.href = `/course/${course.id}`;
+    } else if (permalink) {
       window.open(permalink, "_blank");
     }
   };
-
-  const isEnrolled = course?.isEnrolled === true;
   return (
     <>
       {" "}

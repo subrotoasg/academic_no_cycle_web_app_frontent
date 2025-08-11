@@ -37,10 +37,22 @@ const courseApiServices = baseApi.injectEndpoints({
             ]
           : [{ type: tagTypesValue.COURSE, id: "LIST" }],
     }),
+    getArchivedCourseById: builder.query({
+      query: (courseId) => ({
+        url: `/course/get-all/archieve-courses/${courseId}`,
+        method: "GET",
+      }),
+      providesTags: (result, error, courseId) => [
+        { type: tagTypesValue.COURSE, id: courseId },
+      ],
+    }),
   }),
 });
 
-export const { useGetCourseByIdQuery, useGetAllCourseQuery } =
-  courseApiServices;
+export const {
+  useGetCourseByIdQuery,
+  useGetAllCourseQuery,
+  useGetArchivedCourseByIdQuery,
+} = courseApiServices;
 
 export default courseApiServices;
