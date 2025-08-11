@@ -19,7 +19,7 @@ const Featured = ({ courseId }) => {
     <div className="container mx-auto p-4">
       <div className="text-center mb-6">
         <h2 className="text-2xl md:text-3xl font-bold text-blue-500 animate__animated animate__slideInDown">
-          ⭐ Featured Highlights
+          Featured Highlights
         </h2>
         <p className="text-xs md:text-lg text-gray-600 dark:text-gray-300 my-8 animate__animated animate__fadeIn animate__delay-1s">
           Discover our latest offers, exciting new features, and exclusive

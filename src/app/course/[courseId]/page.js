@@ -34,7 +34,7 @@ function CourseContent() {
           </h3>
         )}
         <h2 className="text-xl md:text-3xl font-bold text-center text-blue-500 my-10">
-          📚 Available Classes
+          Available Classes
         </h2>
         <p className="text-xs md:text-lg text-gray-600 dark:text-gray-300 mt-2">
           Explore the classes available in the course and find the perfect fit

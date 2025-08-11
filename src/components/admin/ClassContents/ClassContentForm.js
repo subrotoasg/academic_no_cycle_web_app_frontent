@@ -16,11 +16,13 @@ import { useCreateClassContentMutation } from "@/redux/services/contentsApi";
 import { selectAllCourses } from "@/redux/Features/courseInfo";
 
 export default function ClassContentForm() {
+  const STORAGE_ZONE_BASE = "https://fai-cg.b-cdn.net";
   const types = [
-    { label: "Free Teachimint", value: "Free" },
-    { label: "Premium Teachimint", value: "Premium" },
+    // { label: "Free Teachimint", value: "Free" },
+    // { label: "Premium Teachimint", value: "Premium" },
     { label: "Free Youtube", value: "freeyt" },
     { label: "Premium Youtube", value: "premyt" },
+    { label: "Bunny CDN", value: "bunny" },
   ];
   const defaultValues = {
     courseId: "",
@@ -50,7 +52,7 @@ export default function ClassContentForm() {
       label: course.productFullName,
       value: course.id,
     })) || [];
-  // const { data: subjects, isLoading: isSubjectLoading } = useGetSubjectsQuery();
+
   const {
     data: subjects,
     isLoading: isSubjectLoading,
@@ -112,8 +114,6 @@ export default function ClassContentForm() {
 
     const formData = new FormData();
     const contentInfo = {
-      // courseId: data.courseId,
-      // subjectId: selectedSubjectId,
       courseSubjectChapterId: data.chapter,
       hostingType: data.type,
       classTitle: data.title,
@@ -137,6 +137,12 @@ export default function ClassContentForm() {
     } catch (err) {
       toast.error(err?.data?.message || "Upload Failed. Please try again.");
     }
+  };
+
+  // Helper to generate Bunny Storage Zone video URL
+  const getBunnyVideoUrl = (videoId) => {
+    if (!videoId) return "";
+    return `${STORAGE_ZONE_BASE}/${videoId}.mp4`;
   };
 
   return (
@@ -252,18 +258,16 @@ export default function ClassContentForm() {
               ></iframe>
             </div>
           )}
-          {videoId && videoType === "vimeo" && (
+          {/* Bunny Storage Zone Preview */}
+          {videoId && videoType === "bunny" && (
             <div className="w-full mt-2">
-              <iframe
-                src={videoId}
+              <video
+                src={getBunnyVideoUrl(videoId)}
+                controls
                 width="100%"
-                title="Vimeo video player"
-                height="450"
-                frameBorder="0"
-                allow="autoplay; fullscreen; picture-in-picture"
-                allowFullScreen
-                className="rounded-lg shadow-md"
-              ></iframe>
+                height="auto"
+                className="rounded-lg shadow-md w-full h-auto md:h-84"
+              />
             </div>
           )}
         </div>

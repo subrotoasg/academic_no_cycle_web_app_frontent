@@ -69,14 +69,26 @@ const VideoHolder = ({ classContent }) => {
               transition={{ duration: 0.6 }}
             >
               <div className="relative pb-[56.25%] h-0 bg-black rounded-2xl overflow-hidden shadow-2xl">
-                <ReactPlayer
-                  url={`https://www.youtube.com/watch?v=${classContent?.videoUrl}`}
-                  width="100%"
-                  height="100%"
-                  className="absolute top-0 left-0"
-                  controls
-                  playing
-                />
+                {classContent?.videoType === "bunny" ? (
+                  <video
+                    src={classContent?.videoUrl}
+                    controls
+                    width="100%"
+                    height="100%"
+                    className="absolute top-0 left-0 w-full h-full"
+                  >
+                    Your browser does not support the video tag.
+                  </video>
+                ) : (
+                  <ReactPlayer
+                    url={`https://www.youtube.com/watch?v=${classContent?.videoUrl}`}
+                    width="100%"
+                    height="100%"
+                    className="absolute top-0 left-0"
+                    controls
+                    playing
+                  />
+                )}
               </div>
             </motion.div>
 
