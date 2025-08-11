@@ -62,6 +62,9 @@ const VideoHolder = ({ classContent }) => {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 rounded-xl">
       <div className="max-w-8xl mx-auto  px-1 sm:px-4 lg:px-8 py-4 md:py-10">
         <div className="lg:grid lg:grid-cols-12 lg:gap-6">
+          <h1 className="mt-3 text-center font-bold text-2xl md:text-3xl mb-5 text-blue-400">
+            {classContent?.classTitle}
+          </h1>
           <div className="lg:col-span-9">
             <motion.div
               initial={{ opacity: 0, y: -30 }}
@@ -99,7 +102,7 @@ const VideoHolder = ({ classContent }) => {
               transition={{ delay: 0.3, duration: 0.5 }}
             >
               <h1 className="text-xl md:text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-5xl">
-                {classContent?.classTitle}
+                {/* {classContent?.classTitle} */}
               </h1>
               <p className="mt-4 text-xs md:text-xl text-gray-600 dark:text-gray-300">
                 {classContent?.description}

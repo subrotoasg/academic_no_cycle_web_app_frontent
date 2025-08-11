@@ -9,7 +9,6 @@ import React from "react";
 
 const Videos = () => {
   const params = useParams();
-
   const classId = params.classId;
 
   const {

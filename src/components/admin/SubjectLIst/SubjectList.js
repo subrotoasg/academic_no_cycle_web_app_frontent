@@ -12,7 +12,6 @@ import SubjectsImageEditDialog from "./SubjectInfoEditDialog";
 import {
   useDeleteCourseSubjectMutation,
   useGetCourseSubjectQuery,
-  useGetSubjectsByCourseIdQuery,
 } from "@/redux/services/subjectsApi";
 import { selectAllCourses } from "@/redux/Features/courseInfo";
 import CourseSelect from "@/components/form/CourseSelect";
@@ -32,7 +31,7 @@ export function SubjectList() {
       setSelectedCourseId(courses.data[0].id);
     }
   }, [courses, selectedCourseId]);
-  const { data, isError, isLoading } = useGetCourseSubjectQuery(
+  const { data, isError, isLoading, isFetching } = useGetCourseSubjectQuery(
     {
       page,
       limit,
@@ -120,19 +119,19 @@ export function SubjectList() {
         onChange={setSelectedCourseId}
       />
 
-      {isLoading && (
+      {(isLoading || isFetching) && (
         <div className="w-full flex justify-center py-8">
           <Loading />
         </div>
       )}
 
-      {isError && !isLoading && (
+      {isError && !(isLoading || isFetching) && (
         <div className="text-center text-red-500 py-4">
           Failed to load Subjects.
         </div>
       )}
 
-      {!isLoading && !isError && (
+      {!(isLoading || isFetching) && !isError && (
         <>
           {!selectedCourseId || sortedSubject.length === 0 ? (
             <div className="text-center text-gray-500 py-4">
