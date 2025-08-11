@@ -96,27 +96,15 @@ export default function DashboardCourseCard({ course }) {
 
       {/* Actions */}
       <CardActions className="flex justify-center items-center mb-3">
-        {isEnrolled ? (
-          <button
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm hover:rounded-full w-full text-center hover:font-bold"
-            onClick={(e) => {
-              e.stopPropagation();
-              router.push(courseUrl);
-            }}
-          >
-            View Course
-          </button>
-        ) : (
-          <a
-            href={permalink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-blue-600 hover:bg-blue-800 text-white px-4 py-2 rounded text-sm hover:rounded-full w-full text-center hover:font-bold"
-            onClick={(e) => e.stopPropagation()}
-          >
-            Enroll Now
-          </a>
-        )}
+        <a
+          href={permalink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="bg-blue-600 hover:bg-blue-800 text-white px-4 py-2 rounded text-sm hover:rounded-full w-full text-center hover:font-bold"
+          onClick={(e) => e.stopPropagation()}
+        >
+          Enroll Now
+        </a>
       </CardActions>
     </Card>
   );
