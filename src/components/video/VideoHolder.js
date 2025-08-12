@@ -59,19 +59,19 @@ const VideoHolder = ({ classContent }) => {
   const chapterContents = chapterContentsData?.data;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 rounded-xl">
-      <div className="max-w-8xl mx-auto  px-1 sm:px-4 lg:px-8 py-4 md:py-10">
-        <div className="lg:grid lg:grid-cols-12 lg:gap-6">
-          <h1 className="mt-3 text-center font-bold text-2xl md:text-3xl mb-5 text-blue-400">
+    <div className="min-h-auto bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 rounded-xl mx-auto">
+      <div className="max-w-8xl mx-auto  px-1 sm:px-4 py-4 md:py-10">
+        <div className="lg:grid lg:grid-cols-12 lg:gap-4">
+          {/* <h1 className="mt-3 text-center font-bold text-2xl md:text-3xl mb-5 text-blue-400">
             {classContent?.classTitle}
-          </h1>
+          </h1> */}
           <div className="lg:col-span-9">
             <motion.div
               initial={{ opacity: 0, y: -30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <div className="relative pb-[56.25%] h-0 bg-black rounded-2xl overflow-hidden shadow-2xl">
+              <div className="relative pb-[56.25%] h-50 bg-black rounded-2xl overflow-hidden shadow-2xl">
                 {classContent?.videoType === "bunny" ? (
                   <video
                     src={classContent?.videoUrl}
@@ -102,7 +102,7 @@ const VideoHolder = ({ classContent }) => {
               transition={{ delay: 0.3, duration: 0.5 }}
             >
               <h1 className="text-xl md:text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-5xl">
-                {/* {classContent?.classTitle} */}
+                {classContent?.classTitle}
               </h1>
               <p className="mt-4 text-xs md:text-xl text-gray-600 dark:text-gray-300">
                 {classContent?.description}

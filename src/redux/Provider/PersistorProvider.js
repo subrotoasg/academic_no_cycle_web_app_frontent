@@ -9,7 +9,7 @@ export default function PersistorProvider({ children }) {
     <Provider store={store}>
       <PersistGate persistor={persistor}>{children}</PersistGate>
       <Toaster
-        position="top-right"
+        position="bottom-right"
         toastOptions={{
           style: {
             padding: "16px 10px",

@@ -66,8 +66,9 @@ const CourseFeature = () => {
       </div>
     );
   }
-
-  if (!courses.length) {
+  // console.log(courses);
+  // console.log(sortedCourses);
+  if (!sortedCourses.length > 0) {
     return (
       <div className="text-center text-gray-500 py-10">
         No courses available.

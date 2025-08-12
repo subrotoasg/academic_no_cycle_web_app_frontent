@@ -10,7 +10,7 @@ import archiveAccessReducer from "../Features/archiveAccess";
 const persistConfig = {
   key: "auth",
   storage,
-  whitelist: ["auth", "course", "studentCourses"],
+  whitelist: ["auth", "course", "studentCourses", "archiveAccess"],
 };
 
 const rootReducer = combineReducers({
