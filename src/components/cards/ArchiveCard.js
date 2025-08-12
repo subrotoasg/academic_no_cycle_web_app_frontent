@@ -1,53 +1,3 @@
-// "use client";
-
-// import { grantArchiveAccess } from "@/redux/Features/archiveAccess";
-// import Image from "next/image";
-// import Link from "next/link";
-// import { useDispatch } from "react-redux";
-
-// export default function ArchiveCourseCard({ archiveData }) {
-//   const dispatch = useDispatch();
-//   if (!archiveData?.data) return null;
-
-//   const { id, ProductImage, productFullName } = archiveData.data;
-
-//   return (
-//     <div
-//       data-aos="fade-up"
-//       className="transition-transform transform hover:scale-105 cursor-pointer bg-gray-100 rounded-lg shadow-md overflow-hidden"
-//       style={{ maxWidth: 320 }}
-//     >
-//       <Link
-//         href={`/course/${id}`}
-//         className="block"
-//         onClick={() => dispatch(grantArchiveAccess(archiveData.data.id))}
-//       >
-//         {/* Image Section */}
-//         <div className="relative h-44 w-full overflow-hidden rounded-t-lg bg-white">
-//           <Image
-//             src={ProductImage}
-//             alt={productFullName || "Archived Course Image"}
-//             className="object-fill w-full h-full"
-//             loading="lazy"
-//             height={200}
-//             width={300}
-//           />
-//         </div>
-
-//         {/* Content Section */}
-//         <div className="p-4">
-//           <h4
-//             className="text-lg font-semibold mb-2 text-blue-700 line-clamp-2"
-//             title={productFullName}
-//           >
-//             Archive: {productFullName}
-//           </h4>
-//         </div>
-//       </Link>
-//     </div>
-//   );
-// }
-
 "use client";
 
 import { grantArchiveAccess } from "@/redux/Features/archiveAccess";
@@ -58,6 +8,7 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import CardActionArea from "@mui/material/CardActionArea";
+import archiveImg from "../../../public/img/archive.jpg";
 
 export default function ArchiveCourseCard({ archiveData }) {
   const dispatch = useDispatch();
@@ -81,11 +32,10 @@ export default function ArchiveCourseCard({ archiveData }) {
         onClick={() => dispatch(grantArchiveAccess(id))}
       >
         <CardActionArea component="div" sx={{ height: "100%" }}>
-          {/* Image Section */}
           <CardMedia
             component="img"
             height="180"
-            image={ProductImage}
+            image={archiveImg.src}
             alt={productFullName || "Archived Course Image"}
             sx={{
               height: 160,
@@ -94,7 +44,6 @@ export default function ArchiveCourseCard({ archiveData }) {
             }}
           />
 
-          {/* Title Section */}
           <CardContent>
             <Typography
               gutterBottom
