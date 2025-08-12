@@ -59,16 +59,12 @@ const VideoHolder = ({ classContent }) => {
   const chapterContents = chapterContentsData?.data;
 
   const getBunnyVideoUrl = (videoId, libraryId) => {
-    // if (!videoId || !libraryId) return "";
     return `https://iframe.mediadelivery.net/play/${libraryId}/${videoId}`;
   };
   return (
     <div className="min-h-auto bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 rounded-xl mx-auto">
       <div className="max-w-8xl mx-auto  px-1 sm:px-4 py-4 md:py-10">
         <div className="lg:grid lg:grid-cols-12 lg:gap-4">
-          {/* <h1 className="mt-3 text-center font-bold text-2xl md:text-3xl mb-5 text-blue-400">
-            {classContent?.classTitle}
-          </h1> */}
           <div className="lg:col-span-9">
             <motion.div
               initial={{ opacity: 0, y: -30 }}
