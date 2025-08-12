@@ -50,7 +50,7 @@ function FeaturedCard({ feature }) {
 
       <div className="p-5 flex flex-col justify-between flex-1">
         <div>
-          <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white capitalize">
+          <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 capitalize">
             {feature?.title}
           </h5>
 

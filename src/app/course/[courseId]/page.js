@@ -49,7 +49,7 @@ function CourseContent() {
       </div>
       <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-8 mx-5">
         {subjects.length === 0 && !archiveData ? (
-          <p className="text-red-500 text-lg font-semibold col-span-full text-center">
+          <p className="text-green-600 text-lg font-semibold col-span-full text-center">
             Archive will be available soon ...
           </p>
         ) : (
