@@ -6,6 +6,7 @@ import StudentRoute from "@/PrivateRoute/StudentRoute";
 import { useGetMyCoursesQuery } from "@/redux/services/studentCourseApi";
 import { useGetAllCourseQuery } from "@/redux/services/courseApi";
 import { motion } from "framer-motion";
+import { useMemo } from "react";
 
 function StudentDashboard() {
   // Fetch enrolled courses
@@ -22,9 +23,14 @@ function StudentDashboard() {
   } = useGetAllCourseQuery({ limit: 100 });
 
   const EnrolledCourses = enrolledData?.data?.data || [];
-  const AllCourses = allCourseData?.data?.data || [];
 
-  const mergedCourses = AllCourses?.map((course) => {
+  const courses = useMemo(() => {
+    const allCourses = allCourseData?.data?.data || [];
+    return allCourses.filter((course) => !course.markAsArchieve);
+  }, [allCourseData]);
+
+  // const mergedCourses = AllCourses?.map((course) => {
+  const mergedCourses = courses?.map((course) => {
     const isEnrolled = EnrolledCourses?.some((en) => en.courseId === course.id);
     return { ...course, isEnrolled };
   });
@@ -59,12 +65,12 @@ function StudentDashboard() {
         <>
           <div className="text-center py-10 text-lg font-medium text-gray-500">
             You are not enrolled in any courses yet. <br />
-            <span className="text-blue-600 font-semibold cursor-pointer hover:underline">
-              Explore our courses and start learning today!
-            </span>
+            <p className="text-blue-600 font-semibold cursor-pointer hover:underline my-3">
+              Explore our courses and start learning today
+            </p>
           </div>
           <div className="mt-8">
-            <h2 className="text-xl font-semibold mb-4 text-center">
+            <h2 className="text-2xl font-semibold mb-4 text-center">
               Available Courses
             </h2>
             <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-4 md:py-8 p-4">

@@ -19,7 +19,8 @@ const CourseFeature = () => {
   // console.log(courseData);
 
   const courses = useMemo(() => {
-    return courseData?.data?.data || [];
+    const allCourses = courseData?.data?.data || [];
+    return allCourses.filter((course) => !course.markAsArchieve);
   }, [courseData]);
 
   //  Get all unique subcategories from the courses
@@ -108,7 +109,7 @@ const CourseFeature = () => {
         ))}
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-4 md:py-8 p-4">
+      <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-4 md:py-8 p-4 justify-center">
         {filteredCourses.map((course) => (
           <div key={course.id}>
             <CourseCard course={course} />

@@ -11,12 +11,16 @@ import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { useSelector } from "react-redux";
 import { useGetSubjectsByCourseIdQuery } from "@/redux/services/subjectsApi";
-import { useGetChaptersByCourseSubjectIdQuery } from "@/redux/services/chapterAPi";
+import {
+  useGetChaptersByCourseSubjectIdQuery,
+  useGetChaptersBySubjectIdQuery,
+} from "@/redux/services/chapterAPi";
 import { useCreateClassContentMutation } from "@/redux/services/contentsApi";
 import { selectAllCourses } from "@/redux/Features/courseInfo";
 
 export default function ClassContentForm() {
-  const STORAGE_ZONE_BASE = "https://fai-cg.b-cdn.net";
+  // const STORAGE_ZONE_BASE = "https://fai-cg.b-cdn.net";
+  const STORAGE_ZONE_BASE = "https://iframe.mediadelivery.net/play";
   const types = [
     // { label: "Free Teachimint", value: "Free" },
     // { label: "Premium Teachimint", value: "Premium" },
@@ -39,6 +43,7 @@ export default function ClassContentForm() {
 
   const videoType = useWatch({ control, name: "type" });
   const videoId = useWatch({ control, name: "videoId" });
+  const libraryId = useWatch({ control, name: "libraryId" });
   const [selectedFile, setSelectedFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const selectedCourseId = useWatch({ control, name: "courseId" });
@@ -59,11 +64,16 @@ export default function ClassContentForm() {
   } = useGetSubjectsByCourseIdQuery(selectedCourseId, {
     skip: !selectedCourseId,
   });
-
+  console.log("sub", subjects);
   const { data: chapters, isLoading: isChapterLoading } =
     useGetChaptersByCourseSubjectIdQuery(selectedSubjectId, {
       skip: !selectedSubjectId,
     });
+  // const { data: chapters, isLoading: isChapterLoading } =
+  //   useGetChaptersBySubjectIdQuery(selectedSubjectId, {
+  //     skip: !selectedSubjectId,
+  //   });
+  console.log("chapter", chapters);
   const [createClassContent, { isLoading }] = useCreateClassContentMutation();
 
   const subjectOptions = isSubjectLoading
@@ -84,6 +94,8 @@ export default function ClassContentForm() {
       }))
     : [{ label: "No chapters added yet", value: "" }];
 
+  console.log(subjectOptions);
+  console.log(chapterOptions);
   useEffect(() => {
     setValue("subject", "");
     setValue("chapter", "");
@@ -122,6 +134,7 @@ export default function ClassContentForm() {
       classNo: data.classNumber,
       description: data.description,
       videoUrl: data.videoId,
+      libraryId: videoType === "bunny" ? data.libraryId : undefined,
     };
 
     formData.append("file", selectedFile);
@@ -141,10 +154,9 @@ export default function ClassContentForm() {
     }
   };
 
-  // Helper to generate Bunny Storage Zone video URL
-  const getBunnyVideoUrl = (videoId) => {
-    if (!videoId) return "";
-    return `${STORAGE_ZONE_BASE}/${videoId}.mp4`;
+  const getBunnyVideoUrl = (videoId, libraryId) => {
+    // if (!videoId || !libraryId) return "";
+    return `${STORAGE_ZONE_BASE}/${libraryId}/${videoId}`;
   };
 
   return (
@@ -256,15 +268,24 @@ export default function ClassContentForm() {
               ></iframe>
             </div>
           )}
-          {/* Bunny Storage Zone Preview */}
-          {videoId && videoType === "bunny" && (
+
+          {videoId && videoType === "bunny" && libraryId && (
             <div className="w-full mt-2">
-              <video
-                src={getBunnyVideoUrl(videoId)}
+              {/* <video
+                src={getBunnyVideoUrl(videoId, methods.getValues("libraryId"))}
                 controls
                 width="100%"
                 height="auto"
                 className="rounded-lg shadow-md w-full h-auto md:h-84"
+              /> */}
+              <iframe
+                src={getBunnyVideoUrl(videoId, methods.getValues("libraryId"))}
+                width="100%"
+                height="400"
+                frameBorder="0"
+                allow="autoplay"
+                allowFullScreen
+                className="rounded-lg shadow-md"
               />
             </div>
           )}

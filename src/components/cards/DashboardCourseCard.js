@@ -43,7 +43,7 @@ export default function DashboardCourseCard({ course }) {
 
         {/* Locked overlay */}
         {!isEnrolled && (
-          <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-white rounded-4xl">
+          <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-white">
             <LockIcon sx={{ fontSize: 40, color: "" }} />
 
             <span className="mt-2 text-sm font-semibold">Locked</span>

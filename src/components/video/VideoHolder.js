@@ -58,13 +58,13 @@ const VideoHolder = ({ classContent }) => {
       ?.id;
   const chapterContents = chapterContentsData?.data;
 
+  const getBunnyVideoUrl = (videoId, libraryId) => {
+    return `https://iframe.mediadelivery.net/play/${libraryId}/${videoId}`;
+  };
   return (
     <div className="min-h-auto bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 rounded-xl mx-auto">
       <div className="max-w-8xl mx-auto  px-1 sm:px-4 py-4 md:py-10">
         <div className="lg:grid lg:grid-cols-12 lg:gap-4">
-          {/* <h1 className="mt-3 text-center font-bold text-2xl md:text-3xl mb-5 text-blue-400">
-            {classContent?.classTitle}
-          </h1> */}
           <div className="lg:col-span-9">
             <motion.div
               initial={{ opacity: 0, y: -30 }}
@@ -72,16 +72,19 @@ const VideoHolder = ({ classContent }) => {
               transition={{ duration: 0.6 }}
             >
               <div className="relative pb-[56.25%] h-50 bg-black rounded-2xl overflow-hidden shadow-2xl">
-                {classContent?.videoType === "bunny" ? (
-                  <video
-                    src={classContent?.videoUrl}
-                    controls
+                {classContent?.hostingType === "bunny" ? (
+                  <iframe
+                    src={getBunnyVideoUrl(
+                      classContent?.videoUrl,
+                      classContent?.libraryId
+                    )}
                     width="100%"
-                    height="100%"
-                    className="absolute top-0 left-0 w-full h-full"
-                  >
-                    Your browser does not support the video tag.
-                  </video>
+                    height="400"
+                    frameBorder="0"
+                    allow="autoplay"
+                    allowFullScreen
+                    className="rounded-xl shadow-lg w-full md:h-96 lg:h-[560px] lg:w-4/5 mx-auto"
+                  />
                 ) : (
                   <ReactPlayer
                     url={`https://www.youtube.com/watch?v=${classContent?.videoUrl}`}
