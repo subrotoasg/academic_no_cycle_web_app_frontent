@@ -24,11 +24,14 @@ export default function ContentInfoEditDialog({
   selectedContent,
   refetchClassContents,
 }) {
+  // const STORAGE_ZONE_BASE = "https://fai-cg.b-cdn.net";
+  const STORAGE_ZONE_BASE = "https://iframe.mediadelivery.net/play";
   const types = [
-    { label: "Free Teachimint", value: "Free" },
-    { label: "Premium Teachimint", value: "Premium" },
+    // { label: "Free Teachimint", value: "Free" },
+    // { label: "Premium Teachimint", value: "Premium" },
     { label: "Free Youtube", value: "freeyt" },
     { label: "Premium Youtube", value: "premyt" },
+    { label: "Bunny CDN", value: "bunny" },
   ];
   const methods = useForm();
 
@@ -36,6 +39,7 @@ export default function ContentInfoEditDialog({
 
   const videoType = useWatch({ control, name: "type" });
   const videoId = useWatch({ control, name: "videoId" });
+  const libraryId = useWatch({ control, name: "libraryId" });
   const [thumbnailPreview, setThumbnailPreview] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef(null);
@@ -60,6 +64,7 @@ export default function ContentInfoEditDialog({
         practiceSheetId: selectedContent?.practiceSheet || "",
         solutionSheetId: selectedContent?.solutionSheet || "",
         videoId: selectedContent?.videoUrl || "",
+        libraryId: selectedContent?.libraryId || "",
       });
 
       setThumbnailPreview(selectedContent?.thumbneil || null);
@@ -85,6 +90,7 @@ export default function ContentInfoEditDialog({
       classNo: data.classNumber,
       description: data.description,
       videoUrl: data.videoId,
+      libraryId: data.libraryId,
       lectureSheet: data.lectureSheetId,
       practiceSheet: data.practiceSheetId,
       solutionSheet: data.solutionSheetId,
@@ -111,6 +117,10 @@ export default function ContentInfoEditDialog({
     } catch (error) {
       toast.error(error.message || "Failed to Update Class Content");
     }
+  };
+  const getBunnyVideoUrl = (videoId, libraryId) => {
+    // if (!videoId || !libraryId) return "";
+    return `${STORAGE_ZONE_BASE}/${libraryId}/${videoId}`;
   };
 
   return (
@@ -193,15 +203,22 @@ export default function ContentInfoEditDialog({
               type="text"
               placeholder="Enter Solution Sheet ID"
             />
-
-            <div className="md:col-span-2 mt-2">
+            {videoType === "bunny" && (
               <InputField
-                label="Youtube Video Id"
-                name="videoId"
-                type="text"
-                placeholder="Enter the correct video Id"
+                label="Library Id"
+                name="libraryId"
+                placeholder="Enter Bunny Library Id"
+                rules={{ required: "Library Id is required for Bunny hosting" }}
               />
-            </div>
+            )}
+            {/* <div className="md:col-span-2 mt-2"> */}
+            <InputField
+              label="Youtube Video Id"
+              name="videoId"
+              type="text"
+              placeholder="Enter the correct video Id"
+            />
+            {/* </div> */}
 
             <div className="md:col-span-2" id="video_thumb">
               {videoId &&
@@ -219,7 +236,30 @@ export default function ContentInfoEditDialog({
                     ></iframe>
                   </div>
                 )}
-              {videoId && videoType === "vimeo" && (
+              {videoId && videoType === "bunny" && libraryId && (
+                <div className="w-full mt-2">
+                  {/* <video
+                src={getBunnyVideoUrl(videoId, methods.getValues("libraryId"))}
+                controls
+                width="100%"
+                height="auto"
+                className="rounded-lg shadow-md w-full h-auto md:h-84"
+              /> */}
+                  <iframe
+                    src={getBunnyVideoUrl(
+                      videoId,
+                      methods.getValues("libraryId")
+                    )}
+                    width="100%"
+                    height="400"
+                    frameBorder="0"
+                    allow="autoplay"
+                    allowFullScreen
+                    className="rounded-lg shadow-md"
+                  />
+                </div>
+              )}
+              {/* {videoId && videoType === "vimeo" && (
                 <div className="w-full mt-2">
                   <iframe
                     src={videoId}
@@ -232,7 +272,7 @@ export default function ContentInfoEditDialog({
                     className="rounded-lg shadow-md"
                   ></iframe>
                 </div>
-              )}
+              )} */}
             </div>
 
             {/* Thumbnail Upload */}

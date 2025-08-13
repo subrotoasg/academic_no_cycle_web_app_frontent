@@ -83,7 +83,7 @@ const VideoHolder = ({ classContent }) => {
                     frameBorder="0"
                     allow="autoplay"
                     allowFullScreen
-                    className="rounded-xl shadow-lg w-full md:h-96 lg:h-[560px] lg:w-4/5 mx-auto"
+                    className="absolute top-0 left-0 w-full h-full rounded-xl shadow-lg"
                   />
                 ) : (
                   <div className="absolute top-0 left-0 w-full h-full rounded-xl shadow-lg">

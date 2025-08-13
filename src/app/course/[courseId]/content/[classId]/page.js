@@ -42,9 +42,9 @@ const Videos = () => {
       ) : (
         <>
           <VideoHolder classContent={classContent} />
-          <div className="md:px-20">
+          {/* <div className="md:px-20">
             <Comments />
-          </div>
+          </div> */}
         </>
       )}
     </div>

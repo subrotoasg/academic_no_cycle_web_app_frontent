@@ -36,6 +36,7 @@ export default function ContentDetailsDialog({
     { label: "Class No", value: selectedContent?.classNo },
     { label: "Hosting Type", value: selectedContent?.hostingType },
     { label: "Video Id/Url", value: selectedContent?.videoUrl },
+    { label: "Library Id (bunny)", value: selectedContent?.libraryId },
     {
       label: "Content Uploaded",
       value: selectedContent?.createdAt
