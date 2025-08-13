@@ -71,7 +71,7 @@ const VideoHolder = ({ classContent }) => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <div className="relative pb-[56.25%] h-50 bg-black rounded-2xl overflow-hidden shadow-2xl">
+              <div className="relative w-full pb-[56.25%] rounded-2xl overflow-hidden shadow-2xl">
                 {classContent?.hostingType === "bunny" ? (
                   <iframe
                     src={getBunnyVideoUrl(
@@ -83,17 +83,20 @@ const VideoHolder = ({ classContent }) => {
                     frameBorder="0"
                     allow="autoplay"
                     allowFullScreen
-                    className="rounded-xl shadow-lg w-full md:h-96 lg:h-[560px] lg:w-4/5 mx-auto"
+                    className="absolute top-0 left-0 w-full h-full rounded-xl shadow-lg"
                   />
                 ) : (
-                  <ReactPlayer
-                    url={`https://www.youtube.com/watch?v=${classContent?.videoUrl}`}
-                    width="100%"
-                    height="100%"
-                    className="absolute top-0 left-0"
-                    controls
-                    playing
-                  />
+                  <div className="absolute top-0 left-0 w-full h-full rounded-xl shadow-lg">
+                    {" "}
+                    <ReactPlayer
+                      url={`https://www.youtube.com/watch?v=${classContent?.videoUrl}`}
+                      width="100%"
+                      height="100%"
+                      className="absolute top-0 left-0"
+                      controls
+                      playing
+                    />
+                  </div>
                 )}
               </div>
             </motion.div>

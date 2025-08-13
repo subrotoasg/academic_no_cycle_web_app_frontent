@@ -64,7 +64,7 @@ export default function ClassContentForm() {
   } = useGetSubjectsByCourseIdQuery(selectedCourseId, {
     skip: !selectedCourseId,
   });
-  console.log("sub", subjects);
+  // console.log("sub", subjects);
   const { data: chapters, isLoading: isChapterLoading } =
     useGetChaptersByCourseSubjectIdQuery(selectedSubjectId, {
       skip: !selectedSubjectId,
@@ -73,7 +73,7 @@ export default function ClassContentForm() {
   //   useGetChaptersBySubjectIdQuery(selectedSubjectId, {
   //     skip: !selectedSubjectId,
   //   });
-  console.log("chapter", chapters);
+  // console.log("chapter", chapters);
   const [createClassContent, { isLoading }] = useCreateClassContentMutation();
 
   const subjectOptions = isSubjectLoading
@@ -94,8 +94,8 @@ export default function ClassContentForm() {
       }))
     : [{ label: "No chapters added yet", value: "" }];
 
-  console.log(subjectOptions);
-  console.log(chapterOptions);
+  // console.log(subjectOptions);
+  // console.log(chapterOptions);
   useEffect(() => {
     setValue("subject", "");
     setValue("chapter", "");
@@ -143,12 +143,15 @@ export default function ClassContentForm() {
     try {
       await createClassContent(formData).unwrap();
 
-      Swal.fire({
-        icon: "success",
-        title: "Class Content Successfully Uploaded",
-        timer: 1000,
-      });
-      resetForm();
+      if (res?.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Class Content Successfully Uploaded",
+          timer: 1000,
+        });
+
+        resetForm();
+      }
     } catch (err) {
       toast.error(err?.data?.message || "Upload Failed. Please try again.");
     }
@@ -168,7 +171,6 @@ export default function ClassContentForm() {
         <Dropdown
           label="Select Course"
           name="courseId"
-          className="tiro-bangla-text"
           options={courseOptions}
           rules={{ required: "Course is required" }}
         />
@@ -230,6 +232,15 @@ export default function ClassContentForm() {
           placeholder="Enter video Id or Url"
           rules={{ required: "Video ID or Link is required" }}
         />
+        {/* Library ID only when Bunny is selected */}
+        {videoType === "bunny" && (
+          <InputField
+            label="Library Id"
+            name="libraryId"
+            placeholder="Enter Bunny Library Id"
+            rules={{ required: "Library Id is required for Bunny hosting" }}
+          />
+        )}
         <div>
           <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">
             Video Thumbnail Image
