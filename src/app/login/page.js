@@ -215,6 +215,18 @@ const Login = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
+
+                  <div className="flex items-center mb-3 mt-4">
+                    <div className="flex ml-auto">
+                      <Link
+                        href="/forgot-password"
+                        className="inline-flex text-xs sm:text-sm text-yellow-500 hover:text-yellow-400"
+                      >
+                        Forgot Your Password ?
+                      </Link>
+                    </div>
+                  </div>
+
                   <Button
                     onClick={handlePasswordSubmit}
                     disabled={loading}

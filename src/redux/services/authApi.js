@@ -39,6 +39,25 @@ const authApiServices = baseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypesValue.AUTH],
     }),
+
+    forgotPassword: builder.mutation({
+      query: (data) => ({
+        url: "/forget-password",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: [tagTypesValue.AUTH],
+    }),
+
+    resetPassword: builder.mutation({
+      query: (data) => ({
+        url: "/reset-password",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: [tagTypesValue.AUTH],
+    }),
+
     logOut: builder.mutation({
       query: () => ({
         url: "/logout",
@@ -55,6 +74,8 @@ export const {
   useStudentSignUpMutation,
   useVerifyLoginMutation,
   useChangePasswordMutation,
+  useForgotPasswordMutation,
   useLogOutMutation,
+  useResetPasswordMutation,
 } = authApiServices;
 export default authApiServices;
