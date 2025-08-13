@@ -64,7 +64,7 @@ export default function ClassContentForm() {
   } = useGetSubjectsByCourseIdQuery(selectedCourseId, {
     skip: !selectedCourseId,
   });
-  console.log("sub", subjects);
+  // console.log("sub", subjects);
   const { data: chapters, isLoading: isChapterLoading } =
     useGetChaptersByCourseSubjectIdQuery(selectedSubjectId, {
       skip: !selectedSubjectId,
@@ -73,7 +73,7 @@ export default function ClassContentForm() {
   //   useGetChaptersBySubjectIdQuery(selectedSubjectId, {
   //     skip: !selectedSubjectId,
   //   });
-  console.log("chapter", chapters);
+  // console.log("chapter", chapters);
   const [createClassContent, { isLoading }] = useCreateClassContentMutation();
 
   const subjectOptions = isSubjectLoading
@@ -94,8 +94,8 @@ export default function ClassContentForm() {
       }))
     : [{ label: "No chapters added yet", value: "" }];
 
-  console.log(subjectOptions);
-  console.log(chapterOptions);
+  // console.log(subjectOptions);
+  // console.log(chapterOptions);
   useEffect(() => {
     setValue("subject", "");
     setValue("chapter", "");
