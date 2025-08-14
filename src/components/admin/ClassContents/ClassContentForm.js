@@ -134,6 +134,9 @@ export default function ClassContentForm() {
       classNo: data.classNumber,
       description: data.description,
       videoUrl: data.videoId,
+      lectureSheetId: data.lectureSheet,
+      practiceSheetId: data.practiceSheet,
+      solutionSheetId: data.solutionSheet,
       libraryId: videoType === "bunny" ? data.libraryId : undefined,
     };
 
@@ -141,19 +144,20 @@ export default function ClassContentForm() {
     formData.append("data", JSON.stringify(contentInfo));
 
     try {
-      await createClassContent(formData).unwrap();
+      const res = await createClassContent(formData);
 
-      if (res?.success) {
+      if (res?.data.success === true) {
         Swal.fire({
           icon: "success",
           title: "Class Content Successfully Uploaded",
           timer: 1000,
         });
-
         resetForm();
       }
     } catch (err) {
-      toast.error(err?.data?.message || "Upload Failed. Please try again.");
+      toast.error(
+        err?.data?.message || "Content Upload Failed, please Try again"
+      );
     }
   };
 
@@ -225,6 +229,24 @@ export default function ClassContentForm() {
             },
           }}
           textarea
+        />{" "}
+        <InputField
+          label="Lecture Sheet ID"
+          name="lectureSheetId"
+          type="text"
+          placeholder="Enter Lecture Sheet ID"
+        />
+        <InputField
+          label="Practice Sheet ID"
+          name="practiceSheetId"
+          type="text"
+          placeholder="Enter Practice Sheet ID"
+        />
+        <InputField
+          label="Solution Sheet ID"
+          name="solutionSheetId"
+          type="text"
+          placeholder="Enter Solution Sheet ID"
         />
         <InputField
           label="Video ID / Link"

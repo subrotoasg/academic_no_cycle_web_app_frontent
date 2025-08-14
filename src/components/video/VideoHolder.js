@@ -89,11 +89,10 @@ const VideoHolder = ({ classContent }) => {
                   <div className="absolute top-0 left-0 w-full h-full rounded-xl shadow-lg">
                     {" "}
                     <ReactPlayer
-                      url={`https://www.youtube.com/watch?v=${classContent?.videoUrl}`}
+                      url={`https://www.youtube.com/embed/${classContent?.videoUrl}?modestbranding=1&rel=0&controls=0`}
                       width="100%"
                       height="100%"
                       className="absolute top-0 left-0"
-                      controls
                       playing
                     />
                   </div>
