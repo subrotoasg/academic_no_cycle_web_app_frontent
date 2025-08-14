@@ -134,9 +134,9 @@ export default function ClassContentForm() {
       classNo: data.classNumber,
       description: data.description,
       videoUrl: data.videoId,
-      lectureSheetId: data.lectureSheet,
-      practiceSheetId: data.practiceSheet,
-      solutionSheetId: data.solutionSheet,
+      lectureSheet: data.lectureSheetId,
+      practiceSheet: data.practiceSheetId,
+      solutionSheet: data.solutionSheetId,
       libraryId: videoType === "bunny" ? data.libraryId : undefined,
     };
 
