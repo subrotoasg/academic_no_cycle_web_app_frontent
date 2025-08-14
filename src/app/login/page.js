@@ -262,7 +262,7 @@ const Login = () => {
                     Create Password
                   </h1>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Must be 8+ characters with a number.
+                    Minimum of 8 characters
                   </p>
                 </div>
                 <div className="space-y-3">
