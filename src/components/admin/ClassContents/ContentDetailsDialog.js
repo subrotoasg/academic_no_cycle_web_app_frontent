@@ -37,6 +37,9 @@ export default function ContentDetailsDialog({
     { label: "Hosting Type", value: selectedContent?.hostingType },
     { label: "Video Id/Url", value: selectedContent?.videoUrl },
     { label: "Library Id (bunny)", value: selectedContent?.libraryId },
+    { label: "Lecture Sheet", value: selectedContent?.lectureSheet },
+    { label: "Practice Sheet", value: selectedContent?.practiceSheet },
+    { label: "Solution Sheet", value: selectedContent?.solutionSheet },
     {
       label: "Content Uploaded",
       value: selectedContent?.createdAt

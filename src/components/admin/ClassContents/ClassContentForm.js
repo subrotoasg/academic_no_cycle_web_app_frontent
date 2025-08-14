@@ -121,10 +121,10 @@ export default function ClassContentForm() {
   };
 
   const onSubmit = async (data) => {
-    if (!selectedFile) {
-      toast.error("Please upload a thumbnail image.");
-      return;
-    }
+    // if (!selectedFile) {
+    //   toast.error("Please upload a thumbnail image.");
+    //   return;
+    // }
 
     const formData = new FormData();
     const contentInfo = {
@@ -134,6 +134,9 @@ export default function ClassContentForm() {
       classNo: data.classNumber,
       description: data.description,
       videoUrl: data.videoId,
+      lectureSheetId: data.lectureSheet,
+      practiceSheetId: data.practiceSheet,
+      solutionSheetId: data.solutionSheet,
       libraryId: videoType === "bunny" ? data.libraryId : undefined,
     };
 
@@ -141,25 +144,21 @@ export default function ClassContentForm() {
     formData.append("data", JSON.stringify(contentInfo));
 
     try {
-      await createClassContent(formData).unwrap();
+      const res = await createClassContent(formData);
 
-      if (res?.success) {
+      if (res?.data.success === true) {
         Swal.fire({
           icon: "success",
           title: "Class Content Successfully Uploaded",
           timer: 1000,
         });
-
         resetForm();
       }
     } catch (err) {
-      toast.error(err?.data?.message || "Upload Failed. Please try again.");
+      toast.error(
+        err?.data?.message || "Content Upload Failed, please Try again"
+      );
     }
-  };
-
-  const getBunnyVideoUrl = (videoId, libraryId) => {
-    // if (!videoId || !libraryId) return "";
-    return `${STORAGE_ZONE_BASE}/${libraryId}/${videoId}`;
   };
 
   return (
@@ -225,6 +224,24 @@ export default function ClassContentForm() {
             },
           }}
           textarea
+        />{" "}
+        <InputField
+          label="Lecture Sheet ID"
+          name="lectureSheetId"
+          type="text"
+          placeholder="Enter Lecture Sheet ID"
+        />
+        <InputField
+          label="Practice Sheet ID"
+          name="practiceSheetId"
+          type="text"
+          placeholder="Enter Practice Sheet ID"
+        />
+        <InputField
+          label="Solution Sheet ID"
+          name="solutionSheetId"
+          type="text"
+          placeholder="Enter Solution Sheet ID"
         />
         <InputField
           label="Video ID / Link"
@@ -250,7 +267,6 @@ export default function ClassContentForm() {
             type="file"
             accept="image/*"
             onChange={handleFileChange}
-            required
             className="w-full border rounded-md h-10 dark:bg-gray-800 dark:text-white dark:border-gray-700"
           />
           {imagePreview && (
@@ -281,24 +297,23 @@ export default function ClassContentForm() {
           )}
 
           {videoId && videoType === "bunny" && libraryId && (
-            <div className="w-full mt-2">
-              {/* <video
-                src={getBunnyVideoUrl(videoId, methods.getValues("libraryId"))}
-                controls
-                width="100%"
-                height="auto"
-                className="rounded-lg shadow-md w-full h-auto md:h-84"
-              /> */}
+            // <div className="w-full mt-2">
+            <div style={{ position: "relative", paddingTop: "56.25%" }}>
               <iframe
-                src={getBunnyVideoUrl(videoId, methods.getValues("libraryId"))}
-                width="100%"
-                height="400"
-                frameBorder="0"
-                allow="autoplay"
+                src={`https://iframe.mediadelivery.net/embed/${libraryId}/${videoId}?autoplay=true&loop=false&muted=false&preload=true&responsive=true`}
+                loading="lazy"
+                style={{
+                  border: 0,
+                  position: "absolute",
+                  top: 0,
+                  height: "100%",
+                  width: "100%",
+                }}
+                allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;"
                 allowFullScreen
-                className="rounded-lg shadow-md"
               />
             </div>
+            // </div>
           )}
         </div>
         <div className="md:col-span-2">
