@@ -24,7 +24,9 @@ const page = () => {
     <div className="flex justify-center items-center h-screen bg-gray-100 dark:bg-gray-900">
       <div className="bg-white dark:bg-gray-800 p-8 text-sm text-gray-900 dark:text-gray-100 flex flex-col gap-5 rounded-lg shadow-md">
         {/* Title */}
-        <div className="text-center font-semibold text-lg">Forgot Password</div>
+        <div className="text-center font-semibold text-lg">
+          Forgot Password{" "}
+        </div>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="flex flex-col">
