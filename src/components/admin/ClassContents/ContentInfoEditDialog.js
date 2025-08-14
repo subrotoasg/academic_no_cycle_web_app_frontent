@@ -237,25 +237,19 @@ export default function ContentInfoEditDialog({
                   </div>
                 )}
               {videoId && videoType === "bunny" && libraryId && (
-                <div className="w-full mt-2">
-                  {/* <video
-                src={getBunnyVideoUrl(videoId, methods.getValues("libraryId"))}
-                controls
-                width="100%"
-                height="auto"
-                className="rounded-lg shadow-md w-full h-auto md:h-84"
-              /> */}
+                <div style={{ position: "relative", paddingTop: "56.25%" }}>
                   <iframe
-                    src={getBunnyVideoUrl(
-                      videoId,
-                      methods.getValues("libraryId")
-                    )}
-                    width="100%"
-                    height="400"
-                    frameBorder="0"
-                    allow="autoplay"
+                    src={`https://iframe.mediadelivery.net/embed/${libraryId}/${videoId}?autoplay=true&loop=false&muted=false&preload=true&responsive=true`}
+                    loading="lazy"
+                    style={{
+                      border: 0,
+                      position: "absolute",
+                      top: 0,
+                      height: "100%",
+                      width: "100%",
+                    }}
+                    allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;"
                     allowFullScreen
-                    className="rounded-lg shadow-md"
                   />
                 </div>
               )}
