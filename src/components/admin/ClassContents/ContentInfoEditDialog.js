@@ -74,11 +74,11 @@ export default function ContentInfoEditDialog({
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      setSelectedFile(file);
-      const previewUrl = URL.createObjectURL(file);
-      setThumbnailPreview(previewUrl);
-    }
+    // if (file) {
+    //   setSelectedFile(file);
+    //   const previewUrl = URL.createObjectURL(file);
+    //   setThumbnailPreview(previewUrl);
+    // }
   };
 
   const handleFormSubmit = async (data) => {
