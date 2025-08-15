@@ -33,6 +33,21 @@ export default function ContentInfoEditDialog({
     { label: "Premium Youtube", value: "premyt" },
     { label: "Bunny CDN", value: "bunny" },
   ];
+
+  const instructorOptions = [
+    { label: "Kazi Rakibul Hasan", value: "Kazi Rakibul Hasan" },
+    { label: "Dr. Razib", value: "Dr. Razib" },
+    { label: "M Mashrur Hussain", value: "M Mashrur Hussain" },
+    { label: "Apurbo Opu", value: "Apurbo Opu" },
+    { label: "Hemel Barua", value: "Hemel Barua" },
+    { label: "Sanjoy Chakraborty", value: "Sanjoy Chakraborty" },
+    { label: "Abhi Datta Tushar", value: "Abhi Datta Tushar" },
+    { label: "Nazmus Sakib", value: "Nazmus Sakib" },
+    { label: "Hasnat Shuvro", value: "Hasnat Shuvro" },
+    { label: "Omar Faruk", value: "Omar Faruk" },
+    { label: "Shampod Bhowmick", value: "Shampod Bhowmick" },
+    { label: "SHAROARE HOSAN EMON", value: "SHAROARE HOSAN EMON" },
+  ];
   const methods = useForm();
 
   const { reset, handleSubmit, control } = methods;
@@ -65,6 +80,7 @@ export default function ContentInfoEditDialog({
         solutionSheetId: selectedContent?.solutionSheet || "",
         videoId: selectedContent?.videoUrl || "",
         libraryId: selectedContent?.libraryId || "",
+        instructor: selectedContent?.instructor || "",
       });
 
       setThumbnailPreview(selectedContent?.thumbneil || null);
@@ -94,6 +110,7 @@ export default function ContentInfoEditDialog({
       lectureSheet: data.lectureSheetId,
       practiceSheet: data.practiceSheetId,
       solutionSheet: data.solutionSheetId,
+      instructor: data.instructor,
     };
 
     formData.append("data", JSON.stringify(contentInfo));
@@ -181,10 +198,14 @@ export default function ContentInfoEditDialog({
               label="Content Description"
               name="description"
               placeholder="Provide a content description"
-              rules={{ required: "Description is required" }}
               textarea
             />
-
+            <Dropdown
+              label="Instructor"
+              name="instructor"
+              options={instructorOptions}
+              rules={{ required: "Instructor is required" }}
+            />
             <InputField
               label="Lecture Sheet ID"
               name="lectureSheetId"

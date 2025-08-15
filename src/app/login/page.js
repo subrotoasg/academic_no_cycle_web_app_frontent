@@ -62,6 +62,7 @@ const Login = () => {
     setLoading(true);
     try {
       const response = await userLogin({ emailOrPhone }).unwrap();
+      console.log(response);
       if (response?.meta?.role === "admin" || "student") {
         setStep("password");
       } else {
@@ -69,8 +70,11 @@ const Login = () => {
       }
     } catch (error) {
       toast.error(
-        error?.data?.message || "No user found with these credentials."
+        // error?.data?.message || "No user found with these credentials."
+        "You are not registered. Please sign up first" ||
+          "No user found with these credentials."
       );
+      router.replace("/student/signup");
     } finally {
       setLoading(false);
     }
