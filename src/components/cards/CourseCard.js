@@ -43,7 +43,7 @@ export default function CourseCard({ course }) {
             className="object-contain"
           />
 
-          <div
+          {/* <div
             style={{
               position: "absolute",
               top: 8,
@@ -62,7 +62,7 @@ export default function CourseCard({ course }) {
             title="Enrolled Students"
           >
             {course?._count?.student ?? 0} Enrolled
-          </div>
+          </div> */}
         </div>
         <CardContent className="flex-1 text-xl">
           <Tooltip title={course?.productFullName || ""} arrow>
