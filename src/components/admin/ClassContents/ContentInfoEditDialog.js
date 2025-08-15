@@ -35,19 +35,27 @@ export default function ContentInfoEditDialog({
   ];
 
   const instructorOptions = [
-    { label: "Kazi Rakibul Hasan", value: "Kazi Rakibul Hasan" },
-    { label: "Dr. Razib", value: "Dr. Razib" },
-    { label: "M Mashrur Hussain", value: "M Mashrur Hussain" },
-    { label: "Apurbo Opu", value: "Apurbo Opu" },
-    { label: "Hemel Barua", value: "Hemel Barua" },
-    { label: "Sanjoy Chakraborty", value: "Sanjoy Chakraborty" },
-    { label: "Abhi Datta Tushar", value: "Abhi Datta Tushar" },
+    { label: "Md Numeri Sattar Apar", value: "Md Numeri Sattar Apar" },
     { label: "Nazmus Sakib", value: "Nazmus Sakib" },
+    { label: "Hemel", value: "Hemel" },
+    { label: "Kazi Rakibul Hasan", value: "Kazi Rakibul Hasan" },
+    { label: "Sanjoy Chakraborty", value: "Sanjoy Chakraborty" },
+    { label: "M Mashrur Hussain", value: "M Mashrur Hussain" },
+    { label: "Mottasin Pahlovi", value: "Mottasin Pahlovi" },
+    { label: "Baki Billah", value: "Baki Billah" },
+    { label: "Hasnat Abdullah", value: "Hasnat Abdullah" },
+    { label: "Abhi Datta Tushar", value: "Abhi Datta Tushar" },
+    { label: "Dr. Fahad Ibna Mahafuz", value: "Dr. Fahad Ibna Mahafuz" },
+    { label: "Dr. Tofael Ahmed", value: "Dr. Tofael Ahmed" },
+    { label: "Dr. Rizvi Touhid", value: "Dr. Rizvi Touhid" },
+    { label: "Shampod Bhowmick", value: "Shampod Bhowmick" },
     { label: "Hasnat Shuvro", value: "Hasnat Shuvro" },
     { label: "Omar Faruk", value: "Omar Faruk" },
-    { label: "Shampod Bhowmick", value: "Shampod Bhowmick" },
-    { label: "SHAROARE HOSAN EMON", value: "SHAROARE HOSAN EMON" },
+    { label: "Apurbo Opu", value: "Apurbo Opu" },
+    { label: "Rahik", value: "Rahik" },
+    { label: "Omor", value: "Omor" },
   ];
+
   const methods = useForm();
 
   const { reset, handleSubmit, control } = methods;
@@ -81,6 +89,7 @@ export default function ContentInfoEditDialog({
         videoId: selectedContent?.videoUrl || "",
         libraryId: selectedContent?.libraryId || "",
         instructor: selectedContent?.instructor || "",
+        // startTime: selectedContent?.startTime,
       });
 
       setThumbnailPreview(selectedContent?.thumbneil || null);
@@ -111,6 +120,7 @@ export default function ContentInfoEditDialog({
       practiceSheet: data.practiceSheetId,
       solutionSheet: data.solutionSheetId,
       instructor: data.instructor,
+      // startTime: data.startTime,
     };
 
     formData.append("data", JSON.stringify(contentInfo));
@@ -206,6 +216,7 @@ export default function ContentInfoEditDialog({
               options={instructorOptions}
               rules={{ required: "Instructor is required" }}
             />
+            {/* <InputField label="Start Time" name="startTime" type="datetime-local" /> */}
             <InputField
               label="Lecture Sheet ID"
               name="lectureSheetId"
