@@ -22,8 +22,8 @@ const Featured = ({ courseId }) => {
           Featured Highlights
         </h2>
         <p className="text-xs md:text-lg text-gray-600 dark:text-gray-300 my-8 animate__animated animate__fadeIn animate__delay-1s">
-          Discover our latest offers, exciting new features, and exclusive
-          discounts
+          Stay ahead with our latest features, exclusive learning packages,
+          limited-time discounts, and special coupon codes
         </p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6 p-2">
