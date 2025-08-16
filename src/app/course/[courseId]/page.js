@@ -39,6 +39,11 @@ function CourseContent() {
             Course Details
           </h3>
         )}
+      </div>
+      <div className="my-10 md:my-20">
+        <NoticeBoard courseId={courseId} />
+      </div>
+      <div className="text-center mb-6">
         <h2 className="text-xl md:text-3xl font-bold text-center text-blue-500 my-10">
           Available Classes
         </h2>
@@ -54,7 +59,6 @@ function CourseContent() {
           </p>
         ) : (
           <>
-            {/* Render normal subjects */}
             {subjects.map((cs, index) => (
               <div
                 key={cs.id}
@@ -75,16 +79,7 @@ function CourseContent() {
       <div className="my-10 md:my-20">
         <Featured courseId={courseId} />
       </div>
-      <div className="my-10 md:my-20">
-        <NoticeBoard courseId={courseId} />
-      </div>
     </div>
-    // return (
-    //   <div className="text-center mt-20 md:mt-44 p-4">
-    //     <p className="text-blue-500 font-semibold text-3xl md:text-5xl">
-    //       Archive will be available soon...
-    //     </p>
-    //   </div>);
   );
 }
 

@@ -14,6 +14,7 @@ import {
 } from "@/redux/services/noticeRoutineApi";
 import { selectAllCourses } from "@/redux/Features/courseInfo";
 import CourseSelect from "@/components/form/CourseSelect";
+import { toast } from "sonner";
 
 export function NoticeList() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -89,21 +90,20 @@ export function NoticeList() {
 
     if (result.isConfirmed) {
       try {
-        await deleteNoticeRoutine(notice.id).unwrap();
-        Swal.fire({
-          title: "Deleted!",
-          text: `"${notice?.title}" has been successfully deleted.`,
-          icon: "success",
-          timer: 2000,
-          showConfirmButton: false,
-        });
-        refetchNotices();
+        const res = await deleteNoticeRoutine(notice.id).unwrap();
+        // console.log(res);
+        if (res?.success) {
+          Swal.fire({
+            title: "Deleted!",
+            text: `"${notice?.title}" has been successfully deleted.`,
+            icon: "success",
+            timer: 2000,
+            showConfirmButton: false,
+          });
+          refetchNotices();
+        }
       } catch (error) {
-        Swal.fire({
-          title: "Error",
-          text: "An error occurred while deleting the notice. Please try again.",
-          icon: "error",
-        });
+        toast.error(error?.data?.message || "Failed to delete Notice");
       }
     }
   };

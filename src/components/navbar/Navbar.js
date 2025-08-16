@@ -87,7 +87,8 @@ export default function Navbar() {
         });
       } catch (error) {
         toast.error(
-          error?.response?.data?.message || "Logout failed. Please try again."
+          // error?.response?.data?.message || "Logout failed. Please try again."
+          error?.data?.message || "Logout failed. Please try again."
         );
       }
     }

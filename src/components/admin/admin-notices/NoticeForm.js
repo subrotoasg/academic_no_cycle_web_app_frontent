@@ -89,18 +89,18 @@ export default function NoticeForm() {
     formData.append("data", JSON.stringify(NoticeInfo));
 
     try {
-      const res = await createNoticeRoutine(formData).unwrap();
-      if (res?.success) {
+      const res = await createNoticeRoutine(formData);
+      if (res?.data?.success) {
         Swal.fire({
           icon: "success",
-          title: "Notice Successfully Created",
+          title: "Notice Successfully Added",
           timer: 1000,
         });
-        setIsModalOpen(false);
+
         resetForm();
       }
-    } catch (err) {
-      toast.error(err?.data?.message || "Notice Creation Failed. Try Again!");
+    } catch (error) {
+      toast.error(error?.data?.message || "Notice Creation Failed. Try Again!");
     }
   };
 
@@ -132,7 +132,7 @@ export default function NoticeForm() {
         <InputField
           label="Title"
           name="title"
-          placeholder="Notice Title"
+          placeholder="Title"
           rules={{
             required: "Title is required.",
             minLength: {

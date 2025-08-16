@@ -11,17 +11,19 @@ const NoticeBoard = ({ courseId }) => {
   const { data: notices, isLoading } = useGetNoticeRoutinesByCourseIdQuery({
     courseId,
   });
+  // console.log(notices);
   const today = new Date();
 
   const filteredNotices = notices?.data?.data?.filter((notice) => {
     const endDate = new Date(notice.endTime);
-    return endDate >= today && notice.type === "Notice";
+    return endDate >= today;
   });
 
   if (!notices || filteredNotices.length === 0) {
     return null;
   }
   const noticesData = filteredNotices;
+  // console.log(noticesData);
   return (
     <div className="container mx-auto p-2 marquee-mobile">
       <div className="my-2 md:my-6">

@@ -38,7 +38,7 @@ function FeaturedForm() {
     type: "",
     description: "",
     coupon: "",
-    link: "",
+    // link: "",
   };
   const methods = useForm({ defaultValues });
   const {
@@ -92,12 +92,14 @@ function FeaturedForm() {
 
     try {
       const res = await createFeatured(formData).unwrap();
-      Swal.fire({
-        icon: "success",
-        title: "New Feature Successfully Created",
-        timer: 1000,
-      });
-      resetForm();
+      if (res?.success) {
+        Swal.fire({
+          icon: "success",
+          title: "New Feature Successfully Created",
+          timer: 1000,
+        });
+        resetForm();
+      }
     } catch (err) {
       toast.error(err?.data?.message || "Featured creation failed. Try again!");
     }

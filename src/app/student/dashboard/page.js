@@ -7,6 +7,7 @@ import { useGetMyCoursesQuery } from "@/redux/services/studentCourseApi";
 import { useGetAllCourseQuery } from "@/redux/services/courseApi";
 import { motion } from "framer-motion";
 import { useMemo } from "react";
+import Link from "next/link";
 
 function StudentDashboard() {
   // Fetch enrolled courses
@@ -64,10 +65,16 @@ function StudentDashboard() {
       {!isLoading && !isError && EnrolledCourses.length === 0 && (
         <>
           <div className="text-center py-10 text-lg font-medium text-gray-500">
-            You are not enrolled in any courses yet. <br />
+            আপনি এখনও কোনো কোর্স অ্যাক্সেস করেননি। <br />
             <p className="text-blue-600 font-semibold cursor-pointer hover:underline my-3">
-              Explore our courses and start learning today
+              নির্দিষ্ট কোর্সের জন্য অ্যাক্সেস কোড প্রদান করে আপনার কোর্সে
+              প্রবেশ করুন।
             </p>
+            <Link href="/" passHref>
+              <button className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 text-xs rounded hover:rounded-full">
+                Access Course
+              </button>
+            </Link>
           </div>
           <div className="mt-8">
             <h2 className="text-2xl font-semibold mb-4 text-center">

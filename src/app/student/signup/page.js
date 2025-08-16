@@ -54,7 +54,7 @@ const StudentSignUp = () => {
       const token = res?.data?.authToken;
       if (res?.success) {
         dispatch(setUserFromToken(token));
-        toast.success(res.message);
+        toast.success(res?.message);
         router.push("/student/dashboard");
       }
     } catch (error) {
