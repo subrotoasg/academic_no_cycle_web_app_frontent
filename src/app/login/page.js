@@ -62,7 +62,7 @@ const Login = () => {
     setLoading(true);
     try {
       const response = await userLogin({ emailOrPhone }).unwrap();
-      console.log(response);
+      // console.log(response);
       if (response?.meta?.role === "admin" || "student") {
         setStep("password");
       } else {

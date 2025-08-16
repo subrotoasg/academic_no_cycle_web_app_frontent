@@ -240,12 +240,12 @@ export default function ClassContentForm() {
           label="Content Description"
           name="description"
           placeholder="Provide a content description"
-          rules={{
-            minLength: {
-              value: 3,
-              message: "Description must be at least 3 characters long",
-            },
-          }}
+          // rules={{
+          //   minLength: {
+          //     value: 3,
+          //     message: "Description must be at least 3 characters long",
+          //   },
+          // }}
           textarea
         />{" "}
         <Dropdown

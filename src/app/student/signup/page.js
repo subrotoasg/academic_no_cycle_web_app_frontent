@@ -58,7 +58,8 @@ const StudentSignUp = () => {
         router.push("/student/dashboard");
       }
     } catch (error) {
-      toast.error(error?.data?.message || "Sign up failed");
+      // toast.error(error?.data?.message || "Sign up failed");
+      toast.error(error?.data?.erroSourses[0]?.message || "Sign up failed");
     }
     setLoading(false);
   };

@@ -32,7 +32,7 @@ export default function NoticeInfoEditDialog({
       description: "",
       startTime: "",
       endTime: "",
-      url: "",
+      // url: "",
     },
   });
 
@@ -42,25 +42,25 @@ export default function NoticeInfoEditDialog({
   const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef(null);
 
-  const selectedType = watch("type");
+  // const selectedType = watch("type");
+  const formatLocalDateTime = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    const tzOffset = date.getTimezoneOffset() * 60000; // in ms
+    const localISOTime = new Date(date - tzOffset).toISOString().slice(0, 16);
+    return localISOTime;
+  };
 
   useEffect(() => {
     if (notice) {
-      const formattedStartDate = notice.startTime
-        ? new Date(notice.startTime).toISOString().slice(0, 16)
-        : "";
-      const formattedEndDate = notice.endTime
-        ? new Date(notice.endTime).toISOString().slice(0, 16)
-        : "";
-
       reset({
         course: notice.course?.productName || "",
         type: notice.type || "",
         title: notice.title || "",
         description: notice.description || "",
-        startTime: formattedStartDate,
-        endTime: formattedEndDate,
-        url: notice.url || "",
+        startTime: formatLocalDateTime(notice.startTime),
+        endTime: formatLocalDateTime(notice.endTime),
+        // url: notice.url || "",
       });
 
       setImagePreview(notice.image || null);
@@ -97,9 +97,9 @@ export default function NoticeInfoEditDialog({
       endTime: data.endTime,
     };
 
-    if (data.type === "Routine") {
-      NoticeInfo.url = data.url;
-    }
+    // if (data.type === "Routine") {
+    //   NoticeInfo.url = data.url;
+    // }
 
     const formData = new FormData();
 
@@ -110,14 +110,19 @@ export default function NoticeInfoEditDialog({
     formData.append("data", JSON.stringify(NoticeInfo));
 
     try {
-      await updateNoticeRoutine({ id: notice.id, formData }).unwrap();
-      Swal.fire({
-        icon: "success",
-        title: "Notice updated successfully!",
-        timer: 1000,
-      });
-      onOpenChange(false);
-      await refetchNotices();
+      const res = await updateNoticeRoutine({
+        id: notice.id,
+        formData,
+      }).unwrap();
+      if (res?.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Notice updated successfully!",
+          timer: 1000,
+        });
+        onOpenChange(false);
+        await refetchNotices();
+      }
     } catch (error) {
       toast.error(error.message || "Failed to update Notice");
     }
@@ -185,7 +190,7 @@ export default function NoticeInfoEditDialog({
               }}
             />
 
-            {selectedType === "Routine" && (
+            {/* {selectedType === "Routine" && (
               <InputField
                 label="Routine URL"
                 name="url"
@@ -199,7 +204,7 @@ export default function NoticeInfoEditDialog({
                   },
                 }}
               />
-            )}
+            )} */}
 
             <div className="md:col-span-2 mt-2">
               <label
