@@ -99,7 +99,7 @@ export default function FeaturedInfoEditDialog({
       onOpenChange(false);
       await refetchFeatures();
     } catch (error) {
-      toast.error(error.message || "Failed to update Featured");
+      toast.error(error?.data?.message || "Failed to update Featured");
     }
   };
 

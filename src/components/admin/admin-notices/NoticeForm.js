@@ -100,10 +100,7 @@ export default function NoticeForm() {
         resetForm();
       }
     } catch (error) {
-      toast.error(
-        error?.data?.erroSourses[0]?.message ||
-          "Notice Creation Failed. Try Again!"
-      );
+      toast.error(error?.data?.message || "Notice Creation Failed. Try Again!");
     }
   };
 

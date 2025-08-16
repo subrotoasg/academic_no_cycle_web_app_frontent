@@ -170,7 +170,7 @@ export default function ClassContentForm() {
     try {
       const res = await createClassContent(formData);
 
-      if (res?.data.success === true) {
+      if (res?.data.success) {
         Swal.fire({
           icon: "success",
           title: "Class Content Successfully Uploaded",

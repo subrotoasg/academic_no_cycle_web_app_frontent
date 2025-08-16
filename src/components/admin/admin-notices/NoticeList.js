@@ -103,7 +103,7 @@ export function NoticeList() {
           refetchNotices();
         }
       } catch (error) {
-        toast.error(error.message || "Failed to delete Notice");
+        toast.error(error?.data?.message || "Failed to delete Notice");
       }
     }
   };

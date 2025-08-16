@@ -133,16 +133,17 @@ export default function ContentInfoEditDialog({
         id: selectedContent.id,
         formData,
       }).unwrap();
-
-      Swal.fire({
-        icon: "success",
-        title: "Class Content Successfully Updated",
-        timer: 1500,
-      });
-      refetchClassContents();
-      onOpenChange(false);
+      if (res?.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Class Content Successfully Updated",
+          timer: 1500,
+        });
+        refetchClassContents();
+        onOpenChange(false);
+      }
     } catch (error) {
-      toast.error(error.message || "Failed to Update Class Content");
+      toast.error(error?.data?.message || "Failed to Update Class Content");
     }
   };
   const getBunnyVideoUrl = (videoId, libraryId) => {

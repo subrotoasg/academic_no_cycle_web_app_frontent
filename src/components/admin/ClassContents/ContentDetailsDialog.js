@@ -68,15 +68,21 @@ export default function ContentDetailsDialog({
           <div className="sm:col-span-2 flex flex-wrap gap-6">
             <div>
               <strong>Lecture Sheet: </strong>
-              {selectedContent?.lectureSheet ?? "N/A"}
+              {selectedContent?.lectureSheet
+                ? selectedContent?.lectureSheet
+                : "N/A"}
             </div>
             <div>
               <strong>Practice Sheet: </strong>
-              {selectedContent?.practiceSheet ?? "N/A"}
+              {selectedContent?.practiceSheet
+                ? selectedContent?.practiceSheet
+                : "N/A"}
             </div>
             <div>
               <strong>Solution Sheet: </strong>
-              {selectedContent?.solutionSheet ?? "N/A"}
+              {selectedContent?.solutionSheet
+                ? selectedContent?.solutionSheet
+                : "N/A"}
             </div>
           </div>
         </div>

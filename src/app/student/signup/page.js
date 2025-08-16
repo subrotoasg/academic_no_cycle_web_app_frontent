@@ -54,12 +54,11 @@ const StudentSignUp = () => {
       const token = res?.data?.authToken;
       if (res?.success) {
         dispatch(setUserFromToken(token));
-        toast.success(res.message);
+        toast.success(res?.message);
         router.push("/student/dashboard");
       }
     } catch (error) {
-      // toast.error(error?.data?.message || "Sign up failed");
-      toast.error(error?.data?.erroSourses[0]?.message || "Sign up failed");
+      toast.error(error?.data?.message || "Sign up failed");
     }
     setLoading(false);
   };
