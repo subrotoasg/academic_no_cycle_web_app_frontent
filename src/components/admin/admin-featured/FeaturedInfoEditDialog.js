@@ -31,7 +31,7 @@ export default function FeaturedInfoEditDialog({
       description: "",
       discount: "",
       coupne: "",
-      link: "",
+      // link: "",
     },
   });
   const [updateFeatured, { isLoading }] = useUpdateFeaturedMutation();
@@ -47,7 +47,7 @@ export default function FeaturedInfoEditDialog({
         type: featured.type || "",
         description: featured.description || "",
         coupne: featured.coupne || "",
-        link: featured.url || "",
+        // link: featured.url || "",
       });
 
       setImagePreview(featured.image || null);
@@ -90,14 +90,16 @@ export default function FeaturedInfoEditDialog({
     formData.append("data", JSON.stringify(FeaturedInfo));
 
     try {
-      await updateFeatured({ id: featured.id, formData }).unwrap();
-      Swal.fire({
-        icon: "success",
-        title: "Featured Info Successfully Updated!",
-        timer: 1500,
-      });
-      onOpenChange(false);
-      await refetchFeatures();
+      const res = await updateFeatured({ id: featured.id, formData }).unwrap();
+      if (res?.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Featured Info Successfully Updated!",
+          timer: 1500,
+        });
+        onOpenChange(false);
+        await refetchFeatures();
+      }
     } catch (error) {
       toast.error(error?.data?.message || "Failed to update Featured");
     }
@@ -151,14 +153,14 @@ export default function FeaturedInfoEditDialog({
                 rules={{ required: "Coupon code is required for Coupon type." }}
               />
             )}
-            <div className="md:col-span-2 ">
+            {/* <div className="md:col-span-2 ">
               <InputField
                 label="External Link"
                 name="link"
                 type="url"
                 placeholder="https://example.com"
               />
-            </div>
+            </div> */}
 
             {/* Image Upload */}
             <div className="md:col-span-2 mt-1">

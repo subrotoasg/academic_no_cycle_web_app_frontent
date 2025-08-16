@@ -90,21 +90,19 @@ export function FeaturedList() {
 
     if (result.isConfirmed) {
       try {
-        await deleteFeatured(feature.id).unwrap();
-        Swal.fire({
-          title: "Deleted!",
-          text: `"${feature?.title}" was deleted successfully.`,
-          icon: "success",
-          timer: 2000,
-          showConfirmButton: false,
-        });
-        refetchFeatures();
+        const res = await deleteFeatured(feature.id).unwrap();
+        if (res?.success) {
+          Swal.fire({
+            title: "Deleted!",
+            text: `"${feature?.title}" was deleted successfully.`,
+            icon: "success",
+            timer: 2000,
+            showConfirmButton: false,
+          });
+          refetchFeatures();
+        }
       } catch (error) {
-        Swal.fire({
-          title: "Error",
-          text: "Something went wrong while deleting. Please try again.",
-          icon: "error",
-        });
+        toast.error(error?.data?.message || "Failed to delete Feature");
       }
     }
   };

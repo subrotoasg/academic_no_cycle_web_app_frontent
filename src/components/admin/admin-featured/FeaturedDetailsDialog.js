@@ -22,7 +22,7 @@ export default function FeaturedDetailsDialog({
     { label: "Type", value: selectedFeature?.type },
     { label: "Description", value: selectedFeature?.description },
     { label: "Coupon", value: selectedFeature?.coupne || "N/A" },
-    { label: "Link", value: selectedFeature?.url },
+    // { label: "Link", value: selectedFeature?.url },
     { label: "Image", value: selectedFeature?.image },
   ];
 
