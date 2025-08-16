@@ -43,6 +43,9 @@ function CourseContent() {
       <div className="my-10 md:my-20">
         <NoticeBoard courseId={courseId} />
       </div>
+      <div className="my-10 md:my-20">
+        <Featured courseId={courseId} />
+      </div>
       <div className="text-center mb-6">
         <h2 className="text-xl md:text-3xl font-bold text-center text-blue-500 my-10">
           Available Classes
@@ -74,10 +77,6 @@ function CourseContent() {
             )}
           </>
         )}
-      </div>
-
-      <div className="my-10 md:my-20">
-        <Featured courseId={courseId} />
       </div>
     </div>
   );
