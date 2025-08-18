@@ -3,6 +3,7 @@
 import Loading from "@/components/admin/utilities/Loading";
 import Comments from "@/components/video/Comments";
 import VideoHolder from "@/components/video/VideoHolder";
+import VideoHolderModified from "@/components/video/VideoHolderModified";
 import { useGetClassContentByClassIdQuery } from "@/redux/services/contentsApi";
 import { useParams, useSearchParams } from "next/navigation";
 import React from "react";
@@ -47,7 +48,8 @@ const Videos = () => {
         </p>
       ) : (
         <>
-          <VideoHolder classContent={classContent} classTitle={classTitle} />
+          {/* <VideoHolder classContent={classContent} classTitle={classTitle} /> */}
+          <VideoHolderModified classContent={classContent} />
           {/* <div className="md:px-20">
             <Comments />
           </div> */}

@@ -5,10 +5,170 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSelector } from "react-redux";
 import { currentUser } from "@/redux/Features/authentication";
-import Plyr from "plyr";
-import "plyr/dist/plyr.css";
-import VideoPlayer from "./VideoPlayer";
 
+// ====================
+// Custom YouTube Player with Overlay Controls
+// ====================
+const YouTubeOverlayPlayer = ({ videoId }) => {
+  const playerRef = useRef(null);
+  const ytPlayer = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [timeDisplay, setTimeDisplay] = useState("0:00 / 0:00");
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    if (!videoId) return;
+
+    if (!window.YT) {
+      const tag = document.createElement("script");
+      tag.src = "https://www.youtube.com/iframe_api";
+      window.onYouTubeIframeAPIReady = initPlayer;
+      document.body.appendChild(tag);
+    } else {
+      initPlayer();
+    }
+
+    function initPlayer() {
+      ytPlayer.current = new window.YT.Player(playerRef.current, {
+        videoId,
+        playerVars: {
+          autoplay: 0,
+          controls: 0,
+          rel: 0,
+          modestbranding: 1,
+          iv_load_policy: 3,
+          disablekb: 1,
+          fs: 0,
+          showinfo: 0,
+        },
+        events: {
+          onReady: onPlayerReady,
+          onStateChange: onPlayerStateChange,
+        },
+      });
+    }
+
+    function onPlayerReady() {
+      const interval = setInterval(() => {
+        if (!ytPlayer.current?.getCurrentTime) return;
+        const current = ytPlayer.current.getCurrentTime();
+        const total = ytPlayer.current.getDuration();
+        setTimeDisplay(`${formatTime(current)} / ${formatTime(total)}`);
+        setProgress((current / total) * 100);
+      }, 500);
+      return () => clearInterval(interval);
+    }
+
+    function onPlayerStateChange(e) {
+      setIsPlaying(e.data === window.YT.PlayerState.PLAYING);
+    }
+
+    return () => {
+      if (ytPlayer.current?.destroy) ytPlayer.current.destroy();
+    };
+  }, [videoId]);
+
+  const formatTime = (sec) => {
+    if (!sec || isNaN(sec)) return "0:00";
+    const minutes = Math.floor(sec / 60);
+    const seconds = Math.floor(sec % 60);
+    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+  };
+
+  const togglePlay = () => {
+    if (!ytPlayer.current) return;
+    if (isPlaying) ytPlayer.current.pauseVideo();
+    else ytPlayer.current.playVideo();
+  };
+
+  const skip = (seconds) => {
+    if (!ytPlayer.current) return;
+    const newTime = ytPlayer.current.getCurrentTime() + seconds;
+    ytPlayer.current.seekTo(newTime, true);
+  };
+
+  const toggleMute = () => {
+    if (!ytPlayer.current) return;
+    if (ytPlayer.current.isMuted()) ytPlayer.current.unMute();
+    else ytPlayer.current.mute();
+  };
+
+  const changeSpeed = (rate) => {
+    if (!ytPlayer.current) return;
+    ytPlayer.current.setPlaybackRate(parseFloat(rate));
+  };
+
+  const seekToPercent = (e) => {
+    if (!ytPlayer.current) return;
+    const rect = e.target.getBoundingClientRect();
+    const percent = (e.clientX - rect.left) / rect.width;
+    ytPlayer.current.seekTo(ytPlayer.current.getDuration() * percent, true);
+  };
+
+  const goFullscreen = () => {
+    if (playerRef.current && playerRef.current.requestFullscreen) {
+      playerRef.current.requestFullscreen();
+    }
+  };
+
+  return (
+    <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden">
+      {/* YouTube Player */}
+      <div
+        ref={playerRef}
+        className="absolute inset-0 w-full h-full pointer-events-none"
+      />
+
+      {/* Overlay Controls */}
+      <div className="absolute inset-0 flex flex-col justify-between pointer-events-none">
+        {/* Center Play Button */}
+        <div className="flex justify-center items-center flex-1">
+          <button
+            onClick={togglePlay}
+            className="bg-black/50 text-white p-4 rounded-full pointer-events-auto"
+          >
+            {isPlaying ? "⏸" : "▶"}
+          </button>
+        </div>
+
+        {/* Bottom Controls */}
+        <div className="bg-black/50 px-4 py-2 flex items-center justify-between pointer-events-auto">
+          <div className="flex items-center gap-2">
+            <button onClick={() => skip(-5)}>⏪ 5s</button>
+            <button onClick={toggleMute}>🔊</button>
+            <span>{timeDisplay}</span>
+          </div>
+
+          <div
+            className="flex-1 mx-4 h-2 bg-gray-500 rounded cursor-pointer"
+            onClick={seekToPercent}
+          >
+            <div
+              className="h-2 bg-red-500 rounded"
+              style={{ width: `${progress}%` }}
+            ></div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <select onChange={(e) => changeSpeed(e.target.value)}>
+              {[0.5, 0.75, 1, 1.25, 1.5, 2].map((v) => (
+                <option key={v} value={v}>
+                  {v}x
+                </option>
+              ))}
+            </select>
+            <button onClick={() => skip(5)}>5s ⏩</button>
+            <button onClick={goFullscreen}>⛶</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ====================
+// PDF Viewer (same as original)
+// ====================
 const PDFViewer = ({ id, title }) => {
   if (!id) return null;
 
@@ -42,7 +202,6 @@ const PDFViewer = ({ id, title }) => {
   );
 };
 
-// TabButton remains the same
 const TabButton = ({ title, isActive, onClick }) => (
   <button
     onClick={onClick}
@@ -62,204 +221,10 @@ const TabButton = ({ title, isActive, onClick }) => (
   </button>
 );
 
-// const YouTubePlayer = ({ videoId }) => {
-//   const playerRef = useRef(null);
-
-//   useEffect(() => {
-//     if (!videoId) return;
-
-//     const player = new Plyr(playerRef.current, {
-//       // controls: ["play", "progress", "mute", "volume", "fullscreen"],
-//       controls: [
-//         "play",
-//         "progress",
-//         "current-time",
-//         "mute",
-//         "volume",
-//         "settings", // enable settings menu
-//         "fullscreen",
-//       ],
-//       settings: ["quality", "speed"],
-//       speed: { selected: 1, options: [0.5, 0.75, 1, 1.25, 1.5, 2] },
-//       quality: {
-//         default: 720,
-//         options: [4320, 2160, 1440, 1080, 720, 480, 360],
-//       },
-//       youtube: {
-//         modestbranding: 1,
-//         rel: 0,
-//         iv_load_policy: 3,
-//         showinfo: 0,
-//         controls: 0,
-//         fs: 0,
-//         disablekb: 1,
-//         playsinline: 1,
-//       },
-//     });
-
-//     return () => player.destroy();
-//   }, [videoId]);
-
-//   return (
-//     <div style={{ position: "relative", borderRadius: "12px" }}>
-//       <div
-//         style={{
-//           position: "absolute",
-//           top: 0,
-//           left: 0,
-//           height: "100px",
-//           width: "100%",
-//           zIndex: 3,
-//           // pointerEvents: "none",
-//         }}
-//       />
-//       <div
-//         ref={playerRef}
-//         data-plyr-provider="youtube"
-//         data-plyr-embed-id={videoId}
-//         style={{
-//           position: "absolute",
-//           top: 0,
-//           left: 0,
-//           width: "100%",
-//           height: "100%",
-//           borderRadius: "12px",
-//         }}
-//       />
-//     </div>
-//   );
-// };
-
-const YouTubePlayer = ({ videoId }) => {
-  const playerRef = useRef(null);
-  const containerRef = useRef(null);
-  const [isReady, setIsReady] = useState(false);
-
-  useEffect(() => {
-    if (!videoId || !containerRef.current) return;
-
-    const player = new Plyr(containerRef.current, {
-      controls: [
-        "play-large",
-        "play",
-        "progress",
-        "current-time",
-        "duration",
-        "mute",
-        "volume",
-        "captions",
-        "settings",
-        "pip",
-        "airplay",
-        "fullscreen",
-      ],
-      youtube: {
-        noCookie: true,
-        rel: 0, // Don't show related videos
-        showinfo: 0, // Hide video title and uploader
-        iv_load_policy: 3, // Hide annotations
-        modestbranding: 1, // Reduce YouTube logo
-        disablekb: 1, // Disable keyboard controls
-        fs: 0, // Hide fullscreen button (we'll use Plyr's)
-        controls: 0, // Hide YouTube's native controls
-      },
-      keyboard: { focused: true, global: true },
-    });
-
-    player.on("ready", () => {
-      setIsReady(true);
-      playerRef.current = player;
-
-      // Additional safety to hide YouTube elements
-      const iframe = containerRef.current.querySelector("iframe");
-      if (iframe) {
-        iframe.style.width = "100%";
-        iframe.style.height = "100%";
-        iframe.style.position = "absolute";
-        iframe.style.top = "0";
-        iframe.style.left = "0";
-      }
-    });
-
-    return () => {
-      if (playerRef.current) {
-        playerRef.current.destroy();
-      }
-    };
-  }, [videoId]);
-
-  return (
-    <div className="relative w-full rounded-xl overflow-hidden aspect-video bg-black">
-      {/* Enhanced CSS to hide YouTube elements */}
-      <style jsx>{`
-        .plyr__video-embed iframe {
-          width: 100% !important;
-          height: 100% !important;
-          position: absolute !important;
-          top: 0 !important;
-          left: 0 !important;
-        }
-
-        .plyr__controls {
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          padding: 10px;
-          background: linear-gradient(transparent, rgba(0, 0, 0, 0.75));
-          z-index: 3;
-        }
-
-        .plyr__progress__container {
-          position: absolute;
-          bottom: 60px;
-          left: 0;
-          right: 0;
-          padding: 0 10px;
-          z-index: 3;
-        }
-
-        /* Hide YouTube's native elements */
-        .plyr__video-embed::after {
-          content: "";
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          height: 60px;
-          background: linear-gradient(
-            to top,
-            rgba(0, 0, 0, 0.7) 0%,
-            transparent 100%
-          );
-          pointer-events: none;
-          z-index: 2;
-        }
-      `}</style>
-
-      {!isReady && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
-        </div>
-      )}
-
-      <div
-        ref={containerRef}
-        className={`plyr__video-embed ${isReady ? "opacity-100" : "opacity-0"}`}
-      >
-        <iframe
-          src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=0&rel=0&showinfo=0&modestbranding=1&iv_load_policy=3&disablekb=1&fs=0&controls=0`}
-          allowFullScreen
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          className="absolute top-0 left-0 w-full h-full"
-          frameBorder="0"
-        />
-      </div>
-    </div>
-  );
-};
-
-const VideoHolder = ({ classContent }) => {
+// ====================
+// Main VideoHolderModified Component
+// ====================
+const VideoHolderModified = ({ classContent }) => {
   const user = useSelector(currentUser);
   const isAdmin = user?.role === "admin";
   const [activeTab, setActiveTab] = useState(null);
@@ -268,9 +233,11 @@ const VideoHolder = ({ classContent }) => {
     useGetClassContentsBySubjectChapterIdQuery(
       classContent?.courseSubjectChapter?.id
     );
+
   const courseId =
     chapterContentsData?.data[0]?.courseSubjectChapter?.courseSubject?.course
       ?.id;
+
   const chapterContents = chapterContentsData?.data;
 
   const toggleTab = (key) =>
@@ -310,8 +277,7 @@ const VideoHolder = ({ classContent }) => {
                   />
                 </div>
               ) : (
-                // <YouTubePlayer videoId={classContent.videoUrl} />
-                <VideoPlayer classContent={classContent} />
+                <YouTubeOverlayPlayer videoId={classContent.videoUrl} />
               )}
             </motion.div>
 
@@ -416,4 +382,4 @@ const VideoHolder = ({ classContent }) => {
   );
 };
 
-export default VideoHolder;
+export default VideoHolderModified;
