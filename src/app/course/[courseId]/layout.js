@@ -5,14 +5,17 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useGetMyCoursesQuery } from "@/redux/services/studentCourseApi";
 import StudentRoute from "@/PrivateRoute/StudentRoute";
+import { selectEnrolledCourses } from "@/redux/Features/mycourses";
 
 function ActualLayoutLogic({ children }) {
   const { courseId } = useParams();
   const router = useRouter();
 
-  const enrolledCourses = useSelector(
-    (state) => state.studentCourses.enrolledCourses
-  );
+  // const enrolledCourses = useSelector(
+  //   (state) => state.studentCourses.enrolledCourses
+  // );
+
+  const enrolledCourses = useSelector(selectEnrolledCourses);
 
   const allowedArchives = useSelector(
     (state) => state.archiveAccess.allowedArchiveCourseIds
@@ -25,13 +28,6 @@ function ActualLayoutLogic({ children }) {
     courses?.some((c) => c.courseId === courseId) ||
     allowedArchives.includes(courseId);
 
-  // const isEnrolled = courses?.some((c) => c.courseId === courseId);
-
-  // useEffect(() => {
-  //   if (!isLoading && !isEnrolled) {
-  //     router.replace("/unauthorized");
-  //   }
-  // }, [isLoading, isEnrolled, router]);
   useEffect(() => {
     if (!isLoading && !isEnrolledOrArchiveAllowed) {
       router.replace("/unauthorized");
