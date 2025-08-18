@@ -6,11 +6,15 @@ import { useSelector } from "react-redux";
 import { useGetMyCoursesQuery } from "@/redux/services/studentCourseApi";
 import StudentRoute from "@/PrivateRoute/StudentRoute";
 import { selectEnrolledCourses } from "@/redux/Features/mycourses";
+import { currentUser } from "@/redux/Features/authentication";
+import { selectAllCourses } from "@/redux/Features/courseInfo";
 
 function ActualLayoutLogic({ children }) {
   const { courseId } = useParams();
   const router = useRouter();
 
+  const user = useSelector(currentUser);
+  const role = user?.role;
   // const enrolledCourses = useSelector(
   //   (state) => state.studentCourses.enrolledCourses
   // );
@@ -24,31 +28,50 @@ function ActualLayoutLogic({ children }) {
   const { data, isLoading } = useGetMyCoursesQuery({ page: 1, limit: 100 });
   const courses = enrolledCourses || data?.data?.data || [];
 
+  // Admin data
+  const teacherCourses = useSelector(selectAllCourses);
+  console.log(teacherCourses);
+
+  // const isEnrolledOrArchiveAllowed =
+  //   courses?.some((c) => c.courseId === courseId) ||
+  //   allowedArchives.includes(courseId);
+
+  // Check access
   const isEnrolledOrArchiveAllowed =
-    courses?.some((c) => c.courseId === courseId) ||
-    allowedArchives.includes(courseId);
+    role === "student" &&
+    (courses?.some((c) => c.courseId === courseId) ||
+      allowedArchives.includes(courseId));
+
+  // Admin access (course or archive)
+  const isTeacherAllowed =
+    role === "admin" &&
+    ((Array.isArray(teacherCourses?.data) &&
+      teacherCourses.data.some((c) => c.id === courseId)) ||
+      allowedArchives.includes(courseId));
 
   useEffect(() => {
-    if (!isLoading && !isEnrolledOrArchiveAllowed) {
+    // if (!isLoading && !isEnrolledOrArchiveAllowed) {
+    if (!isLoading && !(isEnrolledOrArchiveAllowed || isTeacherAllowed)) {
       router.replace("/unauthorized");
     }
-  }, [isLoading, isEnrolledOrArchiveAllowed, router]);
+    // }, [isLoading, isEnrolledOrArchiveAllowed, router]);
+  }, [isLoading, isEnrolledOrArchiveAllowed, isTeacherAllowed, router]);
 
-  if (!isEnrolledOrArchiveAllowed) {
+  // if (!isEnrolledOrArchiveAllowed) {
+  //   return null;
+  // }
+  if (!isEnrolledOrArchiveAllowed && !isTeacherAllowed) {
     return null;
   }
 
-  if (isLoading || !courses.length) {
+  // if (isLoading || !courses.length) {
+  if (isLoading && role === "student") {
     return (
       <div className="text-center mt-20 md:mt-36">
         Checking course access...
       </div>
     );
   }
-
-  // if (!isEnrolled) {
-  //   return null;
-  // }
 
   return <>{children}</>;
 }

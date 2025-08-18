@@ -22,7 +22,7 @@ const CourseFeature = () => {
     const allCourses = courseData?.data?.data || [];
     return allCourses.filter((course) => !course.markAsArchieve);
   }, [courseData]);
-
+  // console.log(courseData);
   //  Get all unique subcategories from the courses
   const subCategories = useMemo(() => {
     const unique = Array.from(

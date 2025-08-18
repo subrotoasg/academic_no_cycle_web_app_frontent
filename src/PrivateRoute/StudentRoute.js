@@ -11,7 +11,7 @@ const StudentRoute = ({ children }) => {
   const user = useSelector(currentUser);
 
   useEffect(() => {
-    if (!user || user.role !== "student") {
+    if (!user || (user.role !== "student" && user.role !== "admin")) {
       router.push("/login");
     } else {
       setIsAuthorized(true);
