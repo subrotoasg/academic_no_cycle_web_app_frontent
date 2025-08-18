@@ -24,6 +24,7 @@ export default function ContentInfoEditDialog({
   selectedContent,
   refetchClassContents,
 }) {
+  // console.log(selectedContent);
   // const STORAGE_ZONE_BASE = "https://fai-cg.b-cdn.net";
   const STORAGE_ZONE_BASE = "https://iframe.mediadelivery.net/play";
   const types = [
@@ -133,6 +134,7 @@ export default function ContentInfoEditDialog({
         id: selectedContent.id,
         formData,
       }).unwrap();
+
       if (res?.success) {
         Swal.fire({
           icon: "success",
@@ -340,6 +342,7 @@ export default function ContentInfoEditDialog({
               </Button>
 
               <Button
+                type="button"
                 variant="warning"
                 onClick={() => onOpenChange(false)}
                 className="bg-red-600 text-white hover:bg-red-800"

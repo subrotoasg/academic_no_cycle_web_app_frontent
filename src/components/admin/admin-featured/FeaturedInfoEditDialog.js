@@ -201,6 +201,7 @@ export default function FeaturedInfoEditDialog({
                 {isLoading ? "Updating..." : "Update"}
               </Button>
               <Button
+                type="button"
                 variant="warning"
                 onClick={() => onOpenChange(false)}
                 className="bg-red-600 text-white hover:bg-red-800"
