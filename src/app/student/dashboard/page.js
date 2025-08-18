@@ -6,17 +6,30 @@ import StudentRoute from "@/PrivateRoute/StudentRoute";
 import { useGetMyCoursesQuery } from "@/redux/services/studentCourseApi";
 import { useGetAllCourseQuery } from "@/redux/services/courseApi";
 import { motion } from "framer-motion";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import Link from "next/link";
+import { useDispatch } from "react-redux";
+import { setEnrolledCourses } from "@/redux/Features/mycourses";
 
 function StudentDashboard() {
-  // Fetch enrolled courses
+  const dispatch = useDispatch();
+
   const {
     data: enrolledData,
     isLoading: enrolledLoading,
     isError: enrolledError,
   } = useGetMyCoursesQuery({ page: 1, limit: 100 });
   // console.log(enrolledData);
+
+  useEffect(() => {
+    if (enrolledData?.data) {
+      dispatch(
+        setEnrolledCourses({
+          courses: enrolledData.data.data,
+        })
+      );
+    }
+  }, [enrolledData, dispatch]);
   const {
     data: allCourseData,
     isLoading: allLoading,
@@ -30,7 +43,6 @@ function StudentDashboard() {
     return allCourses.filter((course) => !course.markAsArchieve);
   }, [allCourseData]);
 
-  // const mergedCourses = AllCourses?.map((course) => {
   const mergedCourses = courses?.map((course) => {
     const isEnrolled = EnrolledCourses?.some((en) => en.courseId === course.id);
     return { ...course, isEnrolled };
@@ -89,7 +101,7 @@ function StudentDashboard() {
         </>
       )}
 
-      {!isLoading && !isError && EnrolledCourses.length > 0 && (
+      {!isLoading && !isError && EnrolledCourses?.length > 0 && (
         <>
           <div className="mb-12">
             <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-4">

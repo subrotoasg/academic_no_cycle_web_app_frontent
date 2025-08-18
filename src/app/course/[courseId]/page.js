@@ -56,13 +56,13 @@ function CourseContent() {
         </p>
       </div>
       <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-8 mx-5">
-        {subjects.length === 0 && !archiveData ? (
+        {subjects?.length === 0 && !archiveData ? (
           <p className="text-green-600 text-lg font-semibold col-span-full text-center">
             Archive will be available soon ...
           </p>
         ) : (
           <>
-            {subjects.map((cs, index) => (
+            {subjects?.map((cs, index) => (
               <div
                 key={cs.id}
                 data-aos="fade-up"
