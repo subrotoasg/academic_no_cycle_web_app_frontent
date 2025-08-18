@@ -6,9 +6,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useSelector } from "react-redux";
 import { currentUser } from "@/redux/Features/authentication";
 
-// ====================
-// Custom YouTube Player with Overlay Controls
-// ====================
 const YouTubeOverlayPlayer = ({ videoId }) => {
   const playerRef = useRef(null);
   const ytPlayer = useRef(null);
@@ -105,23 +102,34 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
     ytPlayer.current.seekTo(ytPlayer.current.getDuration() * percent, true);
   };
 
+  //   const goFullscreen = () => {
+  //     if (playerRef.current && playerRef.current.requestFullscreen) {
+  //       playerRef.current.requestFullscreen();
+  //     }
+  //   };
+
   const goFullscreen = () => {
-    if (playerRef.current && playerRef.current.requestFullscreen) {
-      playerRef.current.requestFullscreen();
+    if (!ytPlayer.current) return;
+    const iframe = ytPlayer.current.getIframe();
+    if (iframe.requestFullscreen) {
+      iframe.requestFullscreen();
+    } else if (iframe.webkitRequestFullscreen) {
+      iframe.webkitRequestFullscreen();
+    } else if (iframe.mozRequestFullScreen) {
+      iframe.mozRequestFullScreen();
+    } else if (iframe.msRequestFullscreen) {
+      iframe.msRequestFullscreen();
     }
   };
 
   return (
     <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden">
-      {/* YouTube Player */}
       <div
         ref={playerRef}
         className="absolute inset-0 w-full h-full pointer-events-none"
       />
 
-      {/* Overlay Controls */}
       <div className="absolute inset-0 flex flex-col justify-between pointer-events-none">
-        {/* Center Play Button */}
         <div className="flex justify-center items-center flex-1">
           <button
             onClick={togglePlay}
@@ -131,7 +139,6 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
           </button>
         </div>
 
-        {/* Bottom Controls */}
         <div className="bg-black/50 px-4 py-2 flex items-center justify-between pointer-events-auto">
           <div className="flex items-center gap-2">
             <button onClick={() => skip(-5)}>⏪ 5s</button>
@@ -166,9 +173,6 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
   );
 };
 
-// ====================
-// PDF Viewer (same as original)
-// ====================
 const PDFViewer = ({ id, title }) => {
   if (!id) return null;
 
@@ -221,9 +225,6 @@ const TabButton = ({ title, isActive, onClick }) => (
   </button>
 );
 
-// ====================
-// Main VideoHolderModified Component
-// ====================
 const VideoHolderModified = ({ classContent }) => {
   const user = useSelector(currentUser);
   const isAdmin = user?.role === "admin";
