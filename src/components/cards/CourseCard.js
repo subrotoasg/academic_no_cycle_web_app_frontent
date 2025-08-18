@@ -19,9 +19,10 @@ export default function CourseCard({ course }) {
   const user = useSelector(currentUser);
 
   const isEnrolled = course?.isEnrolled === true;
+  const isAdmin = user?.role === "admin";
 
   const handleCardClick = () => {
-    if (isEnrolled) {
+    if (isEnrolled || isAdmin) {
       window.location.href = `/course/${course.id}`;
     } else if (permalink) {
       window.open(permalink, "_blank");
@@ -86,7 +87,7 @@ export default function CourseCard({ course }) {
         </CardContent>
 
         <CardActions className="flex justify-center items-center mb-3">
-          {isEnrolled ? (
+          {isEnrolled || isAdmin ? (
             <Link
               href={`/course/${course.id}`}
               className="bg-green-700 hover:bg-green-900 text-white px-4 py-2 rounded text-sm hover:rounded-full w-full text-center hover:font-bold"

@@ -38,17 +38,17 @@ function ClassCard({ content }) {
         {/* Class Title */}
         <div className="p-2">
           <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
-            Class {classNo}: {classTitle}
+            Class {classNo} : {classTitle}
           </h3>
         </div>
 
         {/* Content Info */}
         <div className="p-2">
-          {(lectureSheet || practiceSheet || solutionSheet) && (
+          {/* {(lectureSheet || practiceSheet || solutionSheet) && (
             <p className="text-sm text-gray-500 dark:text-gray-300 mb-2">
               Available materials:
             </p>
-          )}
+          )} */}
 
           <div className="flex flex-wrap gap-2 mb-3">
             {lectureSheet && (
