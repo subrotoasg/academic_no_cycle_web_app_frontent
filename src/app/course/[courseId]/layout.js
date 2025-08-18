@@ -30,7 +30,7 @@ function ActualLayoutLogic({ children }) {
 
   // Admin data
   const teacherCourses = useSelector(selectAllCourses);
-  console.log(teacherCourses);
+  // console.log(teacherCourses);
 
   // const isEnrolledOrArchiveAllowed =
   //   courses?.some((c) => c.courseId === courseId) ||
