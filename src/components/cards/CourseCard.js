@@ -22,7 +22,7 @@ export default function CourseCard({ course }) {
   const isAdmin = user?.role === "admin";
 
   const handleCardClick = () => {
-    if (isEnrolled) {
+    if (isEnrolled || isAdmin) {
       window.location.href = `/course/${course.id}`;
     } else if (permalink) {
       window.open(permalink, "_blank");

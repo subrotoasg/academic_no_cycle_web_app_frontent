@@ -39,7 +39,7 @@ const Videos = () => {
   return (
     <div className="p-2 mt-5">
       <h2 className="text-2xl md:text-4xl text-center text-blue-500 mb-5">
-        Recorded Class Content
+        Class Content
       </h2>
       {classContentData?.data.length === 0 ? (
         <p className="text-center text-lg font-semibold text-gray-500">
