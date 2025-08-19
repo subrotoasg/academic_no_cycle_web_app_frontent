@@ -22,7 +22,7 @@ function ActualLayoutLogic({ children }) {
     (state) => state.archiveAccess.allowedArchiveCourseIds
   );
 
-  const { data, isLoading } = useGetMyCoursesQuery({ page: 1, limit: 100 });
+  const { data, isLoading } = useGetMyCoursesQuery({ limit: 100 });
   const courses = enrolledCourses || data?.data?.data || [];
 
   // Admin data
