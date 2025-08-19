@@ -17,7 +17,7 @@ export function ChapterTable({
   handleDelete,
   handlechapterEditModal,
 }) {
-  console.log(Chapters);
+  // console.log(Chapters);
   return (
     <div className="overflow-x-auto mb-6">
       <Table className="min-w-full border border-gray-100 text-center">
