@@ -17,6 +17,7 @@ export function ChapterTable({
   handleDelete,
   handlechapterEditModal,
 }) {
+  console.log(Chapters);
   return (
     <div className="overflow-x-auto mb-6">
       <Table className="min-w-full border border-gray-100 text-center">
@@ -48,7 +49,7 @@ export function ChapterTable({
                   {chapter?.courseSubject?.subject?.title || "N/A"}
                 </TableCell>
                 <TableCell className="text-center border">
-                  {chapter?.chapter?.chapterName || "N/A"}
+                  {chapter?.title || chapter?.chapter?.chapterName || "N/A"}
                 </TableCell>
                 <TableCell className="text-center border">
                   <Image
@@ -56,7 +57,11 @@ export function ChapterTable({
                       chapter?.courseSubjectChapterImage ||
                       chapter?.chapter?.chapterImage
                     }
-                    alt={chapter?.chapter?.chapterName || "Chapter Image"}
+                    alt={
+                      chapter?.title ||
+                      chapter?.chapter?.chapterName ||
+                      "Chapter Image"
+                    }
                     width={200}
                     height={200}
                     className="mx-auto h-12 w-16 md:h-16 md:w-20 rounded-md object-fill"

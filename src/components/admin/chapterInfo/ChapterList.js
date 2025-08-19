@@ -71,7 +71,9 @@ export function ChapterList() {
   const handleChapterDelete = async (Chapter) => {
     const result = await Swal.fire({
       title: "Are you sure?",
-      text: `You're about to delete the Chapter titled "${Chapter?.chapter?.chapterName}". This action cannot be undone.`,
+      text: `You're about to delete the Chapter titled "${
+        Chapter?.title || Chapter?.chapter?.chapterName
+      }". This action cannot be undone.`,
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -82,14 +84,17 @@ export function ChapterList() {
     if (result.isConfirmed) {
       try {
         const res = await deleteCourseSubjectChapter(Chapter.id).unwrap();
-
-        Swal.fire({
-          title: "Deleted!",
-          text: `"${Chapter?.chapter?.chapterName} has been successfully deleted.`,
-          icon: "success",
-          timer: 2000,
-          showConfirmButton: false,
-        });
+        if (res?.success) {
+          Swal.fire({
+            title: "Deleted!",
+            text: `"${
+              Chapter?.title || Chapter?.chapter?.chapterName
+            } has been successfully deleted.`,
+            icon: "success",
+            timer: 2000,
+            showConfirmButton: false,
+          });
+        }
       } catch (error) {
         Swal.fire({
           title: "Error",
