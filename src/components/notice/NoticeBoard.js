@@ -14,6 +14,14 @@ const NoticeBoard = ({ courseId }) => {
   // console.log(notices);
   const today = new Date();
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center py-10">
+        <p>Checking Announcements ...</p>
+      </div>
+    );
+  }
+
   const filteredNotices = notices?.data?.data?.filter((notice) => {
     const endDate = new Date(notice.endTime);
     return endDate >= today;
