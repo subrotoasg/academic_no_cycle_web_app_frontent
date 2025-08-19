@@ -73,7 +73,9 @@ export function SubjectList() {
   const handleSubjectDelete = async (Subject) => {
     const result = await Swal.fire({
       title: "Are you sure?",
-      text: `You're about to delete the Subject titled"${Subject?.subject?.title}". This action cannot be undone.`,
+      text: `You're about to delete the Subject titled "${
+        Subject?.title || Subject?.subject?.title
+      }". This action cannot be undone.`,
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -84,14 +86,17 @@ export function SubjectList() {
     if (result.isConfirmed) {
       try {
         const res = await deleteCourseSubject(Subject.id).unwrap();
-
-        Swal.fire({
-          title: "Deleted!",
-          text: `${Subject?.Subject?.SubjectName} has been successfully deleted.`,
-          icon: "success",
-          timer: 2000,
-          showConfirmButton: false,
-        });
+        if (res?.success) {
+          Swal.fire({
+            title: "Deleted!",
+            text: `${
+              Subject?.title || Subject?.subject?.title
+            } has been successfully deleted.`,
+            icon: "success",
+            timer: 2000,
+            showConfirmButton: false,
+          });
+        }
       } catch (error) {
         Swal.fire({
           title: "Error",
