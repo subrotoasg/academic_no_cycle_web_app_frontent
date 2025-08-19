@@ -5,6 +5,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSelector } from "react-redux";
 import { currentUser } from "@/redux/Features/authentication";
+import { Eye } from "lucide-react";
 
 const YouTubeOverlayPlayer = ({ videoId }) => {
   const playerRef = useRef(null);
@@ -303,6 +304,21 @@ const VideoHolderModified = ({ classContent }) => {
                   Instructor: {classContent.instructor}
                 </p>
               )}
+
+              <div className="mt-1 flex items-center space-x-1 text-xs md:text-sm font-normal text-blue-600 dark:text-blue-500">
+                <Eye className="w-4 h-4 md:w-5 md:h-5 mr-1 text-blue-500" />
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={classContent.views}
+                    initial={{ y: 10, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: -10, opacity: 0 }}
+                    transition={{ duration: 0.4 }}
+                  >
+                    Total Views: {classContent.views}
+                  </motion.span>
+                </AnimatePresence>
+              </div>
             </motion.div>
           </div>
 
