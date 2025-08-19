@@ -5,14 +5,40 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSelector } from "react-redux";
 import { currentUser } from "@/redux/Features/authentication";
-import { Eye } from "lucide-react";
+import { Eye, Maximize, Minimize } from "lucide-react";
 
 const YouTubeOverlayPlayer = ({ videoId }) => {
+  const containerRef = useRef(null);
   const playerRef = useRef(null);
   const ytPlayer = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [timeDisplay, setTimeDisplay] = useState("0:00 / 0:00");
   const [progress, setProgress] = useState(0);
+
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    };
+  }, []);
+
+  const exitFullscreen = () => {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    } else if (document.mozCancelFullScreen) {
+      document.mozCancelFullScreen();
+    } else if (document.msExitFullscreen) {
+      document.msExitFullscreen();
+    }
+  };
 
   useEffect(() => {
     if (!videoId) return;
@@ -103,28 +129,27 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
     ytPlayer.current.seekTo(ytPlayer.current.getDuration() * percent, true);
   };
 
-  //   const goFullscreen = () => {
-  //     if (playerRef.current && playerRef.current.requestFullscreen) {
-  //       playerRef.current.requestFullscreen();
-  //     }
-  //   };
-
+  // New FullScreen controller
   const goFullscreen = () => {
-    if (!ytPlayer.current) return;
-    const iframe = ytPlayer.current.getIframe();
-    if (iframe.requestFullscreen) {
-      iframe.requestFullscreen();
-    } else if (iframe.webkitRequestFullscreen) {
-      iframe.webkitRequestFullscreen();
-    } else if (iframe.mozRequestFullScreen) {
-      iframe.mozRequestFullScreen();
-    } else if (iframe.msRequestFullscreen) {
-      iframe.msRequestFullscreen();
+    if (!containerRef.current) return;
+    const container = containerRef.current;
+
+    if (container.requestFullscreen) {
+      container.requestFullscreen();
+    } else if (container.webkitRequestFullscreen) {
+      container.webkitRequestFullscreen();
+    } else if (container.mozRequestFullScreen) {
+      container.mozRequestFullScreen();
+    } else if (container.msRequestFullscreen) {
+      container.msRequestFullscreen();
     }
   };
 
   return (
-    <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden">
+    <div
+      className="relative w-full aspect-video bg-black rounded-lg overflow-hidden"
+      ref={containerRef}
+    >
       <div
         ref={playerRef}
         className="absolute inset-0 w-full h-full pointer-events-none"
@@ -166,7 +191,17 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
               ))}
             </select>
             <button onClick={() => skip(5)}>5s ⏩</button>
-            <button onClick={goFullscreen}>⛶</button>
+
+            {!isFullscreen ? (
+              <button onClick={goFullscreen}>
+                {" "}
+                <Maximize className="w-5 h-5" />
+              </button>
+            ) : (
+              <button onClick={exitFullscreen}>
+                <Minimize className="w-5 h-5" />
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -315,7 +350,7 @@ const VideoHolderModified = ({ classContent }) => {
                     exit={{ y: -10, opacity: 0 }}
                     transition={{ duration: 0.4 }}
                   >
-                    Total Views: {classContent.views}
+                    Views: {classContent.views}
                   </motion.span>
                 </AnimatePresence>
               </div>
