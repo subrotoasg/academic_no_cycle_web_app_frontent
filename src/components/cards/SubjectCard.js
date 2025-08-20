@@ -26,7 +26,7 @@ const SubjectCard = ({ courseSubject }) => {
           transform: "scale(1.01)",
         },
       }}
-      data-aos="fade-up"
+      // data-aos="fade-up"
       className="rounded-3xl"
     >
       <Link
