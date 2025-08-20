@@ -44,7 +44,7 @@ const StudentSignUp = () => {
 
     if (password.length < 8 || !/\d/.test(password)) {
       return toast.error(
-        "Password must be at least 8 characters and contain a number"
+        "Password must be minimum of 8 characters with at least a number"
       );
     }
 
