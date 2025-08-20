@@ -66,7 +66,7 @@ const Login = () => {
       if (response?.meta?.role === "admin" || "student") {
         setStep("password");
       } else {
-        toast.error("You are not authorized to access the admin panel.");
+        toast.error("You are not authorized to access.");
       }
     } catch (error) {
       toast.error(
@@ -114,7 +114,9 @@ const Login = () => {
 
   const handleSetNewPassword = async () => {
     if (newPassword.length < 8 || !/\d/.test(newPassword)) {
-      return toast.error("Password must be 8+ characters with a number.");
+      return toast.error(
+        "Password must be minimum of 8 characters with at least a number"
+      );
     }
     setLoading(true);
     try {

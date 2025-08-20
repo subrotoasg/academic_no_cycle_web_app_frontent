@@ -65,8 +65,6 @@ function CourseContent() {
             {subjects?.map((cs, index) => (
               <div
                 key={cs.id}
-                data-aos="fade-up"
-                data-aos-delay={index * 300}
                 className="transition-transform transform hover:scale-105"
               >
                 <SubjectCard courseSubject={cs} />
