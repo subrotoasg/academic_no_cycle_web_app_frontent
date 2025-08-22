@@ -27,8 +27,8 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
     ytPlayer.current.setVolume(newVolume);
 
     if (newVolume === 0) {
-      ytPlayer.current.mute();
-    } else if (ytPlayer.current.isMuted()) {
+      ytPlayer.current?.mute?.();
+    } else if (ytPlayer.current?.isMuted?.()) {
       ytPlayer.current.unMute();
     }
   };
@@ -158,7 +158,7 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
   };
 
   const toggleMute = () => {
-    if (!ytPlayer.current) return;
+    if (!ytPlayer.current?.isMuted) return;
     if (ytPlayer.current.isMuted()) ytPlayer.current.unMute();
     else ytPlayer.current.mute();
   };
@@ -220,7 +220,7 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
             </button>
             <div className="relative group flex items-center">
               <button onClick={toggleMute} className="z-10">
-                {ytPlayer.current?.isMuted() ? "🔇" : "🔊"}
+                {ytPlayer.current?.isMuted?.() ? "🔇" : "🔊"}
               </button>
               <input
                 type="range"
