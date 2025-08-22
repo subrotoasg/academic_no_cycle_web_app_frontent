@@ -40,7 +40,8 @@ const ForgotPasswordPage = () => {
               Forgot Password
             </h1>
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              Enter your email to reset your password
+              সাইনআপের সময় আপনি যে ইমেইল ব্যবহার করেছিলেন, অনুগ্রহ করে সেটি
+              লিখুন
             </p>
           </div>
 
@@ -61,7 +62,7 @@ const ForgotPasswordPage = () => {
               disabled={isLoading}
               className="w-full bg-blue-400 text-white py-2 px-4 rounded-sm hover:rounded-3xl hover:bg-blue-700 transition flex justify-center items-center dark:bg-blue-500 dark:hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoading ? "Sending..." : "Send Reset Link"}
+              {isLoading ? "Sending..." : "Send Password Reset Link"}
             </button>
           </form>
         </div>

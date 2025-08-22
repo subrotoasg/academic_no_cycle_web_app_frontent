@@ -1,7 +1,7 @@
 "use client";
 
 import { useGetClassContentsBySubjectChapterIdQuery } from "@/redux/services/contentsApi";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSelector } from "react-redux";
 import { currentUser } from "@/redux/Features/authentication";
@@ -16,7 +16,22 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
   const [progress, setProgress] = useState(0);
 
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [volume, setVolume] = useState(100);
 
+  const changeVolume = (e) => {
+    const newVolume = parseInt(e.target.value, 10);
+    setVolume(newVolume);
+
+    if (!ytPlayer.current) return;
+
+    ytPlayer.current.setVolume(newVolume);
+
+    if (newVolume === 0) {
+      ytPlayer.current.mute();
+    } else if (ytPlayer.current.isMuted()) {
+      ytPlayer.current.unMute();
+    }
+  };
   useEffect(() => {
     const handleFullscreenChange = () => {
       setIsFullscreen(!!document.fullscreenElement);
@@ -92,18 +107,49 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
     };
   }, [videoId]);
 
+  // const formatTime = (sec) => {
+  //   if (!sec || isNaN(sec)) return "0:00";
+  //   const minutes = Math.floor(sec / 60);
+  //   const seconds = Math.floor(sec % 60);
+  //   return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+  // };
   const formatTime = (sec) => {
-    if (!sec || isNaN(sec)) return "0:00";
-    const minutes = Math.floor(sec / 60);
+    if (!sec || isNaN(sec)) return "0:00:00";
+    const hours = Math.floor(sec / 3600);
+    const minutes = Math.floor((sec % 3600) / 60);
     const seconds = Math.floor(sec % 60);
-    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+
+    if (hours > 0) {
+      return `${hours}:${minutes.toString().padStart(2, "0")}:${seconds
+        .toString()
+        .padStart(2, "0")}`;
+    } else {
+      return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+    }
   };
 
-  const togglePlay = () => {
+  // const togglePlay = () => {
+  //   if (!ytPlayer.current) return;
+  //   if (isPlaying) ytPlayer.current.pauseVideo();
+  //   else ytPlayer.current.playVideo();
+  // };
+  const togglePlay = useCallback(() => {
     if (!ytPlayer.current) return;
     if (isPlaying) ytPlayer.current.pauseVideo();
     else ytPlayer.current.playVideo();
-  };
+  }, [isPlaying]);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.code === "Space" || e.key === " ") {
+        e.preventDefault();
+        togglePlay();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [togglePlay]);
 
   const skip = (seconds) => {
     if (!ytPlayer.current) return;
@@ -129,7 +175,7 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
     ytPlayer.current.seekTo(ytPlayer.current.getDuration() * percent, true);
   };
 
-  // New FullScreen controller
+  // FullScreen controller
   const goFullscreen = () => {
     if (!containerRef.current) return;
     const container = containerRef.current;
@@ -157,19 +203,36 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
 
       <div className="absolute inset-0 flex flex-col justify-between pointer-events-none">
         <div className="flex justify-center items-center flex-1">
-          <button
-            onClick={togglePlay}
-            className="bg-black/50 text-white p-4 rounded-full pointer-events-auto"
-          >
-            {isPlaying ? "⏸" : "▶"}
-          </button>
+          {!isPlaying && (
+            <button
+              onClick={togglePlay}
+              className="bg-black/50 text-white p-4 rounded-full pointer-events-auto"
+            >
+              ▶
+            </button>
+          )}
         </div>
 
         <div className="bg-black/50 px-4 py-2 flex items-center justify-between pointer-events-auto">
           <div className="flex items-center gap-2">
-            <button onClick={() => skip(-5)}>⏪ 5s</button>
-            <button onClick={toggleMute}>🔊</button>
-            <span>{timeDisplay}</span>
+            <button onClick={togglePlay} className="text-lg">
+              {isPlaying ? "⏸" : "▶"}
+            </button>
+            <div className="relative group flex items-center">
+              <button onClick={toggleMute} className="z-10">
+                {ytPlayer.current?.isMuted() ? "🔇" : "🔊"}
+              </button>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={volume}
+                onChange={changeVolume}
+                className="absolute left-1/2 -translate-x-1/2 bottom-full mb-8 h-8 w-24 opacity-0 group-hover:opacity-100 transition-opacity rotate-[-90deg] z-20"
+              />
+            </div>
+
+            <span className="text-xs">{timeDisplay}</span>
           </div>
 
           <div
@@ -183,14 +246,31 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
           </div>
 
           <div className="flex items-center gap-2">
-            <select onChange={(e) => changeSpeed(e.target.value)}>
+            <button onClick={() => skip(-5)}>⏪ </button>
+            <button onClick={() => skip(5)}>⏩</button>
+            <select
+              onChange={(e) => changeSpeed(e.target.value)}
+              className="text-xs"
+            >
               {[0.5, 0.75, 1, 1.25, 1.5, 2].map((v) => (
                 <option key={v} value={v}>
                   {v}x
                 </option>
               ))}
             </select>
-            <button onClick={() => skip(5)}>5s ⏩</button>
+            {/* <div className="flex items-center gap-2">
+              <span className="text-xs font-medium">Speed</span>
+              <select
+                onChange={(e) => changeSpeed(e.target.value)}
+                className="text-xs border rounded px-1 py-0.5"
+              >
+                {[0.5, 0.75, 1, 1.25, 1.5, 2].map((v) => (
+                  <option key={v} value={v}>
+                    {v}x
+                  </option>
+                ))}
+              </select>
+            </div> */}
 
             {!isFullscreen ? (
               <button onClick={goFullscreen}>
