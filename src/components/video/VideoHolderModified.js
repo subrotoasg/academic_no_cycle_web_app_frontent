@@ -107,12 +107,6 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
     };
   }, [videoId]);
 
-  // const formatTime = (sec) => {
-  //   if (!sec || isNaN(sec)) return "0:00";
-  //   const minutes = Math.floor(sec / 60);
-  //   const seconds = Math.floor(sec % 60);
-  //   return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
-  // };
   const formatTime = (sec) => {
     if (!sec || isNaN(sec)) return "0:00:00";
     const hours = Math.floor(sec / 3600);
@@ -128,11 +122,6 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
     }
   };
 
-  // const togglePlay = () => {
-  //   if (!ytPlayer.current) return;
-  //   if (isPlaying) ytPlayer.current.pauseVideo();
-  //   else ytPlayer.current.playVideo();
-  // };
   const togglePlay = useCallback(() => {
     if (!ytPlayer.current) return;
     if (isPlaying) ytPlayer.current.pauseVideo();
