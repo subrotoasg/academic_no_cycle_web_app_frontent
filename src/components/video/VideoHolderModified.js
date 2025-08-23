@@ -204,11 +204,11 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
 
         <div className="bg-black/50 px-4 py-2 flex items-center justify-between pointer-events-auto">
           <div className="flex items-center gap-2">
-            <button onClick={togglePlay} className="text-lg">
+            <button onClick={togglePlay} className="text-lg text-white">
               {isPlaying ? "⏸" : "▶"}
             </button>
             <div className="relative group flex items-center">
-              <button onClick={toggleMute} className="z-10">
+              <button onClick={toggleMute} className="z-10 ">
                 {ytPlayer.current?.isMuted?.() ? "🔇" : "🔊"}
               </button>
               <input
@@ -221,7 +221,7 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
               />
             </div>
 
-            <span className="text-xs">{timeDisplay}</span>
+            <span className="text-xs text-white">{timeDisplay}</span>
           </div>
 
           <div
@@ -239,7 +239,7 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
             <button onClick={() => skip(5)}>⏩</button>
             <select
               onChange={(e) => changeSpeed(e.target.value)}
-              className="text-xs"
+              className="text-xs text-white"
             >
               {[0.5, 0.75, 1, 1.25, 1.5, 2].map((v) => (
                 <option key={v} value={v}>
@@ -247,28 +247,15 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
                 </option>
               ))}
             </select>
-            {/* <div className="flex items-center gap-2">
-              <span className="text-xs font-medium">Speed</span>
-              <select
-                onChange={(e) => changeSpeed(e.target.value)}
-                className="text-xs border rounded px-1 py-0.5"
-              >
-                {[0.5, 0.75, 1, 1.25, 1.5, 2].map((v) => (
-                  <option key={v} value={v}>
-                    {v}x
-                  </option>
-                ))}
-              </select>
-            </div> */}
 
             {!isFullscreen ? (
               <button onClick={goFullscreen}>
                 {" "}
-                <Maximize className="w-5 h-5" />
+                <Maximize className="w-5 h-5 text-white" />
               </button>
             ) : (
               <button onClick={exitFullscreen}>
-                <Minimize className="w-5 h-5" />
+                <Minimize className="w-5 h-5 text-white" />
               </button>
             )}
           </div>
