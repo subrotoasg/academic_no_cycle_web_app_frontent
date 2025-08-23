@@ -144,11 +144,60 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
     else ytPlayer.current.playVideo();
   }, [isPlaying]);
 
+  // useEffect(() => {
+  //   const handleKeyDown = (e) => {
+  //     if (e.code === "Space" || e.key === " ") {
+  //       e.preventDefault();
+  //       togglePlay();
+  //     }
+  //   };
+
+  //   window.addEventListener("keydown", handleKeyDown);
+  //   return () => window.removeEventListener("keydown", handleKeyDown);
+  // }, [togglePlay]);
+
+  // New
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.code === "Space" || e.key === " ") {
-        e.preventDefault();
-        togglePlay();
+      switch (e.code) {
+        case "Space":
+        case "KeyK":
+          e.preventDefault();
+          togglePlay();
+          break;
+
+        case "ArrowRight":
+          e.preventDefault();
+          skip(10);
+          break;
+
+        case "ArrowLeft":
+          e.preventDefault();
+          skip(-10);
+          break;
+
+        case "ArrowUp":
+          e.preventDefault();
+          setVolume((prev) => {
+            const newVolume = Math.min(prev + 5, 100);
+            ytPlayer.current?.setVolume(newVolume);
+            if (ytPlayer.current?.isMuted?.()) ytPlayer.current.unMute();
+            return newVolume;
+          });
+          break;
+
+        case "ArrowDown":
+          e.preventDefault();
+          setVolume((prev) => {
+            const newVolume = Math.max(prev - 5, 0);
+            ytPlayer.current?.setVolume(newVolume);
+            if (newVolume === 0) ytPlayer.current?.mute?.();
+            return newVolume;
+          });
+          break;
+
+        default:
+          break;
       }
     };
 
@@ -200,7 +249,7 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
     <div
       className="relative w-full aspect-video bg-black rounded-lg overflow-hidden"
       ref={containerRef}
-      onDoubleClick={handleDoubleTap} // desktop double click
+      onDoubleClick={handleDoubleTap}
       onTouchEnd={handleDoubleTap}
     >
       <div
@@ -239,17 +288,6 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
                   className="absolute left-1/2 -translate-x-1/2 bottom-full mb-8 h-8 w-24 opacity-0 group-hover:opacity-100 transition-opacity rotate-[-90deg] z-20"
                 />
               </div>
-              {/* <button onClick={toggleMute} className="z-10 ">
-                {ytPlayer.current?.isMuted?.() ? "🔇" : "🔊"}
-              </button> */}
-              {/* <input
-                type="range"
-                min="0"
-                max="100"
-                value={volume}
-                onChange={changeVolume}
-                className="absolute left-1/2 -translate-x-1/2 bottom-full mb-8 h-8 w-24 opacity-0 group-hover:opacity-100 transition-opacity rotate-[-90deg] z-20"
-              /> */}
 
               <div className="flex items-center  md:hidden">
                 <button onClick={toggleMute}>
