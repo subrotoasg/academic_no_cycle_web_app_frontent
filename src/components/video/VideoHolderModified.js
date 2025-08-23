@@ -32,6 +32,22 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
       ytPlayer.current.unMute();
     }
   };
+
+  // Double tap full screen
+  const lastTap = useRef(0);
+
+  const handleDoubleTap = () => {
+    const now = Date.now();
+    if (now - lastTap.current < 300) {
+      if (!document.fullscreenElement) {
+        goFullscreen();
+      } else {
+        exitFullscreen();
+      }
+    }
+    lastTap.current = now;
+  };
+
   useEffect(() => {
     const handleFullscreenChange = () => {
       setIsFullscreen(!!document.fullscreenElement);
@@ -182,8 +198,11 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
 
   return (
     <div
-      className="relative w-full aspect-video bg-black rounded-lg overflow-hidden"
+      // className="relative w-full aspect-video bg-black rounded-lg overflow-hidden "
+      className="relative w-full aspect-video bg-black rounded-lg overflow-hidden group"
       ref={containerRef}
+      onDoubleClick={handleDoubleTap} // desktop double click
+      onTouchEnd={handleDoubleTap}
     >
       <div
         ref={playerRef}
@@ -208,24 +227,51 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
               {isPlaying ? "⏸" : "▶"}
             </button>
             <div className="relative group flex items-center">
-              <button onClick={toggleMute} className="z-10 ">
+              <div className="hidden md:flex items-center">
+                <button onClick={toggleMute} className="z-10">
+                  {ytPlayer.current?.isMuted?.() ? "🔇" : "🔊"}
+                </button>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={volume}
+                  onChange={changeVolume}
+                  className="absolute left-1/2 -translate-x-1/2 bottom-full mb-8 h-8 w-24 opacity-0 group-hover:opacity-100 transition-opacity rotate-[-90deg] z-20"
+                />
+              </div>
+              {/* <button onClick={toggleMute} className="z-10 ">
                 {ytPlayer.current?.isMuted?.() ? "🔇" : "🔊"}
-              </button>
-              <input
+              </button> */}
+              {/* <input
                 type="range"
                 min="0"
                 max="100"
                 value={volume}
                 onChange={changeVolume}
                 className="absolute left-1/2 -translate-x-1/2 bottom-full mb-8 h-8 w-24 opacity-0 group-hover:opacity-100 transition-opacity rotate-[-90deg] z-20"
-              />
+              /> */}
+
+              <div className="flex items-center  md:hidden">
+                <button onClick={toggleMute}>
+                  {ytPlayer.current?.isMuted?.() ? "🔇" : "🔊"}
+                </button>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={volume}
+                  onChange={changeVolume}
+                  className="h-2 w-8"
+                />
+              </div>
             </div>
 
             <span className="text-xs text-white">{timeDisplay}</span>
           </div>
 
           <div
-            className="flex-1 mx-4 h-2 bg-gray-500 rounded cursor-pointer"
+            className="flex-1 mx-2 h-2 bg-gray-500 rounded cursor-pointer"
             onClick={seekToPercent}
           >
             <div
