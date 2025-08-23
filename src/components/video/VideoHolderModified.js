@@ -198,8 +198,7 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
 
   return (
     <div
-      // className="relative w-full aspect-video bg-black rounded-lg overflow-hidden "
-      className="relative w-full aspect-video bg-black rounded-lg overflow-hidden group"
+      className="relative w-full aspect-video bg-black rounded-lg overflow-hidden"
       ref={containerRef}
       onDoubleClick={handleDoubleTap} // desktop double click
       onTouchEnd={handleDoubleTap}
