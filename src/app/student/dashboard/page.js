@@ -93,9 +93,14 @@ function StudentDashboard() {
               Available Courses
             </h2>
             <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-4 md:py-8 p-4">
-              {sortedCourses.map((course) => (
+              {/* {sortedCourses?.map((course) => (
                 <DashboardCourseCard key={course.id} course={course} />
-              ))}
+              ))} */}
+              {sortedCourses
+                ?.filter((course) => course.productId !== 548)
+                ?.map((course) => (
+                  <DashboardCourseCard key={course.id} course={course} />
+                ))}
             </div>
           </div>
         </>
@@ -106,8 +111,8 @@ function StudentDashboard() {
           <div className="mb-12">
             <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-4">
               {sortedCourses
-                .filter((course) => course.isEnrolled)
-                .map((course) => (
+                ?.filter((course) => course.isEnrolled)
+                ?.map((course) => (
                   <EnrolledCourseCard
                     key={course.id}
                     courseInfo={{ courseId: course.id, course }}
@@ -122,8 +127,11 @@ function StudentDashboard() {
             </h1>
             <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-4">
               {sortedCourses
-                .filter((course) => !course.isEnrolled)
-                .map((course) => (
+                // .filter((course) => !course.isEnrolled)
+                ?.filter(
+                  (course) => !(course.isEnrolled || course.productId == 548)
+                )
+                ?.map((course) => (
                   <DashboardCourseCard key={course.id} course={course} />
                 ))}
             </div>
