@@ -36,7 +36,7 @@ export default function ArchiveCourseCard({ archiveData }) {
           <CardMedia
             component="img"
             height="180"
-            image={archiveImg.src}
+            image={archiveImg?.src}
             alt={productFullName || "Archived Course Image"}
             sx={{
               height: 160,
