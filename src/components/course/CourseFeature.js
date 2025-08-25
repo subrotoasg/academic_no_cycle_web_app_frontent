@@ -16,12 +16,20 @@ const CourseFeature = () => {
     isLoading,
     isError,
   } = useGetAllCourseQuery({ limit: defaultLimit });
-  // console.log(courseData);
 
+  // const courses = useMemo(() => {
+  //   const allCourses = courseData?.data?.data || [];
+  //   return allCourses.filter(
+  //     (course) => !course.markAsArchieve
+  //   );
+  // }, [courseData]);
   const courses = useMemo(() => {
     const allCourses = courseData?.data?.data || [];
-    return allCourses.filter((course) => !course.markAsArchieve);
+    return allCourses.filter(
+      (course) => !(course.markAsArchieve || course.productId == 548)
+    );
   }, [courseData]);
+  // console.log(courses);
 
   const subCategories = useMemo(() => {
     const unique = Array.from(

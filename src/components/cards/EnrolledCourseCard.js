@@ -36,7 +36,6 @@ export default function EnrolledCourseCard({ courseInfo }) {
       className="transition-transform duration-400 hover:shadow-lg hover:scale-[1.01] rounded-4xl flex flex-col justify-between cursor-pointer"
       onClick={handleCardClick}
     >
-      {/* Enrollment badge */}
       <div
         style={{
           position: "absolute",
@@ -79,7 +78,26 @@ export default function EnrolledCourseCard({ courseInfo }) {
       </CardContent>
       <CardActions className="flex justify-center items-center pb-2">
         <button
-          className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 text-xs rounded hover:rounded-full"
+          className="
+    bg-gradient-to-r from-green-900 to-green-700
+    hover:from-green-700 hover:to-green-900
+    text-white
+    px-4 py-2
+    rounded-lg
+    w-full
+    text-center
+    text-sm
+    font-semibold
+    shadow-md
+    transition
+    transform
+    hover:scale-103
+    hover:rounded-full
+    hover:shadow-xl
+    hover:font-bold
+    focus:outline-none
+    focus:ring-1 focus:ring-offset-2 focus:ring-gray-400
+  "
           onClick={handleButtonClick}
         >
           View Course
