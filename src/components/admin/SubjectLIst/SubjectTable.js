@@ -42,7 +42,7 @@ export function SubjectsTable({
             Subjects.map((Subject) => (
               <TableRow key={Subject?.id}>
                 <TableCell className="text-center border">
-                  {Subject?.subject?.title || "N/A"}
+                  {Subject?.title || Subject?.subject?.title || "N/A"}
                 </TableCell>
                 <TableCell className="text-center border">
                   <Image
@@ -50,7 +50,11 @@ export function SubjectsTable({
                       Subject?.courseSubjectImage ||
                       Subject?.subject?.subjectImage
                     }
-                    alt={Subject?.subject?.title || "Subject Image"}
+                    alt={
+                      Subject?.title ||
+                      Subject?.subject?.title ||
+                      "Subject Image"
+                    }
                     width={200}
                     height={200}
                     className="mx-auto h-12 w-16 md:h-16 md:w-20 rounded-md object-fill"

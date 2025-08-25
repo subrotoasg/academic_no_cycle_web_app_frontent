@@ -20,9 +20,17 @@ const CourseFeature = () => {
   } = useGetAllCourseQuery({ limit: defaultLimit });
   const { data, isLoading: isLiveLoading } = useGetAllLiveClassQuery();
 
+  // const courses = useMemo(() => {
+  //   const allCourses = courseData?.data?.data || [];
+  //   return allCourses.filter(
+  //     (course) => !course.markAsArchieve
+  //   );
+  // }, [courseData]);
   const courses = useMemo(() => {
     const allCourses = courseData?.data?.data || [];
-    return allCourses.filter((course) => !course.markAsArchieve);
+    return allCourses.filter(
+      (course) => !(course.markAsArchieve || course.productId == 548)
+    );
   }, [courseData]);
   //  Get all unique subcategories from the courses
   const subCategories = useMemo(() => {
@@ -68,8 +76,7 @@ const CourseFeature = () => {
       </div>
     );
   }
-  // console.log(courses);
-  // console.log(sortedCourses);
+
   if (!sortedCourses.length > 0) {
     return (
       <div className="text-center text-gray-500 py-10">

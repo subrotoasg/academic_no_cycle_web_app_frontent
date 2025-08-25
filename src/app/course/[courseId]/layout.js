@@ -15,9 +15,6 @@ function ActualLayoutLogic({ children }) {
 
   const user = useSelector(currentUser);
   const role = user?.role;
-  // const enrolledCourses = useSelector(
-  //   (state) => state.studentCourses.enrolledCourses
-  // );
 
   const enrolledCourses = useSelector(selectEnrolledCourses);
 
@@ -25,16 +22,11 @@ function ActualLayoutLogic({ children }) {
     (state) => state.archiveAccess.allowedArchiveCourseIds
   );
 
-  const { data, isLoading } = useGetMyCoursesQuery({ page: 1, limit: 100 });
+  const { data, isLoading } = useGetMyCoursesQuery({ limit: 100 });
   const courses = enrolledCourses || data?.data?.data || [];
 
   // Admin data
   const teacherCourses = useSelector(selectAllCourses);
-  // console.log(teacherCourses);
-
-  // const isEnrolledOrArchiveAllowed =
-  //   courses?.some((c) => c.courseId === courseId) ||
-  //   allowedArchives.includes(courseId);
 
   // Check access
   const isEnrolledOrArchiveAllowed =
@@ -50,16 +42,11 @@ function ActualLayoutLogic({ children }) {
       allowedArchives.includes(courseId));
 
   useEffect(() => {
-    // if (!isLoading && !isEnrolledOrArchiveAllowed) {
     if (!isLoading && !(isEnrolledOrArchiveAllowed || isTeacherAllowed)) {
       router.replace("/unauthorized");
     }
-    // }, [isLoading, isEnrolledOrArchiveAllowed, router]);
   }, [isLoading, isEnrolledOrArchiveAllowed, isTeacherAllowed, router]);
 
-  // if (!isEnrolledOrArchiveAllowed) {
-  //   return null;
-  // }
   if (!isEnrolledOrArchiveAllowed && !isTeacherAllowed) {
     return null;
   }

@@ -32,7 +32,6 @@ export default function DashboardCourseCard({ course }) {
       className="relative transition-transform duration-400 hover:shadow-lg hover:scale-[1.01] rounded-4xl flex flex-col justify-between cursor-pointer"
       onClick={handleCardClick}
     >
-      {/* Course Image and Enrolled Count */}
       <div style={{ position: "relative" }}>
         <CardMedia
           sx={{ height: 160, objectFit: "contain" }}
@@ -41,7 +40,6 @@ export default function DashboardCourseCard({ course }) {
           className="object-contain"
         />
 
-        {/* Locked overlay */}
         {!isEnrolled && (
           <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-white">
             <LockIcon sx={{ fontSize: 40, color: "" }} />
@@ -49,7 +47,7 @@ export default function DashboardCourseCard({ course }) {
             <span className="mt-2 text-sm font-semibold">Locked</span>
           </div>
         )}
-        {/* 
+
         <div
           style={{
             position: "absolute",
@@ -69,10 +67,9 @@ export default function DashboardCourseCard({ course }) {
           title="Enrolled Students"
         >
           {course?._count?.student ?? 0} Enrolled
-        </div> */}
+        </div>
       </div>
 
-      {/* Course Info */}
       <CardContent className="flex-1 text-xl">
         <Tooltip title={course?.productFullName || ""} arrow>
           <Typography
@@ -94,13 +91,31 @@ export default function DashboardCourseCard({ course }) {
         <CourseSubCategoryPill subCategory={course?.SubCategory} />
       </CardContent>
 
-      {/* Actions */}
       <CardActions className="flex justify-center items-center mb-3">
         <a
           href={permalink}
           target="_blank"
           rel="noopener noreferrer"
-          className="bg-blue-600 hover:bg-blue-800 text-white px-4 py-2 rounded text-sm hover:rounded-full w-full text-center hover:font-bold"
+          className="
+  bg-gradient-to-r from-blue-600 to-indigo-500
+  hover:from-blue-500 hover:to-indigo-700
+  text-white
+  px-4 py-2
+  rounded-lg
+  w-full
+  text-center
+  text-sm
+  font-semibold
+  shadow-md
+  transition
+  transform
+  hover:scale-105
+  hover:rounded-full
+  hover:shadow-xl
+  hover:font-bold
+  focus:outline-none
+  focus:ring-1 focus:ring-offset-2 focus:ring-gray-400
+"
           onClick={(e) => e.stopPropagation()}
         >
           Enroll Now

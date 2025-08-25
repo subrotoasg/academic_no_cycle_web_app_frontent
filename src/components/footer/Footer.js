@@ -20,8 +20,8 @@ const contactInfo = [
   },
   {
     icon: <MdOutlineEmail className="text-xl" />,
-    text: "admin@aparsclassroom.com",
-    url: "mailto:admin@aparsclassroom.com",
+    text: "support@asgshop.ai",
+    url: "mailto:support@asgshop.ai",
   },
   {
     icon: <TbWorldWww className="text-xl" />,
@@ -32,10 +32,7 @@ const contactInfo = [
 
 const Footer = () => {
   return (
-    <footer
-      className="w-full  text-white" 
-      
-    >
+    <footer className="w-full  text-white">
       <div className="p-10  flex justify-between gap-6 flex-col md:flex-row flex-wrap w-full backdrop-blur-sm bg-black/85 ">
         {/* Left: Logo & Description */}
         <div className="w-full sm:w-[30%]">
@@ -54,9 +51,7 @@ const Footer = () => {
 
         {/* Middle: Quick Links */}
         <div className="w-full sm:w-[25%]">
-          <h3 className="text-[1.2rem]  font-semibold   mb-2">
-            Quick Links
-          </h3>
+          <h3 className="text-[1.2rem]  font-semibold   mb-2">Quick Links</h3>
           <ul className="flex flex-col gap-3">
             {quickLinks.map((link, index) => (
               <li
@@ -71,9 +66,7 @@ const Footer = () => {
 
         {/* Right: Contact Info */}
         <div className="w-full sm:w-[25%]">
-          <h3 className="text-[1.2rem] font-semibold   mb-2">
-            Contact Us
-          </h3>
+          <h3 className="text-[1.2rem] font-semibold   mb-2">Contact Us</h3>
           <div className="flex flex-col gap-3   dark:text-slate-300">
             {contactInfo.map((contact, index) => (
               <div
@@ -98,7 +91,6 @@ const Footer = () => {
 
         {/* Bottom: Copyright */}
         <Copyright />
-
       </div>
     </footer>
   );

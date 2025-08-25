@@ -64,36 +64,45 @@ export default function CourseSubCategoryPill({ subCategory }) {
   };
 
   return (
-    <Chip
-      icon={icon}
-      label={label}
-      size="small"
-      variant="filled"
-      sx={{
-        bgcolor: bgColor,
-        color: textColor,
-        fontWeight: 600,
-        textTransform: "capitalize",
-        height: 20,
-        fontSize: 10,
-        paddingLeft: 6,
-        paddingRight: 6,
-        display: "inline-flex",
-        alignItems: "center",
-        width: "auto",
-        maxWidth: "100%",
-        "& .MuiChip-icon": {
+    <div style={{ display: "flex", justifyContent: "center", margin: "8px 0" }}>
+      <Chip
+        icon={icon}
+        label={label}
+        size="small"
+        variant="filled"
+        sx={{
+          bgcolor: bgColor,
           color: textColor,
-          fontSize: 16,
-          marginLeft: -1,
-          marginRight: 2,
-        },
-        "& .MuiChip-label": {
-          paddingLeft: 0,
-          paddingRight: 0,
-          whiteSpace: "nowrap",
-        },
-      }}
-    />
+          fontWeight: 600,
+          textTransform: "capitalize",
+          height: 22,
+          fontSize: 11,
+          borderRadius: 16,
+          boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+          transition: "transform 0.2s, box-shadow 0.2s",
+          "&:hover": {
+            transform: "scale(1.05)",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+          },
+          paddingLeft: 6,
+          paddingRight: 6,
+          display: "inline-flex",
+          alignItems: "center",
+          width: "auto",
+          maxWidth: "100%",
+          "& .MuiChip-icon": {
+            color: textColor,
+            fontSize: 18,
+            marginLeft: -2,
+            marginRight: 4,
+          },
+          "& .MuiChip-label": {
+            paddingLeft: 0,
+            paddingRight: 0,
+            whiteSpace: "nowrap",
+          },
+        }}
+      />
+    </div>
   );
 }

@@ -44,7 +44,7 @@ export default function CourseCard({ course }) {
             className="object-contain"
           />
 
-          {/* <div
+          <div
             style={{
               position: "absolute",
               top: 8,
@@ -63,7 +63,7 @@ export default function CourseCard({ course }) {
             title="Enrolled Students"
           >
             {course?._count?.student ?? 0} Enrolled
-          </div> */}
+          </div>
         </div>
         <CardContent className="flex-1 text-xl">
           <Tooltip title={course?.productFullName || ""} arrow>
@@ -90,7 +90,26 @@ export default function CourseCard({ course }) {
           {isEnrolled || isAdmin ? (
             <Link
               href={`/course/${course.id}`}
-              className="bg-green-700 hover:bg-green-900 text-white px-4 py-2 rounded text-sm hover:rounded-full w-full text-center hover:font-bold"
+              className="
+              bg-gradient-to-r from-green-900 to-green-700
+              hover:from-green-700 hover:to-green-900
+              text-white
+              px-4 py-2
+              rounded-lg
+              w-full
+              text-center
+              text-sm
+              font-semibold
+              shadow-md
+              transition
+              transform
+              hover:scale-105
+              hover:rounded-full
+              hover:shadow-xl
+              hover:font-bold
+              focus:outline-none
+              focus:ring-1 focus:ring-offset-2 focus:ring-gray-400
+            "
               onClick={(e) => e.stopPropagation()}
             >
               View Course
@@ -101,7 +120,11 @@ export default function CourseCard({ course }) {
                 href={permalink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-blue-600 hover:bg-blue-700 text-white px-2 py-2 rounded text-xs hover:rounded-full hover:font-bold"
+                className="bg-gradient-to-r from-indigo-800 to-indigo-500 hover:from-indigo-400 hover:to-indigo-700 hover:bg-blue-700 text-white px-2 py-2 rounded-lg   transition
+                transform text-xs hover:rounded-full font-bold hover:scale-105
+                hover:shadow-xl
+                focus:outline-none
+                focus:ring-1 focus:ring-offset-1 focus:ring-gray-400"
                 onClick={(e) => e.stopPropagation()}
               >
                 Enroll Now
@@ -117,7 +140,24 @@ export default function CourseCard({ course }) {
                     window.location.href = "/login";
                   }
                 }}
-                className="access-now-btn border border-gray-400 hover:bg-gray-100 text-gray-700 text-xs px-4 py-2 rounded hover:rounded-full hover:font-bold"
+                className="
+                access-now-btn
+                text-white
+                bg-gradient-to-r from-blue-800 to-blue-500
+                hover:from-blue-500 hover:to-blue-800
+                shadow-lg
+                text-xs
+                px-4 py-2
+                rounded-lg
+                font-bold
+                transition
+                transform
+                hover:rounded-full
+                hover:scale-105
+                hover:shadow-xl
+                focus:outline-none
+                focus:ring-1 focus:ring-offset-1 focus:ring-gray-400
+              "
               >
                 Access Now
               </button>

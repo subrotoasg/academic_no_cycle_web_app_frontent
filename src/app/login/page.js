@@ -66,7 +66,7 @@ const Login = () => {
       if (response?.meta?.role === "admin" || "student") {
         setStep("password");
       } else {
-        toast.error("You are not authorized to access the admin panel.");
+        toast.error("You are not authorized to access.");
       }
     } catch (error) {
       toast.error(
@@ -114,7 +114,9 @@ const Login = () => {
 
   const handleSetNewPassword = async () => {
     if (newPassword.length < 8 || !/\d/.test(newPassword)) {
-      return toast.error("Password must be 8+ characters with a number.");
+      return toast.error(
+        "Password must be minimum of 8 characters with at least a number"
+      );
     }
     setLoading(true);
     try {
@@ -164,7 +166,8 @@ const Login = () => {
                     Access Your Account
                   </h1>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Sign in to your profile
+                    যেই ইমেইল বা ফোন নম্বর দিয়ে আপনি সাইন আপ করেছেন, সেই ইমেইল
+                    বা নম্বর ব্যবহার করে লগইন করুন।
                   </p>
                 </div>
                 <form onSubmit={handleLogin} className="space-y-3">

@@ -80,7 +80,7 @@ function StudentDashboard() {
 
       {!isLoading &&
         !isError &&
-        !isLiveClassLoading &&
+        isLiveClassLoading &&
         EnrolledCourses.length === 0 && (
           <>
             <div className="text-center py-10 text-lg font-medium text-gray-500">
@@ -100,9 +100,14 @@ function StudentDashboard() {
                 Available Courses
               </h2>
               <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-4 md:py-8 p-4">
-                {sortedCourses?.map((course) => (
-                  <DashboardCourseCard key={course.id} course={course} />
-                ))}
+                {/* {sortedCourses?.map((course) => (
+                <DashboardCourseCard key={course.id} course={course} />
+              ))} */}
+                {sortedCourses
+                  ?.filter((course) => course.productId !== 548)
+                  ?.map((course) => (
+                    <DashboardCourseCard key={course.id} course={course} />
+                  ))}
               </div>
             </div>
           </>
@@ -133,7 +138,10 @@ function StudentDashboard() {
             </h2>
             <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-4">
               {sortedCourses
-                ?.filter((course) => !course.isEnrolled)
+                // .filter((course) => !course.isEnrolled)
+                ?.filter(
+                  (course) => !(course.isEnrolled || course.productId == 548)
+                )
                 ?.map((course) => (
                   <DashboardCourseCard key={course.id} course={course} />
                 ))}

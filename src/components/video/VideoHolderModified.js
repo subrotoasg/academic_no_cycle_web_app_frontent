@@ -1,17 +1,75 @@
 "use client";
 
 import { useGetClassContentsBySubjectChapterIdQuery } from "@/redux/services/contentsApi";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSelector } from "react-redux";
 import { currentUser } from "@/redux/Features/authentication";
+import { Eye, Maximize, Minimize } from "lucide-react";
 
 const YouTubeOverlayPlayer = ({ videoId }) => {
+  const containerRef = useRef(null);
   const playerRef = useRef(null);
   const ytPlayer = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [timeDisplay, setTimeDisplay] = useState("0:00 / 0:00");
   const [progress, setProgress] = useState(0);
+
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [volume, setVolume] = useState(100);
+
+  const changeVolume = (e) => {
+    const newVolume = parseInt(e.target.value, 10);
+    setVolume(newVolume);
+
+    if (!ytPlayer.current) return;
+
+    ytPlayer.current.setVolume(newVolume);
+
+    if (newVolume === 0) {
+      ytPlayer.current?.mute?.();
+    } else if (ytPlayer.current?.isMuted?.()) {
+      ytPlayer.current.unMute();
+    }
+  };
+
+  // Double tap full screen
+  const lastTap = useRef(0);
+
+  const handleDoubleTap = () => {
+    const now = Date.now();
+    if (now - lastTap.current < 300) {
+      if (!document.fullscreenElement) {
+        goFullscreen();
+      } else {
+        exitFullscreen();
+      }
+    }
+    lastTap.current = now;
+  };
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    };
+  }, []);
+
+  const exitFullscreen = () => {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    } else if (document.mozCancelFullScreen) {
+      document.mozCancelFullScreen();
+    } else if (document.msExitFullscreen) {
+      document.msExitFullscreen();
+    }
+  };
 
   useEffect(() => {
     if (!videoId) return;
@@ -66,17 +124,86 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
   }, [videoId]);
 
   const formatTime = (sec) => {
-    if (!sec || isNaN(sec)) return "0:00";
-    const minutes = Math.floor(sec / 60);
+    if (!sec || isNaN(sec)) return "0:00:00";
+    const hours = Math.floor(sec / 3600);
+    const minutes = Math.floor((sec % 3600) / 60);
     const seconds = Math.floor(sec % 60);
-    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+
+    if (hours > 0) {
+      return `${hours}:${minutes.toString().padStart(2, "0")}:${seconds
+        .toString()
+        .padStart(2, "0")}`;
+    } else {
+      return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+    }
   };
 
-  const togglePlay = () => {
+  const togglePlay = useCallback(() => {
     if (!ytPlayer.current) return;
     if (isPlaying) ytPlayer.current.pauseVideo();
     else ytPlayer.current.playVideo();
-  };
+  }, [isPlaying]);
+
+  // useEffect(() => {
+  //   const handleKeyDown = (e) => {
+  //     if (e.code === "Space" || e.key === " ") {
+  //       e.preventDefault();
+  //       togglePlay();
+  //     }
+  //   };
+
+  //   window.addEventListener("keydown", handleKeyDown);
+  //   return () => window.removeEventListener("keydown", handleKeyDown);
+  // }, [togglePlay]);
+
+  // New
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      switch (e.code) {
+        case "Space":
+        case "KeyK":
+          e.preventDefault();
+          togglePlay();
+          break;
+
+        case "ArrowRight":
+          e.preventDefault();
+          skip(10);
+          break;
+
+        case "ArrowLeft":
+          e.preventDefault();
+          skip(-10);
+          break;
+
+        case "ArrowUp":
+          e.preventDefault();
+          setVolume((prev) => {
+            const newVolume = Math.min(prev + 5, 100);
+            ytPlayer.current?.setVolume(newVolume);
+            if (ytPlayer.current?.isMuted?.()) ytPlayer.current.unMute();
+            return newVolume;
+          });
+          break;
+
+        case "ArrowDown":
+          e.preventDefault();
+          setVolume((prev) => {
+            const newVolume = Math.max(prev - 5, 0);
+            ytPlayer.current?.setVolume(newVolume);
+            if (newVolume === 0) ytPlayer.current?.mute?.();
+            return newVolume;
+          });
+          break;
+
+        default:
+          break;
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [togglePlay]);
 
   const skip = (seconds) => {
     if (!ytPlayer.current) return;
@@ -85,7 +212,7 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
   };
 
   const toggleMute = () => {
-    if (!ytPlayer.current) return;
+    if (!ytPlayer.current?.isMuted) return;
     if (ytPlayer.current.isMuted()) ytPlayer.current.unMute();
     else ytPlayer.current.mute();
   };
@@ -102,28 +229,29 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
     ytPlayer.current.seekTo(ytPlayer.current.getDuration() * percent, true);
   };
 
-  //   const goFullscreen = () => {
-  //     if (playerRef.current && playerRef.current.requestFullscreen) {
-  //       playerRef.current.requestFullscreen();
-  //     }
-  //   };
-
+  // FullScreen controller
   const goFullscreen = () => {
-    if (!ytPlayer.current) return;
-    const iframe = ytPlayer.current.getIframe();
-    if (iframe.requestFullscreen) {
-      iframe.requestFullscreen();
-    } else if (iframe.webkitRequestFullscreen) {
-      iframe.webkitRequestFullscreen();
-    } else if (iframe.mozRequestFullScreen) {
-      iframe.mozRequestFullScreen();
-    } else if (iframe.msRequestFullscreen) {
-      iframe.msRequestFullscreen();
+    if (!containerRef.current) return;
+    const container = containerRef.current;
+
+    if (container.requestFullscreen) {
+      container.requestFullscreen();
+    } else if (container.webkitRequestFullscreen) {
+      container.webkitRequestFullscreen();
+    } else if (container.mozRequestFullScreen) {
+      container.mozRequestFullScreen();
+    } else if (container.msRequestFullscreen) {
+      container.msRequestFullscreen();
     }
   };
 
   return (
-    <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden">
+    <div
+      className="relative w-full aspect-video bg-black rounded-lg overflow-hidden"
+      ref={containerRef}
+      onDoubleClick={handleDoubleTap}
+      onTouchEnd={handleDoubleTap}
+    >
       <div
         ref={playerRef}
         className="absolute inset-0 w-full h-full pointer-events-none"
@@ -131,23 +259,56 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
 
       <div className="absolute inset-0 flex flex-col justify-between pointer-events-none">
         <div className="flex justify-center items-center flex-1">
-          <button
-            onClick={togglePlay}
-            className="bg-black/50 text-white p-4 rounded-full pointer-events-auto"
-          >
-            {isPlaying ? "⏸" : "▶"}
-          </button>
+          {!isPlaying && (
+            <button
+              onClick={togglePlay}
+              className="bg-black/50 text-white p-4 rounded-full pointer-events-auto"
+            >
+              ▶
+            </button>
+          )}
         </div>
 
         <div className="bg-black/50 px-4 py-2 flex items-center justify-between pointer-events-auto">
           <div className="flex items-center gap-2">
-            <button onClick={() => skip(-5)}>⏪ 5s</button>
-            <button onClick={toggleMute}>🔊</button>
-            <span>{timeDisplay}</span>
+            <button onClick={togglePlay} className="text-lg text-white">
+              {isPlaying ? "⏸" : "▶"}
+            </button>
+            <div className="relative group flex items-center">
+              <div className="hidden md:flex items-center">
+                <button onClick={toggleMute} className="z-10">
+                  {ytPlayer.current?.isMuted?.() ? "🔇" : "🔊"}
+                </button>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={volume}
+                  onChange={changeVolume}
+                  className="absolute left-1/2 -translate-x-1/2 bottom-full mb-8 h-8 w-24 opacity-0 group-hover:opacity-100 transition-opacity rotate-[-90deg] z-20"
+                />
+              </div>
+
+              <div className="flex items-center  md:hidden">
+                <button onClick={toggleMute}>
+                  {ytPlayer.current?.isMuted?.() ? "🔇" : "🔊"}
+                </button>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={volume}
+                  onChange={changeVolume}
+                  className="h-2 w-8"
+                />
+              </div>
+            </div>
+
+            <span className="text-xs text-white">{timeDisplay}</span>
           </div>
 
           <div
-            className="flex-1 mx-4 h-2 bg-gray-500 rounded cursor-pointer"
+            className="flex-1 mx-2 h-2 bg-gray-500 rounded cursor-pointer"
             onClick={seekToPercent}
           >
             <div
@@ -157,15 +318,29 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
           </div>
 
           <div className="flex items-center gap-2">
-            <select onChange={(e) => changeSpeed(e.target.value)}>
+            <button onClick={() => skip(-5)}>⏪ </button>
+            <button onClick={() => skip(5)}>⏩</button>
+            <select
+              onChange={(e) => changeSpeed(e.target.value)}
+              className="text-xs text-white"
+            >
               {[0.5, 0.75, 1, 1.25, 1.5, 2].map((v) => (
                 <option key={v} value={v}>
                   {v}x
                 </option>
               ))}
             </select>
-            <button onClick={() => skip(5)}>5s ⏩</button>
-            <button onClick={goFullscreen}>⛶</button>
+
+            {!isFullscreen ? (
+              <button onClick={goFullscreen}>
+                {" "}
+                <Maximize className="w-5 h-5 text-white" />
+              </button>
+            ) : (
+              <button onClick={exitFullscreen}>
+                <Minimize className="w-5 h-5 text-white" />
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -303,6 +478,21 @@ const VideoHolderModified = ({ classContent }) => {
                   Instructor: {classContent.instructor}
                 </p>
               )}
+
+              <div className="mt-1 flex items-center space-x-1 text-xs md:text-sm font-normal text-blue-600 dark:text-blue-500">
+                <Eye className="w-4 h-4 md:w-5 md:h-5 mr-1 text-blue-500" />
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={classContent.views}
+                    initial={{ y: 10, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: -10, opacity: 0 }}
+                    transition={{ duration: 0.4 }}
+                  >
+                    Views: {classContent.views}
+                  </motion.span>
+                </AnimatePresence>
+              </div>
             </motion.div>
           </div>
 

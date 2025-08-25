@@ -44,7 +44,7 @@ const StudentSignUp = () => {
 
     if (password.length < 8 || !/\d/.test(password)) {
       return toast.error(
-        "Password must be at least 8 characters and contain a number"
+        "Password must be minimum of 8 characters with at least a number"
       );
     }
 
@@ -82,7 +82,9 @@ const StudentSignUp = () => {
                 Student Sign Up
               </h1>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Create your account
+                কোর্স কিনে থাকলে ইনভয়েসের ইমেইল ব্যবহার করুন, অথবা যেকোনো ইমেইল
+                দিন। এটি লগইন, কোর্স অ্যাক্সেস এবং পাসওয়ার্ড পরিবর্তনের জন্য
+                গুরুত্বপূর্ণ, তাই মনে রাখা জরুরি।
               </p>
             </div>
 
