@@ -10,6 +10,8 @@ import { useEffect, useMemo } from "react";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
 import { setEnrolledCourses } from "@/redux/Features/mycourses";
+import { useGetAllLiveClassQuery } from "@/redux/services/liveClassApi";
+import LiveClassLayout from "@/components/liveClass/LiveClassLayout";
 
 function StudentDashboard() {
   const dispatch = useDispatch();
@@ -19,7 +21,9 @@ function StudentDashboard() {
     isLoading: enrolledLoading,
     isError: enrolledError,
   } = useGetMyCoursesQuery({ page: 1, limit: 100 });
-  // console.log(enrolledData);
+
+  const { data: liveClasssData, isLoading: isLiveClassLoading } =
+    useGetAllLiveClassQuery();
 
   useEffect(() => {
     if (enrolledData?.data) {
@@ -53,16 +57,16 @@ function StudentDashboard() {
     return a.isEnrolled ? -1 : 1;
   });
 
-  const isLoading = enrolledLoading || allLoading;
+  const isLoading = enrolledLoading || allLoading || isLiveClassLoading;
   const isError = enrolledError || allError;
 
   return (
     <div className="container mx-auto pt-16 md:pt-28 mb-10">
-      <h1 className="text-2xl md:text-3xl font-bold mb-6 text-center">
+      {/* <h1 className="text-2xl md:text-3xl font-bold mb-6 text-center">
         Enrolled Courses
-      </h1>
+      </h1> */}
 
-      {isLoading && (
+      {isLoading && isLiveClassLoading && (
         <div className="text-center py-20 text-lg font-medium text-gray-600">
           Loading courses ...
         </div>
@@ -74,40 +78,47 @@ function StudentDashboard() {
         </div>
       )}
 
-      {!isLoading && !isError && EnrolledCourses.length === 0 && (
-        <>
-          <div className="text-center py-10 text-lg font-medium text-gray-500">
-            আপনি এখনও কোনো কোর্স অ্যাক্সেস করেননি। <br />
-            <p className="text-blue-600 font-semibold cursor-pointer hover:underline my-3">
-              নির্দিষ্ট কোর্সের জন্য অ্যাক্সেস কোড প্রদান করে আপনার কোর্সে
-              প্রবেশ করুন।
-            </p>
-            <Link href="/" passHref>
-              <button className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 text-xs rounded hover:rounded-full">
-                Access Course
-              </button>
-            </Link>
-          </div>
-          <div className="mt-8">
-            <h2 className="text-2xl font-semibold mb-4 text-center">
-              Available Courses
-            </h2>
-            <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-4 md:py-8 p-4">
-              {sortedCourses.map((course) => (
-                <DashboardCourseCard key={course.id} course={course} />
-              ))}
+      {!isLoading &&
+        !isError &&
+        !isLiveClassLoading &&
+        EnrolledCourses.length === 0 && (
+          <>
+            <div className="text-center py-10 text-lg font-medium text-gray-500">
+              আপনি এখনও কোনো কোর্স অ্যাক্সেস করেননি। <br />
+              <p className="text-blue-600 font-semibold cursor-pointer hover:underline my-3">
+                নির্দিষ্ট কোর্সের জন্য অ্যাক্সেস কোড প্রদান করে আপনার কোর্সে
+                প্রবেশ করুন।
+              </p>
+              <Link href="/" passHref>
+                <button className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 text-xs rounded hover:rounded-full">
+                  Access Course
+                </button>
+              </Link>
             </div>
-          </div>
-        </>
-      )}
+            <div className="mt-8">
+              <h2 className="text-2xl font-semibold mb-4 text-center">
+                Available Courses
+              </h2>
+              <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-4 md:py-8 p-4">
+                {sortedCourses?.map((course) => (
+                  <DashboardCourseCard key={course.id} course={course} />
+                ))}
+              </div>
+            </div>
+          </>
+        )}
 
       {!isLoading && !isError && EnrolledCourses?.length > 0 && (
         <>
+          <LiveClassLayout data={liveClasssData} />
           <div className="mb-12">
+            <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-white  my-10 md:mx-3">
+              Enrolled Courses
+            </h2>
             <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-4">
               {sortedCourses
-                .filter((course) => course.isEnrolled)
-                .map((course) => (
+                ?.filter((course) => course.isEnrolled)
+                ?.map((course) => (
                   <EnrolledCourseCard
                     key={course.id}
                     courseInfo={{ courseId: course.id, course }}
@@ -117,13 +128,13 @@ function StudentDashboard() {
           </div>
 
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold mb-10 text-center">
+            <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-white text-center md:mb-10 mb-2">
               Available Courses
-            </h1>
+            </h2>
             <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-4">
               {sortedCourses
-                .filter((course) => !course.isEnrolled)
-                .map((course) => (
+                ?.filter((course) => !course.isEnrolled)
+                ?.map((course) => (
                   <DashboardCourseCard key={course.id} course={course} />
                 ))}
             </div>
