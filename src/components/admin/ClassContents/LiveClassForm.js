@@ -109,8 +109,8 @@ export default function LiveClassForm() {
 
     try {
       const res = await addLiveClass(liveClassInfo).unwrap();
-      //   console.log(res);
-      if (res?.data.success) {
+      // console.log(res);
+      if (res?.success) {
         Swal.fire({
           icon: "success",
           title: "Live Class Scheduled Successfully",
