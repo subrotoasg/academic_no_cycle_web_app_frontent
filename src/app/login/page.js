@@ -166,7 +166,7 @@ const Login = () => {
                     Access Your Account
                   </h1>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Sign in to your profile
+                    Sign in with your registered email or phone number
                   </p>
                 </div>
                 <form onSubmit={handleLogin} className="space-y-3">

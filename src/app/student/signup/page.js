@@ -82,7 +82,7 @@ const StudentSignUp = () => {
                 Student Sign Up
               </h1>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Create your account
+                অ্যাকাউন্ট তৈরির জন্য ইনভয়েসে উল্লেখিত ইমেইল ব্যবহার করুন
               </p>
             </div>
 

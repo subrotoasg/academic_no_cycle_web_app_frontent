@@ -22,8 +22,7 @@ const CourseFeature = () => {
     const allCourses = courseData?.data?.data || [];
     return allCourses.filter((course) => !course.markAsArchieve);
   }, [courseData]);
-  // console.log(courseData);
-  //  Get all unique subcategories from the courses
+
   const subCategories = useMemo(() => {
     const unique = Array.from(
       new Set(courses.map((c) => c.SubCategory).filter(Boolean))
@@ -67,8 +66,7 @@ const CourseFeature = () => {
       </div>
     );
   }
-  // console.log(courses);
-  // console.log(sortedCourses);
+
   if (!sortedCourses.length > 0) {
     return (
       <div className="text-center text-gray-500 py-10">
