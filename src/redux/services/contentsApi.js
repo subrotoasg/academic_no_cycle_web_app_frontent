@@ -82,6 +82,16 @@ const classContentApiServices = baseApi.injectEndpoints({
         { type: "classContent", id: "LIST" },
       ],
     }),
+
+    // New Live Class mutation
+    addLiveClass: builder.mutation({
+      query: (data) => ({
+        url: "/live-class",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["classContent"],
+    }),
   }),
 });
 
@@ -92,6 +102,7 @@ export const {
   useGetClassContentsBySubjectChapterIdQuery,
   useUpdateClassContentMutation,
   useDeleteClassContentMutation,
+  useAddLiveClassMutation,
 } = classContentApiServices;
 
 export default classContentApiServices;
