@@ -49,8 +49,8 @@ export default function CourseCard({ course }) {
               position: "absolute",
               top: 8,
               right: 8,
-              backgroundColor: "rgba(0,0,0,0.9)",
-              color: "#11dd18",
+              backgroundColor: "rgba(0,0,0,0.6)",
+              color: "#36f23c",
               padding: "2px 8px",
               borderRadius: 12,
               fontSize: 12,
@@ -90,6 +90,7 @@ export default function CourseCard({ course }) {
           {isEnrolled || isAdmin ? (
             <Link
               href={`/course/${course.id}`}
+              // className="bg-green-700 hover:bg-green-900 text-white px-4 py-2 rounded text-sm hover:rounded-full w-full text-center hover:font-bold"
               className="
               bg-gradient-to-r from-green-900 to-green-700
               hover:from-green-700 hover:to-green-900
