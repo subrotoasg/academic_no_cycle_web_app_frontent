@@ -8,7 +8,8 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import CardActionArea from "@mui/material/CardActionArea";
-import archiveImg from "../../../public/img/archive.jpg";
+// import archiveImg from "../../../public/img/archive.jpg";
+import archiveImg from "../../../public/img/arch.jpg";
 
 export default function ArchiveCourseCard({ archiveData }) {
   const dispatch = useDispatch();
