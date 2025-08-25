@@ -166,7 +166,8 @@ const Login = () => {
                     Access Your Account
                   </h1>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Sign in with your registered email or phone number
+                    যেই ইমেইল বা ফোন নম্বর দিয়ে আপনি সাইন আপ করেছেন, সেই ইমেইল
+                    বা নম্বর ব্যবহার করে লগইন করুন।
                   </p>
                 </div>
                 <form onSubmit={handleLogin} className="space-y-3">
