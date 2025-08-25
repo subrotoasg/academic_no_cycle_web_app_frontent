@@ -49,7 +49,7 @@ export default function DashboardCourseCard({ course }) {
             <span className="mt-2 text-sm font-semibold">Locked</span>
           </div>
         )}
-        {/* 
+
         <div
           style={{
             position: "absolute",
@@ -69,7 +69,7 @@ export default function DashboardCourseCard({ course }) {
           title="Enrolled Students"
         >
           {course?._count?.student ?? 0} Enrolled
-        </div> */}
+        </div>
       </div>
 
       {/* Course Info */}
