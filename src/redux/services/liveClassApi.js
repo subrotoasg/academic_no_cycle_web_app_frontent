@@ -43,6 +43,14 @@ const liveClassApiServices = baseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypesValue.LIVE_CLASS],
     }),
+    // Delete Live Class
+    deleteLiveClass: builder.mutation({
+      query: (id) => ({
+        url: `/live-class/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: [tagTypesValue.LIVE_CLASS],
+    }),
   }),
 });
 
@@ -51,6 +59,7 @@ export const {
   useGetSingleLiveClassQuery,
   useJoinLiveClassQuery,
   useCreateLiveClassMutation,
+  useDeleteLiveClassMutation,
 } = liveClassApiServices;
 
 export default liveClassApiServices;
