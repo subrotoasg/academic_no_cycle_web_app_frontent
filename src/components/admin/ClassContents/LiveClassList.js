@@ -14,6 +14,7 @@ import {
   useGetAllLiveClassQuery,
 } from "@/redux/services/liveClassApi";
 import LiveClassTable from "./LiveClassTable";
+import LiveClassEditDialog from "./LiveClassEditDialog";
 
 const LiveClassList = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -44,7 +45,7 @@ const LiveClassList = () => {
   });
 
   const [deleteLiveClass] = useDeleteLiveClassMutation();
-  console.log(data);
+  //   console.log(data);
   const meta = data?.meta;
   const totalPages = meta?.totalCount ? Math.ceil(meta.totalCount / limit) : 1;
 
@@ -137,13 +138,13 @@ const LiveClassList = () => {
         onChange={setSelectedCourseId}
       /> */}
 
-      <div className="p-2">
+      {/* <div className="p-2">
         <SearchBar
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
           placeholder="Search by live class title..."
         />
-      </div>
+      </div> */}
 
       {(isLoading || isFetching) && (
         <div className="w-full flex justify-center py-8">
@@ -168,7 +169,7 @@ const LiveClassList = () => {
               <LiveClassTable
                 contentData={sortedData}
                 handleDelete={handleDelete}
-                // handleEditModal={handleEditModal}
+                handleEditModal={handleEditModal}
                 handleSort={handleSort}
               />
               <PaginationControls
@@ -184,12 +185,12 @@ const LiveClassList = () => {
         </>
       )}
 
-      {/* <LiveClassEditDialog
-        selectedClass={selectedLiveClass}
+      <LiveClassEditDialog
+        selectedLiveClass={selectedLiveClass}
         isOpen={isEditModalOpen}
         onOpenChange={setIsEditModalOpen}
         refetchLiveClasses={refetchLiveClasses}
-      /> */}
+      />
     </div>
   );
 };

@@ -15,7 +15,7 @@ export default function LiveClassTable({
   contentData,
   handleSort,
   handleDelete,
-  //   handleEditModal,
+  handleEditModal,
 }) {
   return (
     <div className="overflow-x-auto mb-6">
@@ -85,7 +85,7 @@ export default function LiveClassTable({
                   <Button
                     variant="ghost"
                     size="icon"
-                    // onClick={() => handleEditModal(content)}
+                    onClick={() => handleEditModal(content)}
                   >
                     <Edit className="h-4 w-4" />
                   </Button>
@@ -104,7 +104,7 @@ export default function LiveClassTable({
           ) : (
             <TableRow>
               <TableCell colSpan={4} className="h-24 text-center border">
-                No results found.
+                No live class found.
               </TableCell>
             </TableRow>
           )}
