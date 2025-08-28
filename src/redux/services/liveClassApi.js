@@ -27,8 +27,8 @@ const liveClassApiServices = baseApi.injectEndpoints({
 
     // Join Live class
     joinLiveClass: builder.query({
-      query: ({ videoId }) => ({
-        url: `/live-class/join/class/${videoId}`,
+      query: (content) => ({
+        url: `/live-class/join/class/${content.id}`,
         method: "GET",
       }),
       providesTags: [tagTypesValue.LIVE_CLASS],
@@ -68,7 +68,6 @@ export const {
   useGetAllLiveClassQuery,
   useGetSingleLiveClassQuery,
   useJoinLiveClassQuery,
-  useLazyJoinLiveClassQuery,
   useCreateLiveClassMutation,
   useUpdateLiveClassMutation,
   useDeleteLiveClassMutation,
