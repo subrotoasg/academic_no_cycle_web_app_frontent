@@ -51,14 +51,23 @@ const LiveClassList = () => {
   useEffect(() => {
     setPage(1);
   }, [searchQuery]);
+
   useEffect(() => {
     setSearchQuery("");
     setPage(1);
   }, [selectedCourseId]);
 
   const combinedClasses = useMemo(() => {
-    const live = data?.data?.liveClasses ?? [];
-    const upcoming = data?.data?.upcomingClasses ?? [];
+    const live = Array.isArray(data?.data?.liveClasses)
+      ? data.data.liveClasses
+      : Array.isArray(data?.data)
+      ? data.data
+      : [];
+
+    const upcoming = Array.isArray(data?.data?.upcomingClasses)
+      ? data.data.upcomingClasses
+      : [];
+
     return [...live, ...upcoming];
   }, [data]);
 
@@ -73,7 +82,7 @@ const LiveClassList = () => {
 
   const sortedData = useMemo(() => {
     if (!sortConfig.key) return combinedClasses;
-    return [...combinedClasses].sort((a, b) => {
+    return [...combinedClasses]?.sort((a, b) => {
       if (a[sortConfig.key] < b[sortConfig.key]) {
         return sortConfig.direction === "asc" ? -1 : 1;
       }
@@ -166,7 +175,7 @@ const LiveClassList = () => {
           ) : (
             <>
               <LiveClassTable
-                contentData={sortedData}
+                contentData={Array.isArray(sortedData) ? sortedData : []}
                 handleDelete={handleDelete}
                 handleEditModal={handleEditModal}
                 handleSort={handleSort}
