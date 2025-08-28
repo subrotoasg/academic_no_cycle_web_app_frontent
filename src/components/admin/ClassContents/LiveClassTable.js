@@ -115,26 +115,26 @@ export default function LiveClassTable({
                   })}
                 </TableCell>
                 <TableCell className="text-center border">
-                  <Button
+                  {/* <Button
                     variant="ghost"
                     size="icon"
                     onClick={() => handleJoin(content?.videoId)}
                     disabled={isFetching}
                   >
-                    {/* <Video className="w-5 h-5 text-green-600" /> */}
-                    N/A
-                  </Button>
+                    <Video className="w-5 h-5 text-green-600" />
+                  </Button> */}
+                  N/A
                 </TableCell>
 
                 <TableCell className="text-center border">
-                  <Button
+                  {/* <Button
                     variant="ghost"
                     size="icon"
                     onClick={() => handleEditModal(content)}
                   >
-                    {/* <Edit className="h-4 w-4" /> */}
-                    N/A
-                  </Button>
+                    <Edit className="h-4 w-4" />
+                  </Button> */}
+                  N/A
                 </TableCell>
                 <TableCell className="text-center border">
                   <Button
