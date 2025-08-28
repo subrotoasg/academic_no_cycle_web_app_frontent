@@ -4,6 +4,7 @@ import ClassContentUploader from "./ClassContentUploader";
 import ContentList from "./ContentList";
 import { Button } from "@/components/ui/button";
 import LiveClassSchedule from "./LiveClassSchedule";
+import LiveClassList from "./LiveClassList";
 
 function ClassContentPanel() {
   const [activeTab, setActiveTab] = useState("content");
@@ -26,11 +27,16 @@ function ClassContentPanel() {
       </div>
 
       {activeTab === "content" ? (
-        <ClassContentUploader />
+        <>
+          <ClassContentUploader />
+          <ContentList />
+        </>
       ) : (
-        <LiveClassSchedule />
+        <>
+          <LiveClassSchedule />
+          <LiveClassList />
+        </>
       )}
-      <ContentList />
     </div>
   );
 }

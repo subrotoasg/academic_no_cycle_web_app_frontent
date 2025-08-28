@@ -43,6 +43,24 @@ const liveClassApiServices = baseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypesValue.LIVE_CLASS],
     }),
+
+    // Update Live class
+    updateLiveClass: builder.mutation({
+      query: ({ id, formData }) => ({
+        url: `/live-class/${id}`,
+        method: "PATCH",
+        body: formData,
+      }),
+      invalidatesTags: [tagTypesValue.LIVE_CLASS],
+    }),
+    // Delete Live Class
+    deleteLiveClass: builder.mutation({
+      query: (id) => ({
+        url: `/live-class/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: [tagTypesValue.LIVE_CLASS],
+    }),
   }),
 });
 
@@ -50,7 +68,10 @@ export const {
   useGetAllLiveClassQuery,
   useGetSingleLiveClassQuery,
   useJoinLiveClassQuery,
+  useLazyJoinLiveClassQuery,
   useCreateLiveClassMutation,
+  useUpdateLiveClassMutation,
+  useDeleteLiveClassMutation,
 } = liveClassApiServices;
 
 export default liveClassApiServices;

@@ -11,19 +11,12 @@ import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { useSelector } from "react-redux";
 import { useGetSubjectsByCourseIdQuery } from "@/redux/services/subjectsApi";
-import {
-  useGetChaptersByCourseSubjectIdQuery,
-  useGetChaptersBySubjectIdQuery,
-} from "@/redux/services/chapterAPi";
+import { useGetChaptersByCourseSubjectIdQuery } from "@/redux/services/chapterAPi";
 import { useCreateClassContentMutation } from "@/redux/services/contentsApi";
 import { selectAllCourses } from "@/redux/Features/courseInfo";
 
 export default function ClassContentForm() {
-  // const STORAGE_ZONE_BASE = "https://fai-cg.b-cdn.net";
-  const STORAGE_ZONE_BASE = "https://iframe.mediadelivery.net/play";
   const types = [
-    // { label: "Free Teachimint", value: "Free" },
-    // { label: "Premium Teachimint", value: "Premium" },
     { label: "Free Youtube", value: "freeyt" },
     { label: "Premium Youtube", value: "premyt" },
     { label: "Bunny CDN", value: "bunny" },
@@ -64,15 +57,12 @@ export default function ClassContentForm() {
   } = useGetSubjectsByCourseIdQuery(selectedCourseId, {
     skip: !selectedCourseId,
   });
-  // console.log("sub", subjects);
+
   const { data: chapters, isLoading: isChapterLoading } =
     useGetChaptersByCourseSubjectIdQuery(selectedSubjectId, {
       skip: !selectedSubjectId,
     });
-  // const { data: chapters, isLoading: isChapterLoading } =
-  //   useGetChaptersBySubjectIdQuery(selectedSubjectId, {
-  //     skip: !selectedSubjectId,
-  //   });
+
   // console.log("chapter", chapters);
   const [createClassContent, { isLoading }] = useCreateClassContentMutation();
 
@@ -116,8 +106,6 @@ export default function ClassContentForm() {
     { label: "Omor", value: "Omor" },
   ];
 
-  // console.log(subjectOptions);
-  // console.log(chapterOptions);
   useEffect(() => {
     setValue("subject", "");
     setValue("chapter", "");
@@ -160,7 +148,6 @@ export default function ClassContentForm() {
       practiceSheet: data.practiceSheetId,
       solutionSheet: data.solutionSheetId,
       instructor: data.instructor,
-      // startTime: data.startTime,
       libraryId: videoType === "bunny" ? data.libraryId : undefined,
     };
 
@@ -254,7 +241,6 @@ export default function ClassContentForm() {
           options={instructorOptions}
           rules={{ required: "Instructor is required" }}
         />
-        {/* <InputField label="Start Time" name="startTime" type="datetime-local" /> */}
         <InputField
           label="Lecture Sheet ID"
           name="lectureSheetId"
@@ -327,7 +313,6 @@ export default function ClassContentForm() {
           )}
 
           {videoId && videoType === "bunny" && libraryId && (
-            // <div className="w-full mt-2">
             <div style={{ position: "relative", paddingTop: "56.25%" }}>
               <iframe
                 src={`https://iframe.mediadelivery.net/embed/${libraryId}/${videoId}?autoplay=true&loop=false&muted=false&preload=true&responsive=true`}
@@ -343,7 +328,6 @@ export default function ClassContentForm() {
                 allowFullScreen
               />
             </div>
-            // </div>
           )}
         </div>
         <div className="md:col-span-2">

@@ -8,7 +8,8 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import CardActionArea from "@mui/material/CardActionArea";
-import archiveImg from "../../../public/img/archive.jpg";
+// import archiveImg from "../../../public/img/archive.jpg";
+import archiveImg from "../../../public/img/arch.jpg";
 
 export default function ArchiveCourseCard({ archiveData }) {
   const dispatch = useDispatch();
@@ -35,7 +36,7 @@ export default function ArchiveCourseCard({ archiveData }) {
           <CardMedia
             component="img"
             height="180"
-            image={archiveImg.src}
+            image={archiveImg?.src}
             alt={productFullName || "Archived Course Image"}
             sx={{
               height: 160,
