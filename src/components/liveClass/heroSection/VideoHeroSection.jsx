@@ -10,7 +10,7 @@ const VideoHeroSection = ({ selectedClass }) => {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const { data: liveClassUrl } = useJoinLiveClassQuery(
-    { videoId: selectedClass?.id },
+    { id: selectedClass?.id },
     {
       skip: !isPlaying,
     }
