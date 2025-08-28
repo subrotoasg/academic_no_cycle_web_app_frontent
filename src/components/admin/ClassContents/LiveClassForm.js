@@ -1,17 +1,19 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm, FormProvider, useWatch } from "react-hook-form";
 import Dropdown from "@/components/form/Dropdown";
 import InputField from "@/components/form/InputField";
 import { CalendarClock } from "lucide-react";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
+import { Input } from "@/components/ui/input";
+import Image from "next/image";
 import { useSelector } from "react-redux";
 import { selectAllCourses } from "@/redux/Features/courseInfo";
 import { useGetSubjectsByCourseIdQuery } from "@/redux/services/subjectsApi";
 import { useGetChaptersByCourseSubjectIdQuery } from "@/redux/services/chapterAPi";
-import { useAddLiveClassMutation } from "@/redux/services/contentsApi";
+import { useCreateLiveClassMutation } from "@/redux/services/liveClassApi";
 
 export default function LiveClassForm() {
   const defaultValues = {
@@ -28,6 +30,25 @@ export default function LiveClassForm() {
 
   const selectedCourseId = useWatch({ control, name: "courseId" });
   const selectedSubjectId = useWatch({ control, name: "subject" });
+
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const fileInputRef = useRef(null);
+
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
+
+  const resetForm = () => {
+    reset(defaultValues);
+    setSelectedFile(null);
+    setImagePreview(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
 
   const courses = useSelector(selectAllCourses);
   const courseOptions =
@@ -95,34 +116,43 @@ export default function LiveClassForm() {
     setValue("chapter", "");
   }, [selectedSubjectId, setValue]);
 
-  const [addLiveClass, { isLoading }] = useAddLiveClassMutation();
+  const [createLiveClass, { isLoading }] = useCreateLiveClassMutation();
 
   const onSubmit = async (data) => {
+    const formData = new FormData();
+
     const liveClassInfo = {
       courseSubjectChapterId: data.chapter,
       title: data.title,
-      //   classNo: data.classNumber,
+      classNo: data.classNumber,
       description: data.description,
       instructor: data.instructor,
       startTime: data.startTime,
     };
 
-    try {
-      const res = await addLiveClass(liveClassInfo).unwrap();
-      // console.log(res);
-      if (res?.success) {
-        Swal.fire({
-          icon: "success",
-          title: "Live Class Scheduled Successfully",
-          timer: 1000,
-        });
-        reset(defaultValues);
-      }
-    } catch (err) {
-      toast.error(
-        err?.data?.message || "Failed to schedule live class, please try again"
-      );
+    if (selectedFile) {
+      formData.append("file", selectedFile);
     }
+    formData.append("data", JSON.stringify(liveClassInfo));
+    toast.warning(
+      "Live Class functionality is disabled for testing. Please wait for reactivation"
+    );
+    // try {
+    //   const res = await createLiveClass(formData);
+    //   // console.log(res);
+    //   if (res?.data?.success) {
+    //     Swal.fire({
+    //       icon: "success",
+    //       title: "Live Class Scheduled Successfully",
+    //       timer: 1000,
+    //     });
+    //     resetForm();
+    //   }
+    // } catch (err) {
+    //   toast.error(
+    //     err?.data?.message || "Failed to schedule live class, please try again"
+    //   );
+    // }
   };
 
   return (
@@ -159,7 +189,7 @@ export default function LiveClassForm() {
           placeholder="Enter class title"
           rules={{ required: "Class title is required" }}
         />
-        {/* <InputField
+        <InputField
           label="Class Number"
           name="classNumber"
           type="number"
@@ -169,12 +199,13 @@ export default function LiveClassForm() {
             min: { value: 1, message: "Class number must start from 1" },
           }}
           min={1}
-        /> */}
+        />
         <InputField
           label="Description"
           name="description"
           placeholder="Enter class description"
           textarea
+          required
         />
         <Dropdown
           label="Instructor"
@@ -190,12 +221,37 @@ export default function LiveClassForm() {
         />
 
         <div className="md:col-span-2">
+          <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">
+            Thumbnail (Optional)
+          </label>
+          <Input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="w-full border rounded-md h-10 dark:bg-gray-800 dark:text-white dark:border-gray-700"
+          />
+          {imagePreview && (
+            <div className="mt-3 w-28 h-28 relative border rounded-md overflow-hidden">
+              <Image
+                src={imagePreview}
+                alt="Thumbnail Preview"
+                fill
+                className="object-cover"
+              />
+            </div>
+          )}
+        </div>
+
+        <div className="md:col-span-2">
           <button
             type="submit"
-            disabled={isSubmitting /* || isLoading */}
+            disabled={isSubmitting || isLoading}
             className="w-full bg-blue-400 text-sm md:text-base text-white py-2 px-4 rounded-sm hover:rounded-3xl hover:bg-blue-700 transition flex justify-center items-center dark:bg-blue-500 dark:hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isSubmitting ? "Scheduling..." : "Schedule Live Class"}
+            {isSubmitting || isLoading
+              ? "Scheduling..."
+              : "Schedule Live Class"}
             <CalendarClock className="ms-2 h-4 md:h-5" />
           </button>
         </div>
