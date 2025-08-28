@@ -4,20 +4,25 @@ import VideoCarousel from "./videoCarousel/VideoCarousel";
 
 const LiveClassLayout = ({ data }) => {
   const { liveClasses = [], upcomingClasses = [] } = data?.data || {};
-  const [selectedClass, setSelectedClass] = useState(liveClasses?.[0]);
   const liveAndUpcomming = [...liveClasses, ...upcomingClasses];
+  const [selectedClass, setSelectedClass] = useState(liveClasses?.[0]);
   useEffect(() => {
     if (liveClasses.length > 0 && !selectedClass) {
-      setSelectedClass(liveClasses[0]);
+      setSelectedClass(liveClasses?.[0]);
     }
   }, [liveClasses, selectedClass]);
+
   const filteredLiveAndUpcomming = liveAndUpcomming?.filter(
     (cls) => cls.id !== selectedClass?.id
   );
+
   return (
-    <div className="">
-      {liveClasses?.length > 0 && (
-        <VideoHeroSection selectedClass={selectedClass} />
+    <div>
+      {selectedClass && (
+        <VideoHeroSection
+          key={selectedClass?.id}
+          selectedClass={selectedClass}
+        />
       )}
 
       {filteredLiveAndUpcomming?.length > 0 && (

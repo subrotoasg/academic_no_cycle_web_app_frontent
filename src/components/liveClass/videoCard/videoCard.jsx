@@ -10,6 +10,17 @@ const VideoCard = ({ video, setSelectedClass, setIsPlaying }) => {
   const handleVideoCardClicked = (video) => {
     setSelectedClass(() => video);
   };
+  const getThumbnail = (cls) => {
+    if (cls?.status === "live") return "/live_class.jpg";
+
+    if (cls?.thumbnail && cls.thumbnail.trim() !== "") return cls.thumbnail;
+
+    if (cls?.thumbnailPath && cls.thumbnailPath.trim() !== "")
+      return cls.thumbnailPath;
+
+    return "/scheduled.jpg";
+  };
+
   return (
     <div
       onClick={() => handleVideoCardClicked(video)}
@@ -20,15 +31,13 @@ const VideoCard = ({ video, setSelectedClass, setIsPlaying }) => {
           className="w-full h-48 bg-gray-800 flex items-center justify-center"
           style={{
             // backgroundImage: `url(${
-            //   video?.thumbnailPath ? video?.thumbnailPath : "/live_class.jpg"
+            //   video?.thumbnailPath
+            //     ? video?.thumbnailPath
+            //     : video?.status === "live"
+            //     ? "/live_class.jpg"
+            //     : "/scheduled.jpg"
             // })`,
-            backgroundImage: `url(${
-              video?.thumbnailPath
-                ? video?.thumbnailPath
-                : video?.status === "live"
-                ? "/live_class.jpg"
-                : "/scheduled.jpg"
-            })`,
+            backgroundImage: `url(${getThumbnail(video)})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
@@ -62,7 +71,7 @@ const VideoCard = ({ video, setSelectedClass, setIsPlaying }) => {
       <div className="p-5 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-100">
         {/* Video Info */}
         <div>
-          <h3 className="font-semibold text-gray-900 text-lg mb-2 line-clamp-2 leading-tight">
+          <h3 className="font-semibold text-gray-900 text-sm mb-2 line-clamp-2 leading-tight">
             {video?.title || "Untitled Video"}
           </h3>
           <p className="text-gray-600 text-sm line-clamp-2 mb-3">
@@ -70,14 +79,14 @@ const VideoCard = ({ video, setSelectedClass, setIsPlaying }) => {
           </p>
 
           <div className="flex items-center">
-            <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center shrink-0 mr-3">
+            {/* <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center shrink-0 mr-3">
               <span className="font-medium text-sm">
                 {video?.instructor?.charAt(0)?.toUpperCase() || "A"}
               </span>
-            </div>
+            </div> */}
             <div className="min-w-0">
               <p className="text-sm font-bold text-gray-900 truncate">
-                {video?.instructor || "Anonymous Instructor"}
+                শিক্ষকঃ {video?.instructor || "Anonymous Instructor"}
               </p>
               <p className="text-xs text-gray-500 flex items-center mt-1">
                 <svg
