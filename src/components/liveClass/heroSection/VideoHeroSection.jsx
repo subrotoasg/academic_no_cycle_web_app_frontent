@@ -8,13 +8,15 @@ import VideoPlayButtonAnimation from "../videoAnimation/VideoPlayButtonAnimation
 
 const VideoHeroSection = ({ selectedClass }) => {
   const [isPlaying, setIsPlaying] = useState(false);
+
   const { data: liveClassUrl } = useJoinLiveClassQuery(
-    { videoId: selectedClass?.videoId },
+    { videoId: selectedClass?.id },
     {
       skip: !isPlaying,
     }
   );
   const joinUrl = liveClassUrl?.data?.isLiveUrl;
+  const isLiveClassStart = liveClassUrl?.data?.isLive;
 
   if (joinUrl) {
     return window.location.replace(joinUrl);
@@ -27,6 +29,16 @@ const VideoHeroSection = ({ selectedClass }) => {
   const handleVideoEnroll = (url) => {
     return window.open(url, "_blank");
   };
+  const getThumbnail = (cls) => {
+    if (cls?.status === "live") return "/live_class.jpg";
+
+    if (cls?.thumbnail && cls.thumbnail.trim() !== "") return cls.thumbnail;
+
+    if (cls?.thumbnailPath && cls.thumbnailPath.trim() !== "")
+      return cls.thumbnailPath;
+
+    return "/scheduled.jpg";
+  };
   return (
     <div className="py-8 px-4">
       <div className="container mx-auto">
@@ -38,15 +50,7 @@ const VideoHeroSection = ({ selectedClass }) => {
                 <>
                   <div
                     style={{
-                      backgroundImage: `url(${
-                        selectedClass?.thumbnailPath
-                          ? selectedClass?.thumbnailPath
-                          : selectedClass?.status === "live"
-                          ? "/live_class.jpg"
-                          : "/scheduled.jpg"
-                      })`,
-                      // backgroundSize: "cover",
-                      // backgroundPosition: "center",
+                      backgroundImage: `url(${getThumbnail(selectedClass)})`,
                       backgroundSize: "contain",
                       backgroundRepeat: "no-repeat",
                     }}
@@ -67,10 +71,11 @@ const VideoHeroSection = ({ selectedClass }) => {
                           </div>
                           <div className="ml-2 sm:ml-3">
                             <p className="font-semibold text-white text-sm sm:text-base">
-                              {selectedClass?.instructor}
+                              শিক্ষকঃ {selectedClass?.instructor}
                             </p>
                             <p className="text-xs sm:text-sm text-gray-300">
-                              {selectedClass?.courseTitle || "No Course"}
+                              {`${selectedClass?.courseSubject?.subjectName} (${selectedClass?.courseSubjectChapter?.chapterName})` ||
+                                "No Course"}
                             </p>
                           </div>
                           {selectedClass?.status === "live" ? (
