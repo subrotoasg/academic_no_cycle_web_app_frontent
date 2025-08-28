@@ -8,7 +8,6 @@ import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
 import { selectAllCourses } from "@/redux/Features/courseInfo";
 import CourseSelect from "@/components/form/CourseSelect";
-// import LiveClassEditDialog from "./LiveClassEditDialog";
 import {
   useDeleteLiveClassMutation,
   useGetAllLiveClassQuery,
@@ -45,7 +44,7 @@ const LiveClassList = () => {
   });
 
   const [deleteLiveClass] = useDeleteLiveClassMutation();
-  //   console.log(data);
+  console.log(data);
   const meta = data?.meta;
   const totalPages = meta?.totalCount ? Math.ceil(meta.totalCount / limit) : 1;
 
@@ -128,7 +127,7 @@ const LiveClassList = () => {
         Live Classes
       </h2>
       <p className="text-xs md:text-sm text-muted-foreground text-center">
-        View and manage all scheduled & past live classes
+        View and manage all scheduled live classes
       </p>
 
       {/* <CourseSelect

@@ -68,6 +68,7 @@ export const {
   useGetAllLiveClassQuery,
   useGetSingleLiveClassQuery,
   useJoinLiveClassQuery,
+  useLazyJoinLiveClassQuery,
   useCreateLiveClassMutation,
   useUpdateLiveClassMutation,
   useDeleteLiveClassMutation,

@@ -10,6 +10,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useLazyJoinLiveClassQuery } from "@/redux/services/liveClassApi";
+import { toast } from "sonner";
 
 export default function LiveClassTable({
   contentData,
@@ -17,6 +19,28 @@ export default function LiveClassTable({
   handleDelete,
   handleEditModal,
 }) {
+  console.log(contentData);
+  const [triggerJoinClass, { isFetching }] = useLazyJoinLiveClassQuery();
+  const handleJoin = async (videoId) => {
+    try {
+      const result = await triggerJoinClass({ videoId }).unwrap();
+      console.log(result);
+
+      if (result?.success) {
+        toast.success("Successfully joined the class");
+        // if you want to redirect when success includes a joinUrl
+        if (result?.joinUrl) {
+          window.open(result.joinUrl, "_blank");
+        }
+      } else {
+        toast.error("Failed to join class. Please try again.");
+      }
+    } catch (err) {
+      console.error("Join failed:", err);
+      toast.error("Failed to join class. Please try again.");
+    }
+  };
+
   return (
     <div className="overflow-x-auto mb-6">
       <Table className="min-w-full border border-gray-100 text-center">
@@ -39,6 +63,9 @@ export default function LiveClassTable({
             </TableHead>
             <TableHead className="text-center text-sm md:text-base border">
               Status
+            </TableHead>
+            <TableHead className="text-center text-sm md:text-base border">
+              Time
             </TableHead>
             <TableHead className="text-center text-sm md:text-base border">
               Join
@@ -72,10 +99,21 @@ export default function LiveClassTable({
                   {content?.status}
                 </TableCell>
                 <TableCell className="text-center border">
+                  {new Date(content?.startTime).toLocaleString("en-GB", {
+                    day: "2-digit",
+                    month: "long",
+                    year: "numeric",
+                    hour: "numeric",
+                    minute: "2-digit",
+                    hour12: true,
+                  })}
+                </TableCell>
+                <TableCell className="text-center border">
                   <Button
                     variant="ghost"
                     size="icon"
-                    // onClick={() => handleRedirect(content)}
+                    onClick={() => handleJoin(content?.videoId)}
+                    disabled={isFetching}
                   >
                     <Video className="w-5 h-5 text-green-600" />
                   </Button>
