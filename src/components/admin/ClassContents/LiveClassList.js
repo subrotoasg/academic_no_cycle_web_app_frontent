@@ -44,7 +44,7 @@ const LiveClassList = () => {
   });
 
   const [deleteLiveClass] = useDeleteLiveClassMutation();
-  console.log(data);
+  // console.log(data);
   const meta = data?.meta;
   const totalPages = meta?.totalCount ? Math.ceil(meta.totalCount / limit) : 1;
 

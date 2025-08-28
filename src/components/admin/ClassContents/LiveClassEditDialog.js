@@ -28,7 +28,7 @@ export default function LiveClassEditDialog({
   selectedLiveClass,
   refetchLiveClasses,
 }) {
-  console.log(selectedLiveClass);
+  // console.log(selectedLiveClass);
   const defaultValues = {
     courseId: "",
     subject: "",
@@ -169,7 +169,7 @@ export default function LiveClassEditDialog({
         id: selectedLiveClass.id,
         formData,
       }).unwrap();
-      console.log(res);
+      // console.log(res);
       if (res?.success) {
         Swal.fire({
           icon: "success",

@@ -134,23 +134,25 @@ export default function LiveClassForm() {
       formData.append("file", selectedFile);
     }
     formData.append("data", JSON.stringify(liveClassInfo));
-
-    try {
-      const res = await createLiveClass(formData);
-      // console.log(res);
-      if (res?.data?.success) {
-        Swal.fire({
-          icon: "success",
-          title: "Live Class Scheduled Successfully",
-          timer: 1000,
-        });
-        resetForm();
-      }
-    } catch (err) {
-      toast.error(
-        err?.data?.message || "Failed to schedule live class, please try again"
-      );
-    }
+    toast.warning(
+      "Live Class functionality is disabled for testing. Please wait for reactivation"
+    );
+    // try {
+    //   const res = await createLiveClass(formData);
+    //   // console.log(res);
+    //   if (res?.data?.success) {
+    //     Swal.fire({
+    //       icon: "success",
+    //       title: "Live Class Scheduled Successfully",
+    //       timer: 1000,
+    //     });
+    //     resetForm();
+    //   }
+    // } catch (err) {
+    //   toast.error(
+    //     err?.data?.message || "Failed to schedule live class, please try again"
+    //   );
+    // }
   };
 
   return (

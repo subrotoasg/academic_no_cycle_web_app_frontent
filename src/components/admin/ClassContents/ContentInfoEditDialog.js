@@ -16,7 +16,11 @@ import Dropdown from "@/components/form/Dropdown";
 import InputField from "@/components/form/InputField";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
+import { useSelector } from "react-redux";
 import { useUpdateClassContentMutation } from "@/redux/services/contentsApi";
+import { useGetSubjectsByCourseIdQuery } from "@/redux/services/subjectsApi";
+import { useGetChaptersByCourseSubjectIdQuery } from "@/redux/services/chapterAPi";
+import { selectAllCourses } from "@/redux/Features/courseInfo";
 
 export default function ContentInfoEditDialog({
   isOpen,
@@ -25,11 +29,7 @@ export default function ContentInfoEditDialog({
   refetchClassContents,
 }) {
   // console.log(selectedContent);
-  // const STORAGE_ZONE_BASE = "https://fai-cg.b-cdn.net";
-  const STORAGE_ZONE_BASE = "https://iframe.mediadelivery.net/play";
   const types = [
-    // { label: "Free Teachimint", value: "Free" },
-    // { label: "Premium Teachimint", value: "Premium" },
     { label: "Free Youtube", value: "freeyt" },
     { label: "Premium Youtube", value: "premyt" },
     { label: "Bunny CDN", value: "bunny" },
@@ -59,7 +59,8 @@ export default function ContentInfoEditDialog({
 
   const methods = useForm();
 
-  const { reset, handleSubmit, control } = methods;
+  // set value
+  const { reset, handleSubmit, control, setValue } = methods;
 
   const videoType = useWatch({ control, name: "type" });
   const videoId = useWatch({ control, name: "videoId" });
@@ -69,18 +70,56 @@ export default function ContentInfoEditDialog({
   const fileInputRef = useRef(null);
   const [updateClassContent, { isLoading }] = useUpdateClassContentMutation();
 
+  const selectedCourseId = useWatch({ control, name: "courseId" });
+  const selectedSubjectId = useWatch({ control, name: "subject" });
+
+  // Courses List
+  const courses = useSelector(selectAllCourses);
+  const courseOptions =
+    courses?.data?.map((course) => ({
+      label: course.productFullName,
+      value: course.id,
+    })) || [];
+
+  // Subjects List
+  const { data: subjects, isLoading: isSubjectLoading } =
+    useGetSubjectsByCourseIdQuery(selectedCourseId, {
+      skip: !selectedCourseId,
+    });
+
+  const subjectOptions = isSubjectLoading
+    ? [{ label: "Loading subjects...", value: "" }]
+    : subjects?.data?.length
+    ? subjects.data.map((sub) => ({
+        label: sub.subject.title,
+        value: sub.id,
+      }))
+    : [{ label: "No subjects available", value: "" }];
+
+  // Chapters List
+  const { data: chapters, isLoading: isChapterLoading } =
+    useGetChaptersByCourseSubjectIdQuery(selectedSubjectId, {
+      skip: !selectedSubjectId,
+    });
+
+  const chapterOptions = isChapterLoading
+    ? [{ label: "Loading chapters...", value: "" }]
+    : chapters?.data?.length
+    ? chapters.data.map((ch) => ({
+        label: ch.chapter.chapterName,
+        value: ch.id,
+      }))
+    : [{ label: "No chapters available", value: "" }];
+
   useEffect(() => {
     if (selectedContent) {
       reset({
-        courseTitle:
-          selectedContent?.courseSubjectChapter?.courseSubject?.course
-            ?.productName || "",
+        courseId:
+          selectedContent?.courseSubjectChapter?.courseSubject?.course?.id ||
+          "",
+        subject: selectedContent?.courseSubjectChapter?.courseSubject?.id || "",
+        chapter: selectedContent?.courseSubjectChapter?.id || "",
         type: selectedContent?.hostingType || "",
-        subject:
-          selectedContent?.courseSubjectChapter?.courseSubject?.subject
-            ?.title || "",
-        chapter:
-          selectedContent?.courseSubjectChapter?.chapter?.chapterName || "",
         title: selectedContent?.classTitle || "",
         classNumber: selectedContent?.classNo || "",
         description: selectedContent?.description || "",
@@ -90,7 +129,6 @@ export default function ContentInfoEditDialog({
         videoId: selectedContent?.videoUrl || "",
         libraryId: selectedContent?.libraryId || "",
         instructor: selectedContent?.instructor || "",
-        // startTime: selectedContent?.startTime,
       });
 
       setThumbnailPreview(selectedContent?.thumbneil || null);
@@ -111,6 +149,7 @@ export default function ContentInfoEditDialog({
     const formData = new FormData();
 
     const contentInfo = {
+      courseSubjectChapterId: data.chapter,
       hostingType: data.type,
       classTitle: data.title,
       classNo: data.classNumber,
@@ -121,7 +160,6 @@ export default function ContentInfoEditDialog({
       practiceSheet: data.practiceSheetId,
       solutionSheet: data.solutionSheetId,
       instructor: data.instructor,
-      // startTime: data.startTime,
     };
 
     formData.append("data", JSON.stringify(contentInfo));
@@ -148,10 +186,6 @@ export default function ContentInfoEditDialog({
       toast.error(error?.data?.message || "Failed to Update Class Content");
     }
   };
-  const getBunnyVideoUrl = (videoId, libraryId) => {
-    // if (!videoId || !libraryId) return "";
-    return `${STORAGE_ZONE_BASE}/${libraryId}/${videoId}`;
-  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -172,11 +206,28 @@ export default function ContentInfoEditDialog({
             onSubmit={handleSubmit(handleFormSubmit)}
             className="grid grid-cols-1 md:grid-cols-2 gap-2 p-4 rounded-lg"
           >
-            <InputField label="Course Title" name="courseTitle" readOnly />
-
-            <InputField label="Subject Title" name="subject" readOnly />
-
-            <InputField label="Chapter Name" name="chapter" readOnly />
+            <Dropdown
+              label="Select Course"
+              name="courseId"
+              options={courseOptions}
+              rules={{ required: "Course is required" }}
+            />
+            {selectedCourseId && (
+              <Dropdown
+                label="Select Subject"
+                name="subject"
+                options={subjectOptions}
+                rules={{ required: "Subject is required" }}
+              />
+            )}
+            {selectedSubjectId && (
+              <Dropdown
+                label="Select Chapter"
+                name="chapter"
+                options={chapterOptions}
+                rules={{ required: "Chapter is required" }}
+              />
+            )}
 
             <Dropdown
               label="Video Hosting Type"
@@ -219,7 +270,7 @@ export default function ContentInfoEditDialog({
               options={instructorOptions}
               rules={{ required: "Instructor is required" }}
             />
-            {/* <InputField label="Start Time" name="startTime" type="datetime-local" /> */}
+
             <InputField
               label="Lecture Sheet ID"
               name="lectureSheetId"
@@ -288,20 +339,6 @@ export default function ContentInfoEditDialog({
                   />
                 </div>
               )}
-              {/* {videoId && videoType === "vimeo" && (
-                <div className="w-full mt-2">
-                  <iframe
-                    src={videoId}
-                    title="Vimeo video player"
-                    width="100%"
-                    height="450"
-                    frameBorder="0"
-                    allow="autoplay; fullscreen; picture-in-picture"
-                    allowFullScreen
-                    className="rounded-lg shadow-md"
-                  ></iframe>
-                </div>
-              )} */}
             </div>
 
             {/* Thumbnail Upload */}
@@ -331,7 +368,6 @@ export default function ContentInfoEditDialog({
               />
             </div>
 
-            {/* Buttons */}
             <DialogFooter className="md:col-span-2 flex justify-between pt-4">
               <Button
                 type="submit"

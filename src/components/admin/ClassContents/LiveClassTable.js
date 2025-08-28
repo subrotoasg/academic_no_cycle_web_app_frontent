@@ -19,12 +19,12 @@ export default function LiveClassTable({
   handleDelete,
   handleEditModal,
 }) {
-  console.log(contentData);
+  // console.log(contentData);
   const [triggerJoinClass, { isFetching }] = useLazyJoinLiveClassQuery();
   const handleJoin = async (videoId) => {
     try {
       const result = await triggerJoinClass({ videoId }).unwrap();
-      console.log(result);
+      // console.log(result);
 
       if (result?.success) {
         toast.success("Successfully joined the class");
@@ -55,11 +55,14 @@ export default function LiveClassTable({
             <TableHead className="text-center text-sm md:text-base border">
               Class Title
             </TableHead>
-            <TableHead className="text-center text-sm md:text-base border">
+            {/* <TableHead className="text-center text-sm md:text-base border">
               Class No.
               <Button variant="ghost" onClick={() => handleSort("classNo")}>
                 <ArrowUpDown />
               </Button>
+            </TableHead> */}
+            <TableHead className="text-center text-sm md:text-base border">
+              Instructor
             </TableHead>
             <TableHead className="text-center text-sm md:text-base border">
               Status
@@ -92,8 +95,11 @@ export default function LiveClassTable({
                 <TableCell className="text-center border">
                   {content?.title}
                 </TableCell>
-                <TableCell className="text-center border">
+                {/* <TableCell className="text-center border">
                   {content?.classNo || "N/A"}
+                </TableCell> */}
+                <TableCell className="text-center border">
+                  {content?.instructor}
                 </TableCell>
                 <TableCell className="text-center border">
                   {content?.status}
@@ -115,7 +121,8 @@ export default function LiveClassTable({
                     onClick={() => handleJoin(content?.videoId)}
                     disabled={isFetching}
                   >
-                    <Video className="w-5 h-5 text-green-600" />
+                    {/* <Video className="w-5 h-5 text-green-600" /> */}
+                    N/A
                   </Button>
                 </TableCell>
 
@@ -125,7 +132,8 @@ export default function LiveClassTable({
                     size="icon"
                     onClick={() => handleEditModal(content)}
                   >
-                    <Edit className="h-4 w-4" />
+                    {/* <Edit className="h-4 w-4" /> */}
+                    N/A
                   </Button>
                 </TableCell>
                 <TableCell className="text-center border">
