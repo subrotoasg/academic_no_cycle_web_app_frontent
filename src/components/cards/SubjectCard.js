@@ -31,7 +31,6 @@ const SubjectCard = ({ courseSubject }) => {
     >
       <Link
         href={{
-          // pathname: `/subject/${courseSubject?.id}`,
           pathname: `/course/${courseId}/subject/${courseSubject?.id}`,
           query: { title },
         }}

@@ -19,11 +19,11 @@ function ClassCard({ content }) {
   return (
     <Link
       href={{
-        // pathname: `/content/${id}`,
         pathname: `/course/${courseId}/content/${id}`,
         query: { title: classTitle },
       }}
-      className="block w-full md:w-72 rounded-lg shadow-lg overflow-hidden bg-indigo-100 dark:bg-gray-900"
+      // className="block w-full md:w-72 rounded-lg shadow-lg overflow-hidden bg-indigo-100 dark:bg-gray-900"
+      className="block md:w-72 mx-auto rounded-lg shadow-lg overflow-hidden bg-indigo-100 dark:bg-gray-900"
     >
       {/* Thumbnail */}
       <div className="hover:bg-indigo-300 dark:hover:bg-indigo-600">
@@ -35,7 +35,7 @@ function ClassCard({ content }) {
             className="object-cover"
           />
         </div>
-        {/* Class Title */}
+
         <div className="p-2">
           <h3 className="text-lg font-semibold text-gray-800 dark:text-white text-center">
             Class {classNo} : {classTitle}
@@ -45,12 +45,10 @@ function ClassCard({ content }) {
         {/* Content Info */}
         {(lectureSheet || practiceSheet || solutionSheet) && (
           <div className="p-3 md:p-4">
-            {/* Label */}
             <p className="text-sm md:text-base text-gray-600 dark:text-gray-300 mb-3 font-medium">
-              Available Materials:
+              Lesson Materials:
             </p>
 
-            {/* Tags */}
             <div className="flex flex-wrap gap-2">
               {lectureSheet && (
                 <span className="px-3 py-1 text-xs md:text-sm font-semibold text-blue-800 bg-blue-100 dark:bg-blue-900 dark:text-blue-200 rounded-full shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer">
