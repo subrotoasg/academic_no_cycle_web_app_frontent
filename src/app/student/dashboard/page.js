@@ -83,6 +83,9 @@ function StudentDashboard() {
         isLiveClassLoading &&
         EnrolledCourses.length === 0 && (
           <>
+            <h1 className="text-2xl md:text-3xl font-bold mb-6 text-center">
+              Enrolled Courses
+            </h1>
             <div className="text-center py-10 text-lg font-medium text-gray-500">
               আপনি এখনও কোনো কোর্স অ্যাক্সেস করেননি। <br />
               <p className="text-blue-600 font-semibold cursor-pointer hover:underline my-3">
