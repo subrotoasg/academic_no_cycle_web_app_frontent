@@ -64,7 +64,7 @@ export default function CourseSubCategoryPill({ subCategory }) {
   };
 
   return (
-    <div style={{ display: "flex", justifyContent: "center", margin: "8px 0" }}>
+    <div style={{ display: "flex", justifyContent: "center", margin: "4px 0" }}>
       <Chip
         icon={icon}
         label={label}
@@ -84,8 +84,8 @@ export default function CourseSubCategoryPill({ subCategory }) {
             transform: "scale(1.05)",
             boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
           },
-          paddingLeft: 6,
-          paddingRight: 6,
+          paddingLeft: 4,
+          paddingRight: 4,
           display: "inline-flex",
           alignItems: "center",
           width: "auto",
@@ -94,7 +94,7 @@ export default function CourseSubCategoryPill({ subCategory }) {
             color: textColor,
             fontSize: 18,
             marginLeft: -2,
-            marginRight: 4,
+            marginRight: 2,
           },
           "& .MuiChip-label": {
             paddingLeft: 0,

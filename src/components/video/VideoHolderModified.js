@@ -367,16 +367,6 @@ const PDFViewer = ({ id, title }) => {
         src={getDrivePreviewURL(id)}
         title={title}
       />
-      <div className="text-center mt-4">
-        <motion.button
-          onClick={() => window.open(getDriveViewURL(id), "_blank")}
-          className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-md text-sm font-semibold transition shadow-lg"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          Open in New Tab
-        </motion.button>
-      </div>
     </motion.div>
   );
 };

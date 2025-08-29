@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import { currentUser } from "@/redux/Features/authentication";
 import CourseSubCategoryPill from "../admin/utilities/CourseSubjectCategoryPill";
 import { Tooltip } from "@mui/material";
+import CourseEnrolledPill from "../admin/utilities/CourseEnrolledPill";
 
 export default function CourseCard({ course }) {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
@@ -32,7 +33,7 @@ export default function CourseCard({ course }) {
     <>
       {" "}
       <Card
-        sx={{ maxWidth: 345, height: 350 }}
+        sx={{ maxWidth: 345, height: 380 }}
         className="transition-transform duration-400 hover:shadow-lg hover:scale-[1.01] rounded-4xl flex flex-col justify-between"
         onClick={handleCardClick}
       >
@@ -43,7 +44,7 @@ export default function CourseCard({ course }) {
             title={course?.productFullName || "Course Image"}
             className="object-contain"
           />
-
+          {/* 
           <div
             style={{
               position: "absolute",
@@ -63,7 +64,7 @@ export default function CourseCard({ course }) {
             title="Enrolled Students"
           >
             {course?._count?.student ?? 0} Enrolled
-          </div>
+          </div> */}
         </div>
         <CardContent className="flex-1 text-xl">
           <Tooltip title={course?.productFullName || ""} arrow>
@@ -83,7 +84,19 @@ export default function CourseCard({ course }) {
               {course?.productFullName}
             </Typography>
           </Tooltip>
-          <CourseSubCategoryPill subCategory={course?.SubCategory} />
+
+          <div
+            style={{
+              display: "flex",
+              gap: "4px",
+              justifyContent: "center",
+              marginTop: 1,
+              alignItems: "center",
+            }}
+          >
+            <CourseSubCategoryPill subCategory={course?.SubCategory} />
+            <CourseEnrolledPill count={course?._count?.student} />
+          </div>
         </CardContent>
 
         <CardActions className="flex justify-center items-center mb-3">
