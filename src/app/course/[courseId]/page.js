@@ -31,7 +31,7 @@ function CourseContent() {
     <div className="container mx-auto mt-20 md:mt-28 p-1">
       <div className="text-center mb-6">
         {hasSubjects ? (
-          <h3 className="text-2xl md:text-5xl font-bold text-center text-blue-700 mb-8">
+          <h3 className="text-2xl md:text-5xl font-bold text-center text-blue-500 mb-8">
             {courseTitle}
           </h3>
         ) : (

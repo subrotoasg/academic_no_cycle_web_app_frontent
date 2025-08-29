@@ -24,6 +24,7 @@ const LiveClassList = () => {
 
   const [selectedLiveClass, setSelectedLiveClass] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [joinClassUrl, setJoinClassUrl] = useState(null);
 
   useEffect(() => {
     if (courses?.data?.length > 0 && !selectedCourseId) {

@@ -5,11 +5,12 @@ import { useJoinLiveClassQuery } from "@/redux/services/liveClassApi";
 import { Lock, Play } from "lucide-react";
 import Image from "next/image";
 import VideoPlayButtonAnimation from "../videoAnimation/VideoPlayButtonAnimation";
+import ProtectedIframe from "../protectIframe/ProtectedIframe";
 
 const VideoHeroSection = ({ selectedClass }) => {
   const [isPlaying, setIsPlaying] = useState(false);
 
-  const { data: liveClassUrl } = useJoinLiveClassQuery(
+  const { data: liveClassUrl, isLoading } = useJoinLiveClassQuery(
     { id: selectedClass?.id },
     {
       skip: !isPlaying,
@@ -18,9 +19,6 @@ const VideoHeroSection = ({ selectedClass }) => {
   const joinUrl = liveClassUrl?.data?.isLiveUrl;
   const isLiveClassStart = liveClassUrl?.data?.isLive;
 
-  if (joinUrl) {
-    return window.location.replace(joinUrl);
-  }
   const formatTime = (dateString) => {
     const date = new Date(dateString);
     return format(date, "hh:mm a", { locale: bn });
@@ -29,6 +27,7 @@ const VideoHeroSection = ({ selectedClass }) => {
   const handleVideoEnroll = (url) => {
     return window.open(url, "_blank");
   };
+
   const getThumbnail = (cls) => {
     if (cls?.status === "live") return "/live_class.jpg";
 
@@ -130,14 +129,18 @@ const VideoHeroSection = ({ selectedClass }) => {
                 </>
               ) : (
                 <>
-                  <div className="relative w-full aspect-video bg-black">
-                    <div className="absolute inset-0 flex flex-col items-center justify-center space-y-4">
-                      <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
-                      <p className="text-lg md:text-xl font-semibold text-white text-center">
-                        Joining class, please wait...
-                      </p>
+                  {!isLoading && joinUrl ? (
+                    <ProtectedIframe joinUrl={joinUrl} />
+                  ) : (
+                    <div className="relative w-full aspect-video bg-black">
+                      <div className="absolute inset-0 flex flex-col items-center justify-center space-y-4">
+                        <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+                        <p className="text-lg md:text-xl font-semibold text-white text-center">
+                          Joining class, please wait...
+                        </p>
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </>
               )}
             </div>
