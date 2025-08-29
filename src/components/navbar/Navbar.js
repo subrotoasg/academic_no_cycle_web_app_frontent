@@ -19,8 +19,7 @@ import { GoSun } from "react-icons/go";
 import { GrSchedule } from "react-icons/gr";
 import { Menu, X } from "lucide-react";
 import { currentUser, removeUser } from "@/redux/Features/authentication";
-import { SiGoogleclassroom } from "react-icons/si";
-import { BiSolidDashboard } from "react-icons/bi";
+import { ShieldUser } from "lucide-react";
 import { useLogOutMutation } from "@/redux/services/authApi";
 import { clearCourses } from "@/redux/Features/courseInfo";
 import Swal from "sweetalert2";
@@ -164,7 +163,7 @@ export default function Navbar() {
           <li>
             <NavItem
               href="/admin"
-              icon={<BiSolidDashboard />}
+              icon={<ShieldUser />}
               label="Admin Dashboard"
               isMobile={isMobile}
             />
@@ -243,8 +242,20 @@ export default function Navbar() {
               ))}
           </Button> */}
           {/* Desktop only Login/Logout */}
-          <div className="hidden md:block">
-            {" "}
+
+          <div className="hidden md:flex items-center gap-3">
+            {user && (
+              <div className="flex flex-col">
+                <span className="text-sm font-medium text-foreground">
+                  {user?.email}
+                </span>
+                {user?.role === "admin" && (
+                  <span className="text-xs text-muted-foreground font-bold">
+                    Admin
+                  </span>
+                )}
+              </div>
+            )}
             {user ? (
               <Button
                 onClick={handleLogout}
@@ -293,6 +304,18 @@ export default function Navbar() {
         }`}
       >
         <div className="px-4 py-3 bg-background">
+          {user && (
+            <div className="mb-3 px-3 py-2 rounded-md bg-accent text-accent-foreground text-sm font-medium">
+              <div className="flex flex-col">
+                <span>{user?.email}</span>
+                {user?.role === "admin" && (
+                  <span className="text-xs text-muted-foreground font-bold">
+                    Admin
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
           <NavLinks isMobile={true} />
         </div>
       </div>

@@ -14,7 +14,6 @@ function ChapterCard({ chapter }) {
   return (
     <Link
       href={{
-        // pathname: `/classes/${chapter?.id}`,
         pathname: `/course/${courseId}/classes/${chapter?.id}`,
         query: {
           title: chapter?.chapter?.chapterName,
