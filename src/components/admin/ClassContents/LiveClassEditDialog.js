@@ -34,7 +34,6 @@ export default function LiveClassEditDialog({
     subject: "",
     chapter: "",
     title: "",
-    classNumber: "",
     description: "",
     instructor: "",
     startTime: "",
@@ -109,7 +108,6 @@ export default function LiveClassEditDialog({
 
   const [updateLiveClass, { isLoading }] = useUpdateLiveClassMutation();
 
-  // Prefill form when selectedLiveClass changes
   useEffect(() => {
     if (selectedLiveClass) {
       reset({
@@ -117,8 +115,7 @@ export default function LiveClassEditDialog({
         classNumber: selectedLiveClass.classNo,
         description: selectedLiveClass.description,
         instructor: selectedLiveClass.instructor,
-        // startTime: selectedLiveClass.startTime?.slice(0, 16) || "",
-        startTime: selectedLiveClass.startTime || "",
+        startTime: selectedLiveClass.startTime?.slice(0, 16) || "",
       });
       setImagePreview(selectedLiveClass.thumbnail || null);
       setSelectedFile(null);
@@ -143,17 +140,10 @@ export default function LiveClassEditDialog({
   };
 
   const onSubmit = async (data) => {
-    let formattedStartTime = data.startTime;
-
-    // If startTime is in "YYYY-MM-DDTHH:mm" → convert to full ISO
-    if (formattedStartTime && formattedStartTime.length === 16) {
-      formattedStartTime = new Date(formattedStartTime).toISOString();
-    }
     const formData = new FormData();
     const liveClassInfo = {
       courseSubjectChapterId: data.chapter,
       title: data.title,
-      classNo: data.classNumber,
       description: data.description,
       instructor: data.instructor,
       startTime: data.startTime,
@@ -229,16 +219,7 @@ export default function LiveClassEditDialog({
               placeholder="Enter class title"
               rules={{ required: "Class title is required" }}
             />
-            <InputField
-              label="Class Number"
-              name="classNumber"
-              type="number"
-              placeholder="Enter the class number"
-              rules={{
-                required: "Class number is required.",
-                min: { value: 1, message: "Class number must start from 1" },
-              }}
-            />
+
             <InputField
               label="Description"
               name="description"

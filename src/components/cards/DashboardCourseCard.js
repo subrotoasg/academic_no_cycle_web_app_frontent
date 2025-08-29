@@ -10,6 +10,7 @@ import LockIcon from "@mui/icons-material/Lock";
 import { useRouter } from "next/navigation";
 import { Tooltip } from "@mui/material";
 import CourseSubCategoryPill from "../admin/utilities/CourseSubjectCategoryPill";
+import CourseEnrolledPill from "../admin/utilities/CourseEnrolledPill";
 
 export default function DashboardCourseCard({ course }) {
   const router = useRouter();
@@ -48,7 +49,7 @@ export default function DashboardCourseCard({ course }) {
           </div>
         )}
 
-        <div
+        {/* <div
           style={{
             position: "absolute",
             top: 8,
@@ -67,7 +68,7 @@ export default function DashboardCourseCard({ course }) {
           title="Enrolled Students"
         >
           {course?._count?.student ?? 0} Enrolled
-        </div>
+        </div> */}
       </div>
 
       <CardContent className="flex-1 text-xl">
@@ -88,7 +89,18 @@ export default function DashboardCourseCard({ course }) {
             {course?.productFullName}
           </Typography>
         </Tooltip>
-        <CourseSubCategoryPill subCategory={course?.SubCategory} />
+        <div
+          style={{
+            display: "flex",
+            gap: "4px",
+            justifyContent: "center",
+            marginTop: 1,
+            alignItems: "center",
+          }}
+        >
+          <CourseSubCategoryPill subCategory={course?.SubCategory} />
+          <CourseEnrolledPill count={course?._count?.student} />
+        </div>
       </CardContent>
 
       <CardActions className="flex justify-center items-center mb-3">

@@ -82,14 +82,10 @@ export default function Navbar() {
           timer: 1500,
           showConfirmButton: false,
         }).then(() => {
-          // window.location.href = "/";
           router.push("/");
         });
       } catch (error) {
-        toast.error(
-          // error?.response?.data?.message || "Logout failed. Please try again."
-          error?.data?.message || "Logout failed. Please try again."
-        );
+        toast.error(error?.data?.message || "Logout failed. Please try again.");
       }
     }
   };
@@ -162,22 +158,6 @@ export default function Navbar() {
       <li>
         <NavItem href="/" icon={<FaHome />} label="Home" isMobile={isMobile} />
       </li>
-      {/* <li>
-        <NavItem
-          href="/myclass"
-          icon={<SiGoogleclassroom />}
-          label="My Courses"
-          isMobile={isMobile}
-        />
-      </li> */}
-      {/* <li>
-        <NavItem
-          href="/routine"
-          icon={<GrSchedule />}
-          label="Routine"
-          isMobile={isMobile}
-        />
-      </li> */}
 
       {user &&
         (user.role === "admin" ? (
@@ -213,13 +193,32 @@ export default function Navbar() {
           </Link>
         </li>
       ))}
+
+      {isMobile && (
+        <li>
+          {user ? (
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 px-3 py-2 rounded-md bg-blue-500 text-white hover:bg-blue-800 transition"
+            >
+              Logout
+            </button>
+          ) : (
+            <Link
+              href="/login"
+              className="flex items-center gap-2 px-3 py-2 rounded-md bg-blue-500 text-white hover:bg-blue-800 transition"
+            >
+              Login
+            </Link>
+          )}
+        </li>
+      )}
     </ul>
   );
 
   return (
     <nav className="fixed top-0 left-0 w-full z-50 border-b border-border bg-background shadow-sm">
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-        {/* Logo */}
         <Link href="/" className="flex items-center">
           <Image src="/logo.png" width={180} height={60} alt="Logo" priority />
         </Link>
@@ -243,24 +242,28 @@ export default function Navbar() {
                 <GoSun size={20} />
               ))}
           </Button> */}
-          {user ? (
-            <Button
-              onClick={handleLogout}
-              variant="secondary"
-              className="text-sm font-bold bg-blue-500 hover:bg-blue-800 text-white"
-            >
-              Logout
-            </Button>
-          ) : (
-            <Link href="/login">
+          {/* Desktop only Login/Logout */}
+          <div className="hidden md:block">
+            {" "}
+            {user ? (
               <Button
+                onClick={handleLogout}
                 variant="secondary"
                 className="text-sm font-bold bg-blue-500 hover:bg-blue-800 text-white"
               >
-                Login
+                Logout
               </Button>
-            </Link>
-          )}
+            ) : (
+              <Link href="/login">
+                <Button
+                  variant="secondary"
+                  className="text-sm font-bold bg-blue-500 hover:bg-blue-800 text-white"
+                >
+                  Login
+                </Button>
+              </Link>
+            )}
+          </div>
 
           <Button
             onClick={toggleMenu}
