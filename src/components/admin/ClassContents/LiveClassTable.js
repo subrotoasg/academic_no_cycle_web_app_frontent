@@ -21,7 +21,7 @@ export default function LiveClassTable({
   handleDelete,
   handleEditModal,
 }) {
-  console.log(contentData);
+  // console.log(contentData);
   const [selectedJoinClass, setSelectedJoinClasses] = useState(null);
   const { data, isFetching, isLoading, refetch } = useJoinLiveClassQuery(
     { id: selectedJoinClass },
