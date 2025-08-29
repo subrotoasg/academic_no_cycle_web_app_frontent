@@ -21,6 +21,7 @@ export default function LiveClassTable({
   handleDelete,
   handleEditModal,
 }) {
+  console.log(contentData);
   const [selectedJoinClass, setSelectedJoinClasses] = useState(null);
   const { data, isFetching, isLoading, refetch } = useJoinLiveClassQuery(
     { id: selectedJoinClass },
@@ -106,7 +107,6 @@ export default function LiveClassTable({
                     <TableCell className="text-center border">
                       <Button
                         variant="ghost"
-                        disabled={true} //button temporaty disabled
                         size="icon"
                         onClick={() => handleDelete && handleDelete(content)}
                       >
@@ -118,7 +118,6 @@ export default function LiveClassTable({
                       <Button
                         variant="ghost"
                         size="icon"
-                        disabled={true} //button temporaty disabled
                         onClick={() =>
                           handleEditModal && handleEditModal(content)
                         }
