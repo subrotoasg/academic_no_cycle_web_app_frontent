@@ -117,7 +117,7 @@ function StudentDashboard() {
         <>
           <LiveClassLayout data={liveClasssData} />
           <div className="mb-12">
-            <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-white  my-10 md:mx-3">
+            <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-white text-center md:mb-5 mb-2 md:text-left md:pl-4">
               Enrolled Courses
             </h2>
             <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-4">
@@ -133,7 +133,7 @@ function StudentDashboard() {
           </div>
 
           <div>
-            <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-white text-center md:mb-10 mb-2">
+            <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-white text-center md:mb-5 mb-2 md:text-left md:pl-4">
               Available Courses
             </h2>
             <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-4">

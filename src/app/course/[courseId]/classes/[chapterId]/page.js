@@ -46,7 +46,7 @@ function Class() {
   //   .sort((a, b) => Number(a.classNo) - Number(b.classNo));
 
   return (
-    <div className="w-full mt-24">
+    <div className="w-full mt-24 container mx-auto">
       <div className="text-center mb-6">
         <h1 className="pt-3 text-center font-bold text-2xl md:text-3xl mb-5 text-blue-500">
           {chapterTitle}
@@ -60,13 +60,9 @@ function Class() {
               <h3 className="md:text-2xl font-semibold text-center my-7 text-indigo-500">
                 Available Classes
               </h3>{" "}
-              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5 mb-10">
-                {chapterContents.map((content, index) => (
-                  <div
-                    key={content.id}
-                    data-aos="zoom-in"
-                    data-aos-delay={index * 200}
-                  >
+              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5 mb-10 lg:mx-0 mx-2">
+                {chapterContents?.map((content, index) => (
+                  <div key={content.id}>
                     <ClassCard content={content} />
                   </div>
                 ))}
