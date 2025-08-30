@@ -14,9 +14,46 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [timeDisplay, setTimeDisplay] = useState("0:00 / 0:00");
   const [progress, setProgress] = useState(0);
-
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [volume, setVolume] = useState(100);
+
+  //  ------- controls visibility -------------
+  const [showControls, setShowControls] = useState(true);
+  const hideTimer = useRef(null);
+
+  const resetControlsTimer = useCallback(() => {
+    setShowControls(true);
+    if (hideTimer.current) clearTimeout(hideTimer.current);
+
+    if (isPlaying) {
+      hideTimer.current = setTimeout(() => {
+        setShowControls(false);
+      }, 2000);
+    }
+  }, [isPlaying]);
+
+  useEffect(() => {
+    resetControlsTimer();
+    return () => clearTimeout(hideTimer.current);
+  }, [isPlaying, resetControlsTimer]);
+
+  const handleUserActivity = useCallback(() => {
+    resetControlsTimer();
+  }, [resetControlsTimer]);
+
+  // Listen for hover/touch on container
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    container.addEventListener("mousemove", handleUserActivity);
+    container.addEventListener("touchstart", handleUserActivity);
+
+    return () => {
+      container.removeEventListener("mousemove", handleUserActivity);
+      container.removeEventListener("touchstart", handleUserActivity);
+    };
+  }, [handleUserActivity]);
 
   const changeVolume = (e) => {
     const newVolume = parseInt(e.target.value, 10);
@@ -46,6 +83,11 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
       }
     }
     lastTap.current = now;
+  };
+
+  const handleTap = (e) => {
+    handleUserActivity();
+    handleDoubleTap(e);
   };
 
   useEffect(() => {
@@ -144,19 +186,6 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
     else ytPlayer.current.playVideo();
   }, [isPlaying]);
 
-  // useEffect(() => {
-  //   const handleKeyDown = (e) => {
-  //     if (e.code === "Space" || e.key === " ") {
-  //       e.preventDefault();
-  //       togglePlay();
-  //     }
-  //   };
-
-  //   window.addEventListener("keydown", handleKeyDown);
-  //   return () => window.removeEventListener("keydown", handleKeyDown);
-  // }, [togglePlay]);
-
-  // New
   useEffect(() => {
     const handleKeyDown = (e) => {
       switch (e.code) {
@@ -249,15 +278,20 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
     <div
       className="relative w-full aspect-video bg-black rounded-lg overflow-hidden"
       ref={containerRef}
-      onDoubleClick={handleDoubleTap}
-      onTouchEnd={handleDoubleTap}
+      onDoubleClick={handleTap}
+      onTouchEnd={handleTap}
     >
       <div
         ref={playerRef}
         className="absolute inset-0 w-full h-full pointer-events-none"
       />
 
-      <div className="absolute inset-0 flex flex-col justify-between pointer-events-none">
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={showControls ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+        transition={{ duration: 0.3 }}
+        className="absolute inset-0 flex flex-col justify-between pointer-events-none"
+      >
         <div className="flex justify-center items-center flex-1">
           {!isPlaying && (
             <button
@@ -343,7 +377,7 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
             )}
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
