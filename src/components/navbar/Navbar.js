@@ -25,6 +25,21 @@ import { clearCourses } from "@/redux/Features/courseInfo";
 import Swal from "sweetalert2";
 import { clearEnrolledCourses } from "@/redux/Features/mycourses";
 import { clearArchiveAccess } from "@/redux/Features/archiveAccess";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { IoMdSettings } from "react-icons/io";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const NAV_ITEMS = [
   {
@@ -159,7 +174,7 @@ export default function Navbar() {
       </li>
 
       {user &&
-        (user.role === "admin" ? (
+        (user?.role === "admin" ? (
           <li>
             <NavItem
               href="/admin"
@@ -179,7 +194,7 @@ export default function Navbar() {
           </li>
         ))}
 
-      {NAV_ITEMS.map((item) => (
+      {NAV_ITEMS?.map((item) => (
         <li key={item.name}>
           <Link
             href={item.url}
@@ -241,9 +256,9 @@ export default function Navbar() {
                 <GoSun size={20} />
               ))}
           </Button> */}
-          {/* Desktop only Login/Logout */}
 
-          <div className="hidden md:flex items-center gap-3">
+          {/* Desktop only Login/Logout */}
+          {/* <div className="hidden md:flex items-center gap-3">
             {user && (
               <div className="flex flex-col">
                 <span className="text-sm font-medium text-foreground">
@@ -269,6 +284,60 @@ export default function Navbar() {
                 <Button
                   variant="secondary"
                   className="text-sm font-bold bg-blue-500 hover:bg-blue-800 text-white"
+                >
+                  Login
+                </Button>
+              </Link>
+            )}
+          </div> */}
+
+          <div className="hidden md:flex items-center gap-3">
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="flex items-center gap-2 text-sm font-medium cursor-pointer"
+                  >
+                    <IoMdSettings className=" text-gray-600 dark:text-gray-300" />
+                    <span className="hidden lg:inline">Settings</span>
+                  </Button>
+                </DropdownMenuTrigger>
+
+                <DropdownMenuContent className="w-56" align="end">
+                  <DropdownMenuLabel>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <span className="text-sm font-semibold">
+                            {user?.email}
+                          </span>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>
+                            {user?.role === "admin"
+                              ? "You have administrator access"
+                              : "You are logged in as a student"}
+                          </p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={handleLogout}
+                    className="cursor-pointer font-semibold justify-center text-gray-800 dark:text-white 
+             hover:bg-gray-100 dark:hover:bg-gray-700"
+                  >
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Link href="/login">
+                <Button
+                  variant="secondary"
+                  className="text-sm font-bold bg-blue-500 hover:bg-blue-700 text-white rounded-lg px-4"
                 >
                   Login
                 </Button>
