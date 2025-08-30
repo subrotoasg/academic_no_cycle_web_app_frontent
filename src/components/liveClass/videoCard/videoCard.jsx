@@ -20,7 +20,6 @@ const VideoCard = ({ video, setSelectedClass, setIsPlaying }) => {
 
     return "/scheduled.jpg";
   };
-
   return (
     <div
       onClick={() => handleVideoCardClicked(video)}
@@ -58,32 +57,30 @@ const VideoCard = ({ video, setSelectedClass, setIsPlaying }) => {
             )}
           </div>
         </div>
+        <div className="absolute bottom-0 px-1 bg-gray-600 text-white text-xs py-1 rounded">
+          {video?.course?.title}
+        </div>
         {isLive ? (
           <div className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded">
             Live
           </div>
         ) : (
-          <div className="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded">
+          <div className="absolute bottom-1 right-1 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded">
             {video?.status}
           </div>
         )}
       </div>
-      <div className="p-5 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-100">
+      <div className="py-4 px-2 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-100">
         {/* Video Info */}
         <div>
-          <h3 className="font-semibold text-gray-900 text-sm mb-2 line-clamp-2 leading-tight">
+          <h3 className="font-bold text-gray-900 text-sm mb-1 line-clamp-2 leading-tight">
             {video?.title || "Untitled Video"}
           </h3>
-          <p className="text-gray-600 text-sm line-clamp-2 mb-3">
+          <p className="text-gray-600 text-xs line-clamp-2 mb-3">
             {video?.description || "No description available"}
           </p>
 
           <div className="flex items-center">
-            {/* <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center shrink-0 mr-3">
-              <span className="font-medium text-sm">
-                {video?.instructor?.charAt(0)?.toUpperCase() || "A"}
-              </span>
-            </div> */}
             <div className="min-w-0">
               <p className="text-sm font-bold text-gray-900 truncate">
                 শিক্ষকঃ {video?.instructor || "Anonymous Instructor"}
