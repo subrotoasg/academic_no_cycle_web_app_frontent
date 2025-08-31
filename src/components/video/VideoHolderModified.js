@@ -12,6 +12,7 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
   const playerRef = useRef(null);
   const ytPlayer = useRef(null);
   const progressRef = useRef(null);
+  const isDragging = useRef(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [timeDisplay, setTimeDisplay] = useState("0:00 / 0:00");
   const [progress, setProgress] = useState(0);
@@ -278,6 +279,19 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
     setProgress(percent * 100);
   };
 
+  const handleDragStart = (e) => {
+    isDragging.current = true;
+    seekToPercent(e);
+  };
+
+  const handleDragMove = (e) => {
+    if (!isDragging.current) return;
+    seekToPercent(e);
+  };
+
+  const handleDragEnd = () => {
+    isDragging.current = false;
+  };
   // FullScreen controller
   const goFullscreen = () => {
     if (!containerRef.current) return;
@@ -365,7 +379,14 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
             ref={progressRef}
             className="flex-1 mx-2 h-2 bg-gray-500 rounded cursor-pointer"
             onClick={seekToPercent}
-            onTouchStart={seekToPercent}
+            // onTouchStart={seekToPercent}
+            onMouseDown={handleDragStart}
+            onMouseMove={handleDragMove}
+            onMouseUp={handleDragEnd}
+            onMouseLeave={handleDragEnd}
+            onTouchStart={handleDragStart}
+            onTouchMove={handleDragMove}
+            onTouchEnd={handleDragEnd}
           >
             <div
               className="h-2 bg-red-500 rounded"
