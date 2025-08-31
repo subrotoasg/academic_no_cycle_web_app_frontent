@@ -9,6 +9,7 @@ export const tagTypesValue = {
   CLASSCONTENT: "classContent",
   NOTICEROUTINE: "noticeRoutine",
   LIVE_CLASS: "liveClass",
+  STUDENT: "student",
 };
 
 // Array tags
