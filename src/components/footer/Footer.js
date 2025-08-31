@@ -9,7 +9,7 @@ const quickLinks = [
   { name: "Home", url: "/" },
   { name: "About Us", url: "https://aparsclassroom.com/about-us.html" },
   { name: "Privacy & Policy", url: "https://aparsclassroom.com/privacy" },
-  { name: "Report an Issue", url: "/report" },
+  // { name: "Report an Issue", url: "/report" },
   { name: "Terms & Conditions", url: "https://aparsclassroom.com/terms" },
 ];
 
@@ -20,8 +20,8 @@ const contactInfo = [
   },
   {
     icon: <MdOutlineEmail className="text-xl" />,
-    text: "support@asgshop.ai",
-    url: "mailto:support@asgshop.ai",
+    text: "tech@asgshop.ai",
+    url: "mailto:tech@asgshop.ai",
   },
   {
     icon: <TbWorldWww className="text-xl" />,
