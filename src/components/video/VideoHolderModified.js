@@ -6,6 +6,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useSelector } from "react-redux";
 import { currentUser } from "@/redux/Features/authentication";
 import { Eye, Maximize, Minimize } from "lucide-react";
+import Image from "next/image";
+import backupImg from "../../../public/img/backup.png";
 
 const YouTubeOverlayPlayer = ({ videoId }) => {
   const containerRef = useRef(null);
@@ -253,12 +255,6 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
     ytPlayer.current.setPlaybackRate(parseFloat(rate));
   };
 
-  // const seekToPercent = (e) => {
-  //   if (!ytPlayer.current) return;
-  //   const rect = e.target.getBoundingClientRect();
-  //   const percent = (e.clientX - rect.left) / rect.width;
-  //   ytPlayer.current.seekTo(ytPlayer.current.getDuration() * percent, true);
-  // };
   const seekToPercent = (e) => {
     if (!ytPlayer.current || !progressRef.current) return;
 
@@ -292,7 +288,7 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
   const handleDragEnd = () => {
     isDragging.current = false;
   };
-  // FullScreen controller
+  // FullScreen
   const goFullscreen = () => {
     if (!containerRef.current) return;
     const container = containerRef.current;
@@ -434,13 +430,13 @@ const PDFViewer = ({ id, title }) => {
 
   return (
     <motion.div
-      className="w-full mt-8"
+      className="w-full flex justify-center items-center"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
     >
       <iframe
-        className="w-full min-h-[80vh] border-2 border-gray-300 dark:border-gray-700 rounded-lg shadow-xl"
+        className="w-full  min-h-[60vh] md:min-h-[90vh] border-2 border-gray-300 dark:border-gray-700 rounded-lg shadow-xl"
         src={getDrivePreviewURL(id)}
         title={title}
       />
@@ -451,19 +447,13 @@ const PDFViewer = ({ id, title }) => {
 const TabButton = ({ title, isActive, onClick }) => (
   <button
     onClick={onClick}
-    className={`py-2 px-4 font-semibold text-base relative transition-colors ${
+    className={`py-1 md:py-2 px-2 md:px-4 font-semibold text-xs md:text-base transition-colors rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-400 ${
       isActive
-        ? "text-indigo-500 dark:text-indigo-400"
-        : "text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+        ? "bg-indigo-500 text-white dark:bg-indigo-600"
+        : "bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-500 dark:text-gray-200 dark:hover:bg-blue-700"
     }`}
   >
     {title}
-    {isActive && (
-      <motion.div
-        className="absolute bottom-[-2px] left-0 right-0 h-0.5 bg-indigo-500 dark:bg-indigo-400"
-        layoutId="underline"
-      />
-    )}
   </button>
 );
 
@@ -471,6 +461,7 @@ const VideoHolderModified = ({ classContent }) => {
   const user = useSelector(currentUser);
   const isAdmin = user?.role === "admin";
   const [activeTab, setActiveTab] = useState(null);
+  const pdfRef = useRef(null);
 
   const { data: chapterContentsData, isLoading } =
     useGetClassContentsBySubjectChapterIdQuery(
@@ -482,9 +473,26 @@ const VideoHolderModified = ({ classContent }) => {
       ?.id;
 
   const chapterContents = chapterContentsData?.data;
+  console.log(chapterContents);
+  const toggleTab = (key) => {
+    setActiveTab((prev) => {
+      const isOpening = prev !== key;
+      const newActive = isOpening ? key : null;
 
-  const toggleTab = (key) =>
-    setActiveTab((prev) => (prev === key ? null : key));
+      if (isOpening) {
+        setTimeout(() => {
+          if (pdfRef.current) {
+            pdfRef.current.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }
+        }, 100);
+      }
+
+      return newActive;
+    });
+  };
 
   return (
     <div className="min-h-auto bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 rounded-xl mx-auto">
@@ -582,17 +590,31 @@ const VideoHolderModified = ({ classContent }) => {
                           ? `/admin/content/${content.id}?title=${content.classTitle}`
                           : `/course/${courseId}/content/${content.id}?title=${content.classTitle}`
                       }
-                      className="block p-2 rounded-lg bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-300 shadow-md"
+                      className="flex items-center p-2 rounded-lg bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-300 shadow-md"
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.1, duration: 0.4 }}
                     >
-                      <p className="font-semibold text-gray-800 dark:text-white">
-                        {content.classTitle}
-                      </p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Lesson {content.classNo}
-                      </p>
+                      {" "}
+                      {/* Thumbnail */}
+                      <div className="flex-shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-md overflow-hidden mr-3">
+                        <Image
+                          src={content.thumbneil || backupImg}
+                          alt={content.classTitle}
+                          className="w-full h-full object-cover"
+                          width={40}
+                          height={40}
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-gray-800 dark:text-white truncate">
+                          {content.classTitle}
+                        </p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                          Lesson {content.classNo} •{" "}
+                          {content.instructor || "Unknown"}
+                        </p>
+                      </div>
                     </motion.a>
                   ))
                 ) : (
@@ -605,18 +627,18 @@ const VideoHolderModified = ({ classContent }) => {
           </div>
         </div>
 
-        <div className="mt-10 container">
-          <div className="flex border-b-1 border-gray-200 dark:border-gray-700 pb-2">
+        <div className="mt-10 w-full  px-2 sm:px-4">
+          <div className="flex border-gray-200 dark:border-gray-700 mb-2">
             {classContent?.lectureSheet && (
               <TabButton
-                title="Lecture "
+                title="Lecture Sheet "
                 isActive={activeTab === "lectureSheet"}
                 onClick={() => toggleTab("lectureSheet")}
               />
             )}
             {classContent?.practiceSheet && (
               <TabButton
-                title="Practice "
+                title="Practice Sheet "
                 isActive={activeTab === "practiceSheet"}
                 onClick={() => toggleTab("practiceSheet")}
               />
@@ -629,11 +651,15 @@ const VideoHolderModified = ({ classContent }) => {
               />
             )}
           </div>
-          <AnimatePresence>
-            {activeTab && (
-              <PDFViewer id={classContent[activeTab]} title={activeTab} />
-            )}
-          </AnimatePresence>
+          <div className="mt-2">
+            <AnimatePresence>
+              {activeTab && (
+                <div ref={pdfRef} className="w-full">
+                  <PDFViewer id={classContent[activeTab]} title={activeTab} />
+                </div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
       </div>
     </div>
