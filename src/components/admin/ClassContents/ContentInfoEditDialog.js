@@ -53,8 +53,7 @@ export default function ContentInfoEditDialog({
     { label: "Hasnat Shuvro", value: "Hasnat Shuvro" },
     { label: "Omar Faruk", value: "Omar Faruk" },
     { label: "Apurbo Opu", value: "Apurbo Opu" },
-    { label: "Rahik", value: "Rahik" },
-    { label: "Omor", value: "Omor" },
+    { label: "Sharoare Hosan Emon", value: "Sharoare Hosan Emon" },
   ];
 
   const methods = useForm();
