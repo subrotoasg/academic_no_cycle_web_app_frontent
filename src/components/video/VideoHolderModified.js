@@ -597,16 +597,16 @@ const VideoHolderModified = ({ classContent }) => {
                     >
                       {" "}
                       {/* Thumbnail */}
-                      <div className="flex-shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-md overflow-hidden mr-3">
+                      <div className="flex-shrink-0 w-16 h-12 md:w-24 md:h-16 rounded-md overflow-hidden mr-3">
                         <Image
                           src={content.thumbneil || backupImg}
                           alt={content.classTitle}
-                          className="w-full h-full object-cover"
-                          width={40}
-                          height={40}
+                          className="w-full h-full object-fill"
+                          width={50}
+                          height={30}
                         />
                       </div>
-                      <div className="flex-1 min-w-0">
+                      <div className="flex-1 min-w-0 text-sm">
                         <p className="font-semibold text-gray-800 dark:text-white truncate">
                           {content.classTitle}
                         </p>
