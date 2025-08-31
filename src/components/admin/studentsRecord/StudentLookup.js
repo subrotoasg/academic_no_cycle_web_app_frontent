@@ -387,7 +387,7 @@ export default function StudentLookup() {
     reset({ criteria: "accessCode", value: "" });
   }, [reset]);
 
-  console.log(displayStudent);
+  //   console.log(displayStudent);
   return (
     <div className="w-full p-2 md:p-4 bg-white dark:bg-gray-900 shadow-lg rounded-2xl space-y-2">
       <h1 className="text-xl md:text-3xl font-bold text-center">
