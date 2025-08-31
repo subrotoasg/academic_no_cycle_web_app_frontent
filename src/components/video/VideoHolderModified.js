@@ -473,7 +473,7 @@ const VideoHolderModified = ({ classContent }) => {
       ?.id;
 
   const chapterContents = chapterContentsData?.data;
-  console.log(chapterContents);
+  // console.log(chapterContents);
   const toggleTab = (key) => {
     setActiveTab((prev) => {
       const isOpening = prev !== key;
@@ -628,7 +628,7 @@ const VideoHolderModified = ({ classContent }) => {
         </div>
 
         <div className="mt-10 w-full  px-2 sm:px-4">
-          <div className="flex border-gray-200 dark:border-gray-700 mb-2">
+          <div className="flex border-gray-200 dark:border-gray-700 mb-2 gap-2">
             {classContent?.lectureSheet && (
               <TabButton
                 title="Lecture Sheet "
