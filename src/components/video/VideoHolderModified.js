@@ -11,6 +11,7 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
   const containerRef = useRef(null);
   const playerRef = useRef(null);
   const ytPlayer = useRef(null);
+  const progressRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [timeDisplay, setTimeDisplay] = useState("0:00 / 0:00");
   const [progress, setProgress] = useState(0);
@@ -251,11 +252,30 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
     ytPlayer.current.setPlaybackRate(parseFloat(rate));
   };
 
+  // const seekToPercent = (e) => {
+  //   if (!ytPlayer.current) return;
+  //   const rect = e.target.getBoundingClientRect();
+  //   const percent = (e.clientX - rect.left) / rect.width;
+  //   ytPlayer.current.seekTo(ytPlayer.current.getDuration() * percent, true);
+  // };
   const seekToPercent = (e) => {
-    if (!ytPlayer.current) return;
-    const rect = e.target.getBoundingClientRect();
-    const percent = (e.clientX - rect.left) / rect.width;
-    ytPlayer.current.seekTo(ytPlayer.current.getDuration() * percent, true);
+    if (!ytPlayer.current || !progressRef.current) return;
+
+    const rect = progressRef.current.getBoundingClientRect();
+    let clientX;
+
+    if (e.touches && e.touches.length > 0) {
+      clientX = e.touches[0].clientX;
+    } else {
+      clientX = e.clientX;
+    }
+
+    let percent = (clientX - rect.left) / rect.width;
+    percent = Math.min(Math.max(percent, 0), 1);
+
+    const seekTime = ytPlayer.current.getDuration() * percent;
+    ytPlayer.current.seekTo(seekTime, true);
+    setProgress(percent * 100);
   };
 
   // FullScreen controller
@@ -340,10 +360,12 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
 
             <span className="text-xs text-white">{timeDisplay}</span>
           </div>
-
+          {/* Changes to progressRef */}
           <div
+            ref={progressRef}
             className="flex-1 mx-2 h-2 bg-gray-500 rounded cursor-pointer"
             onClick={seekToPercent}
+            onTouchStart={seekToPercent}
           >
             <div
               className="h-2 bg-red-500 rounded"
