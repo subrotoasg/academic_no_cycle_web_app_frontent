@@ -53,14 +53,14 @@ function Class() {
         </h1>
       </div>
 
-      <div className="md:flex gap-10 justify-between my-5">
+      <div className="md:flex gap-8 justify-between my-5">
         <div className="w-full">
           {chapterContents?.length > 0 ? (
             <>
               <h3 className="md:text-2xl font-semibold text-center my-7 text-indigo-500">
                 Available Classes
               </h3>{" "}
-              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5 mb-10 lg:mx-0 mx-2">
+              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-10 lg:mx-0 mx-2">
                 {chapterContents?.map((content, index) => (
                   <div key={content.id}>
                     <ClassCard content={content} />
