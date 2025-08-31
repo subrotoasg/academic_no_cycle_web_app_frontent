@@ -41,7 +41,7 @@ function Subject() {
   }
 
   return (
-    <div className="mt-24 mx-5">
+    <div className="mt-24 mx-5 mb-5">
       <div className="text-center mb-12">
         <h1 className="pt-3 text-center font-bold text-2xl sm:text-3xl mb-5 text-blue-500">
           {subjectName}
