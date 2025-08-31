@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { FiArrowUpRight } from "react-icons/fi";
+import backupImg from "../../../public/img/backup.png";
 
 function ClassCard({ content }) {
   const {
@@ -27,12 +28,12 @@ function ClassCard({ content }) {
     >
       {/* Thumbnail */}
       <div className="hover:bg-indigo-300 dark:hover:bg-indigo-600">
-        <div className="relative w-full h-60 md:h-44">
+        <div className="relative w-full md:h-40 h-48">
           <Image
-            src={thumbneil || "/placeholder-image.png"}
+            src={thumbneil || backupImg}
             alt={classTitle}
             layout="fill"
-            className="object-cover"
+            className="object-fill"
           />
         </div>
 
@@ -44,7 +45,7 @@ function ClassCard({ content }) {
 
         {/* Content Info */}
         {(lectureSheet || practiceSheet || solutionSheet) && (
-          <div className="p-2 md:p-3">
+          <div className="p-2 md:p-2">
             <p className="text-sm md:text-base text-gray-600 dark:text-gray-300 mb-3 font-medium">
               Lesson Materials:
             </p>

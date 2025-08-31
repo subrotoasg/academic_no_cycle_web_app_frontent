@@ -24,7 +24,6 @@ export default function ArchiveCourseCard({ archiveData }) {
         transition: "transform 0.3s",
         "&:hover": { transform: "scale(1.01)" },
       }}
-      // data-aos="fade-up"
       className="rounded-3xl"
     >
       <Link
