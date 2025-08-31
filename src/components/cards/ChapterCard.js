@@ -6,9 +6,7 @@ import React from "react";
 
 function ChapterCard({ chapter }) {
   const imageUrl =
-    chapter?.courseSubjectChapterImage ||
-    chapter?.chapter?.chapterImage ||
-    "/placeholder-image.png";
+    chapter?.courseSubjectChapterImage || chapter?.chapter?.chapterImage;
   // console.log(chapter);
   const courseId = chapter?.courseSubject?.course?.id;
   return (
@@ -31,7 +29,7 @@ function ChapterCard({ chapter }) {
           src={imageUrl}
           alt={chapter?.chapter?.chapterName || "Chapter image"}
           layout="fill"
-          className="object-cover rounded-b-xl"
+          className="object-fit rounded-b-xl"
         />
       </div>
     </Link>
