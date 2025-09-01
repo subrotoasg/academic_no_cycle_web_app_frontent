@@ -45,7 +45,7 @@ function StudentEditDialog({ student, onClose, onUpdated }) {
           email: formData.email,
           phone: formData.phone,
         }).unwrap();
-        console.log(res);
+        // console.log(res);
         Swal.fire({
           title: "Updated!",
           text: `"${student?.name}" was updated successfully.`,
