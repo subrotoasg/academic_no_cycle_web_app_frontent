@@ -16,7 +16,7 @@ import { toast } from "sonner";
 import Image from "next/image";
 import Swal from "sweetalert2";
 
-// ===================== Student Edit Dialog =====================
+//  Student Info Edit
 function StudentEditDialog({ student, onClose, onUpdated }) {
   const methods = useForm({
     defaultValues: {
@@ -40,41 +40,36 @@ function StudentEditDialog({ student, onClose, onUpdated }) {
 
     if (result.isConfirmed) {
       try {
+        const trimmedEmail = formData.email.trim();
+        const trimmedPhone = formData.phone.trim();
         const res = await updateStudent({
           id: student?.id,
-          email: formData.email,
-          phone: formData.phone,
+          email: trimmedEmail,
+          phone: trimmedPhone,
         }).unwrap();
-        // console.log(res);
-        Swal.fire({
-          title: "Updated!",
-          text: `"${student?.name}" was updated successfully.`,
-          icon: "success",
-          timer: 2000,
-          showConfirmButton: false,
-        });
 
-        // onUpdated({
-        //   // ...student,
-        //   ...prev,
-        //   email: formData.email,
-        //   phone: formData.phone,
-        // });
-        onUpdated((prev) => ({
-          ...prev,
-          email: formData.email,
-          phone: formData.phone,
-        }));
+        if (res?.success) {
+          Swal.fire({
+            title: "Updated!",
+            text: `"${student?.name}" was updated successfully.`,
+            icon: "success",
+            timer: 2000,
+            showConfirmButton: false,
+          });
 
-        reset();
-        onClose();
+          onUpdated((prev) => ({
+            ...prev,
+            email: formData.email,
+            phone: formData.phone,
+          }));
+
+          reset();
+          onClose();
+          // window.location.reload();
+        }
       } catch (error) {
-        console.log(error);
-        Swal.fire({
-          title: "Error",
-          text: "Something went wrong while updating. Please try again.",
-          icon: "error",
-        });
+        // console.log(error);
+        toast.error(error.data.message || "Student Info Updation failed");
       }
     }
   };
