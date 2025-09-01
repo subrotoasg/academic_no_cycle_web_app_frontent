@@ -1,12 +1,14 @@
 "use client";
 import React from "react";
 import ChapterCard from "@/components/cards/ChapterCard";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Loading from "@/components/admin/utilities/Loading";
 import { useGetChaptersByCourseSubjectIdQuery } from "@/redux/services/chapterAPi";
+import { MoveLeft } from "lucide-react";
 
 function Subject() {
   const params = useParams();
+  const router = useRouter();
   const courseSubjectId = params?.subjectId;
 
   const {
@@ -65,6 +67,14 @@ function Subject() {
             </div>
           </>
         )}
+      </div>
+      <div className="text-center mt-10 md:mt-14">
+        <button
+          onClick={() => router.back()}
+          className="flex justify-center items-center gap-2 px-3 md:px-6 py-1 md:py-2 bg-blue-500 text-white rounded-lg hover:rounded-full hover:bg-blue-600  mx-auto"
+        >
+          <MoveLeft /> Go Back
+        </button>
       </div>
     </div>
   );
