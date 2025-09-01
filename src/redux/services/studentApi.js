@@ -19,12 +19,31 @@ const studentApiServices = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypesValue.STUDENT],
     }),
+    // Update student (PATCH)
+    updateStudent: builder.mutation({
+      query: ({ id, email, phone }) => {
+        const body = new URLSearchParams();
+        if (email) body.append("email", email);
+        if (phone) body.append("phone", phone);
+
+        return {
+          url: `/utils/update/${id}`,
+          method: "PATCH",
+          body,
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        };
+      },
+      invalidatesTags: [tagTypesValue.STUDENT],
+    }),
   }),
 });
 
 export const {
   useGetStudentByEmailOrPhoneQuery,
   useGetStudentByAccessCodeQuery,
+  useUpdateStudentMutation,
 } = studentApiServices;
 
 export default studentApiServices;
