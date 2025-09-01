@@ -40,25 +40,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-// import { useGetCourseByIdQuery } from "@/redux/services/courseApi";
-
-const NAV_ITEMS = [
-  {
-    name: "Group",
-    url: "https://www.facebook.com/AparsClassroom/",
-    icon: <FaFacebook size={18} />,
-  },
-  {
-    name: "Channel",
-    url: "https://www.youtube.com/c/aparsclassroom",
-    icon: <FaYoutube size={18} />,
-  },
-  // {
-  //   name: "Contact",
-  //   url: "https://www.messenger.com/login.php?next=https%3A%2F%2Fwww.messenger.com%2Ft%2F103533265542288%2F",
-  //   icon: <FaFacebookMessenger size={18} />,
-  // },
-];
+import { useGetCourseByIdQuery } from "@/redux/services/courseApi";
 
 export default function Navbar() {
   const [mounted, setMounted] = useState(false);
@@ -74,24 +56,24 @@ export default function Navbar() {
   const [facebookLink, setFacebookLink] = useState(
     "https://www.facebook.com/AparsClassroom/"
   );
-  // Extract courseId from path
-  // const courseId = pathname.startsWith("/course/")
-  //   ? pathname.split("/")[2]
-  //   : null;
 
-  // Fetch course info if courseId exists
-  // const { data: courseData } = useGetCourseByIdQuery(courseId, {
-  //   skip: !courseId,
-  // });
+  const courseId = pathname.startsWith("/course/")
+    ? pathname.split("/")[2]
+    : null;
+  // console.log(courseId);
+
+  const { data: courseData } = useGetCourseByIdQuery(courseId, {
+    skip: !courseId,
+  });
   // console.log("courseInfo:", courseData);
-  // Update Facebook link when course data is fetched
-  // useEffect(() => {
-  //   if (courseData?.facebookGroup) {
-  //     setFacebookLink(courseData.facebookGroup);
-  //   } else {
-  //     setFacebookLink("https://www.facebook.com/AparsClassroom/");
-  //   }
-  // }, [courseData]);
+
+  useEffect(() => {
+    if (courseData?.data?.facebookGroup) {
+      setFacebookLink(courseData?.data?.facebookGroup);
+    } else {
+      setFacebookLink("https://www.facebook.com/AparsClassroom/");
+    }
+  }, [courseData]);
 
   const NAV_ITEMS = [
     {
