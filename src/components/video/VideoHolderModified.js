@@ -21,7 +21,9 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [volume, setVolume] = useState(100);
 
-  //  ------- controls visibility -------------
+  // const singleTapTimer = useRef(null);
+
+  //  ------------ controls visibility -------------
   const [showControls, setShowControls] = useState(true);
   const hideTimer = useRef(null);
 
@@ -74,8 +76,11 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
     }
   };
 
-  // Double tap full screen
   const lastTap = useRef(0);
+
+  // const handleSingleTap = () => {
+  //   togglePlay(); // play or pause
+  // };
 
   const handleDoubleTap = () => {
     const now = Date.now();
@@ -92,6 +97,17 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
   const handleTap = (e) => {
     handleUserActivity();
     handleDoubleTap(e);
+    // // If there's already a pending single tap, it's a double tap
+    // if (singleTapTimer.current) {
+    //   clearTimeout(singleTapTimer.current);
+    //   singleTapTimer.current = null;
+    //   handleDoubleTap(); // fullscreen
+    // } else {
+    //   singleTapTimer.current = setTimeout(() => {
+    //     handleSingleTap(); // play/pause
+    //     singleTapTimer.current = null;
+    //   }, 250); // adjust delay if needed
+    // }
   };
 
   useEffect(() => {
@@ -309,6 +325,7 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
       className="relative w-full aspect-video bg-black rounded-lg overflow-hidden"
       ref={containerRef}
       onDoubleClick={handleTap}
+      // onClick={handleTap}
       onTouchEnd={handleTap}
     >
       <div
