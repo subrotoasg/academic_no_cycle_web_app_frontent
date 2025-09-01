@@ -68,7 +68,7 @@ function Subject() {
           </>
         )}
       </div>
-      <div className="text-center mt-10 md:mt-14">
+      <div className="text-center my-10 md:my-14">
         <button
           onClick={() => router.back()}
           className="flex justify-center items-center gap-2 px-3 md:px-6 py-1 md:py-2 bg-blue-500 text-white rounded-lg hover:rounded-full hover:bg-blue-600  mx-auto"
