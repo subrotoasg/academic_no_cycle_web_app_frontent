@@ -82,9 +82,12 @@ const StudentSignUp = () => {
                 Student Sign Up
               </h1>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                কোর্স কিনে থাকলে ইনভয়েসের ইমেইল ব্যবহার করুন, অথবা যেকোনো ইমেইল
-                দিন। এটি লগইন, কোর্স অ্যাক্সেস এবং পাসওয়ার্ড পরিবর্তনের জন্য
-                গুরুত্বপূর্ণ, তাই মনে রাখা জরুরি।
+                কোর্স কিনে থাকলে ইনভয়েসের ইমেইল ব্যবহার করুন। এটি লগইন, কোর্স
+                অ্যাক্সেস এবং পাসওয়ার্ড পরিবর্তনের জন্য গুরুত্বপূর্ণ, তাই ইমেইল
+                মনে রাখা জরুরি।
+              </p>
+              <p className="text-sm text-red-500 dark:text-red-500">
+                * ইমেইল এবং পাসওয়ার্ড মনে রাখুন বা লিখে রাখুন।
               </p>
             </div>
 
@@ -117,7 +120,7 @@ const StudentSignUp = () => {
                 name="password"
                 value={formData.password}
                 onChange={handlePasswordChange}
-                placeholder="Create Password"
+                placeholder="Enter Password "
               />
               <Button
                 type="submit"
