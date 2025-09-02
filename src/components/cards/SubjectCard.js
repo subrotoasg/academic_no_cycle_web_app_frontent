@@ -26,7 +26,6 @@ const SubjectCard = ({ courseSubject }) => {
           transform: "scale(1.01)",
         },
       }}
-      // data-aos="fade-up"
       className="rounded-3xl"
     >
       <Link
@@ -39,12 +38,12 @@ const SubjectCard = ({ courseSubject }) => {
         <CardActionArea component="div" sx={{ height: "100%" }}>
           <CardMedia
             component="img"
-            height="180"
             image={imageUrl}
             alt={title}
             sx={{
+              objectFit: "fill",
+              width: "100%",
               height: 160,
-              objectFit: "cover",
               backgroundColor: "#f5f5f5",
             }}
           />
