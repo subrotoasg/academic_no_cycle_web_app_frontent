@@ -7,6 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
+import { LogOut, User } from "lucide-react";
 import {
   FaFacebook,
   FaYoutube,
@@ -345,11 +346,22 @@ export default function Navbar() {
                     </TooltipProvider>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link
+                      href="/student/profile"
+                      className="cursor-pointer font-semibold text-gray-800 dark:text-white 
+      hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2 w-full h-full"
+                    >
+                      <User className="w-4 h-4 text-gray-500 dark:text-white" />
+                      Profile
+                    </Link>
+                  </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={handleLogout}
-                    className="cursor-pointer font-semibold justify-center text-gray-800 dark:text-white 
-             hover:bg-gray-100 dark:hover:bg-gray-700"
+                    className="cursor-pointer font-semibold text-gray-800 dark:text-white 
+             hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
                   >
+                    <LogOut className="w-4 h-4 text-gray-500 dark:text-white" />
                     Logout
                   </DropdownMenuItem>
                 </DropdownMenuContent>
