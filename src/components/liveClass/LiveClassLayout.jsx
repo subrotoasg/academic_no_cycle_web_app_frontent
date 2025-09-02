@@ -28,7 +28,7 @@ const LiveClassLayout = ({ data }) => {
       {filteredLiveAndUpcomming?.length > 0 && (
         <VideoCarousel
           videos={filteredLiveAndUpcomming}
-          title="লাইভ ক্লাসসমূহ"
+          title={liveClasses.length <= 1 ? "লাইভ ক্লাস" : "লাইভ ক্লাসসমূহ"}
           setSelectedClass={setSelectedClass}
         />
       )}
