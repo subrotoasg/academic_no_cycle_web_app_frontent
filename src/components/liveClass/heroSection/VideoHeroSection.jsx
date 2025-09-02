@@ -65,15 +65,15 @@ const VideoHeroSection = ({ selectedClass }) => {
                           {selectedClass?.description}
                         </p>
                         <div className="flex items-center mt-2 sm:mt-4 flex-wrap gap-2">
-                          <div className="bg-blue-500 text-white rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center text-sm sm:text-base">
+                          {/* <div className="bg-blue-500 text-white rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center text-sm sm:text-base">
                             {selectedClass?.instructor?.charAt(0)}
-                          </div>
+                          </div> */}
                           <div className="ml-2 sm:ml-3">
                             <p className="font-semibold text-white text-sm sm:text-base">
                               শিক্ষকঃ {selectedClass?.instructor}
                             </p>
                             <p className="text-xs sm:text-sm text-gray-300">
-                              {`${selectedClass?.courseSubject?.subjectName} (${selectedClass?.courseSubjectChapter?.chapterName})` ||
+                              {`${selectedClass?.course?.title}, ${selectedClass?.courseSubject?.subjectName} (${selectedClass?.courseSubjectChapter?.chapterName})` ||
                                 "No Course"}
                             </p>
                           </div>
