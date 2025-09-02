@@ -7,7 +7,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
-import { LogOut, User } from "lucide-react";
 import {
   Book,
   BookImage,
