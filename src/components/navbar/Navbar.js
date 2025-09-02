@@ -251,7 +251,6 @@ export default function Navbar() {
       )}
     </ul>
   );
-
   return (
     <nav className="fixed top-0 left-0 w-full z-50 border-b border-border bg-background shadow-sm">
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -346,16 +345,19 @@ export default function Navbar() {
                     </TooltipProvider>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link
-                      href="/student/profile"
-                      className="cursor-pointer font-semibold text-gray-800 dark:text-white 
+                  {user?.role === "student" ? (
+                    <DropdownMenuItem asChild>
+                      <Link
+                        href="/student/profile"
+                        className="cursor-pointer font-semibold text-gray-800 dark:text-white 
       hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2 w-full h-full"
-                    >
-                      <User className="w-4 h-4 text-gray-500 dark:text-white" />
-                      Profile
-                    </Link>
-                  </DropdownMenuItem>
+                      >
+                        <User className="w-4 h-4 text-gray-500 dark:text-white" />
+                        Profile
+                      </Link>
+                    </DropdownMenuItem>
+                  ) : null}
+
                   <DropdownMenuItem
                     onClick={handleLogout}
                     className="cursor-pointer font-semibold text-gray-800 dark:text-white 
