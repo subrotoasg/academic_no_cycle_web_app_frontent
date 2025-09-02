@@ -110,10 +110,10 @@ const StudentProfile = ({ onUpdate }) => {
   const fileInputRef = useRef(null);
 
   useEffect(() => {
-    if (!isLoading && student) {
-      setFormData(student);
+    if (!isLoading && data?.data && Object.keys(formData).length === 0) {
+      setFormData(data.data);
     }
-  }, [isLoading, student]);
+  }, [isLoading, data?.data]);
 
   const validateName = (value) => {
     if (!value || value.trim().length === 0) {
@@ -248,8 +248,8 @@ const StudentProfile = ({ onUpdate }) => {
 
   const groupOptions = [
     { value: "Science", label: "Science" },
-    { value: "Commerce", label: "Commerce" },
-    { value: "Arts", label: "Arts" },
+    // { value: "Commerce", label: "Commerce" },
+    // { value: "Arts", label: "Arts" },
   ];
 
   const paperOptions = [
@@ -349,6 +349,7 @@ const StudentProfile = ({ onUpdate }) => {
           "Content-Type": "application/pdf",
           "x-access-token": token,
         },
+        credentials: "include",
       });
       if (!res.ok) {
         toast.error("Sorry!, Something went wrong");
@@ -377,7 +378,7 @@ const StudentProfile = ({ onUpdate }) => {
     <div className="container mx-auto p-6 bg-gray-50 dark:bg-gray-900 rounded-2xl shadow-lg mt-20 relative">
       <button
         onClick={downloadProfile}
-        className="absolute top-6 right-6 flex items-center cursor-pointer gap-1 bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition"
+        className="md:absolute md:top-6 md:right-6 flex items-center mx-auto mb-5 cursor-pointer gap-1 bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition"
       >
         <Download size={16} /> Download Profile
       </button>
@@ -425,7 +426,7 @@ const StudentProfile = ({ onUpdate }) => {
           <p className="text-gray-600 dark:text-gray-300 font-bold text-sm">
             {formData?.presentDivision
               ? `${formData?.presentDivision}, Bangladesh`
-              : "ACS"}
+              : "STUDENT"}
           </p>
         </div>
       </div>
@@ -461,10 +462,10 @@ const StudentProfile = ({ onUpdate }) => {
         {
           label: "Group",
           field: "group",
-          type: "text",
-          value: "Science",
-          readOnly: true,
-          // options: groupOptions,
+          type: "select",
+          // value: "Science",
+          // readOnly: true,
+          options: groupOptions,
         },
       ])}
       {renderSection("College Information", [

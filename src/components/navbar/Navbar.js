@@ -9,6 +9,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { LogOut, User } from "lucide-react";
 import {
+  Book,
+  BookImage,
+  Bookmark,
+  LogOut,
+  User,
+  UserIcon,
+} from "lucide-react";
+import {
   FaFacebook,
   FaYoutube,
   FaFacebookMessenger,
@@ -42,6 +50,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useGetCourseByIdQuery } from "@/redux/services/courseApi";
+import { AccountBox } from "@mui/icons-material";
 
 export default function Navbar() {
   const [mounted, setMounted] = useState(false);
@@ -206,14 +215,28 @@ export default function Navbar() {
             />
           </li>
         ) : (
-          <li>
-            <NavItem
-              href="/student/dashboard"
-              icon={<FaUser />}
-              label="My Courses"
-              isMobile={isMobile}
-            />
-          </li>
+          <>
+            {user?.role === "student" ? (
+              <>
+                <li>
+                  <NavItem
+                    href="/student/profile"
+                    icon={<FaUser />}
+                    label="Profile"
+                    isMobile={isMobile}
+                  />
+                </li>
+                <li>
+                  <NavItem
+                    href="/student/dashboard"
+                    icon={<AccountBox />}
+                    label="My Courses"
+                    isMobile={isMobile}
+                  />
+                </li>
+              </>
+            ) : null}
+          </>
         ))}
 
       {NAV_ITEMS?.map((item) => (
