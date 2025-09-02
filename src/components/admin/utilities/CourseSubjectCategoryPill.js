@@ -64,45 +64,46 @@ export default function CourseSubCategoryPill({ subCategory }) {
   };
 
   return (
-    <div style={{ display: "flex", justifyContent: "center", margin: "4px 0" }}>
-      <Chip
-        icon={icon}
-        label={label}
-        size="small"
-        variant="filled"
-        sx={{
-          bgcolor: bgColor,
+    // <div style={{ display: "flex", justifyContent: "center", margin: "4px 0" }}>
+    <Chip
+      icon={icon}
+      label={label}
+      size="small"
+      variant="filled"
+      sx={{
+        bgcolor: bgColor,
+        color: textColor,
+        fontWeight: 600,
+        textTransform: "capitalize",
+        height: 22,
+        fontSize: 11,
+        borderRadius: 16,
+        boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+        transition: "transform 0.2s, box-shadow 0.2s",
+        "&:hover": {
+          transform: "scale(1.05)",
+          boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+        },
+        // paddingLeft: 4,
+        // paddingRight: 4,
+        px: 1,
+        display: "inline-flex",
+        alignItems: "center",
+        width: "auto",
+        maxWidth: "100%",
+        "& .MuiChip-icon": {
           color: textColor,
-          fontWeight: 600,
-          textTransform: "capitalize",
-          height: 22,
           fontSize: 11,
-          borderRadius: 16,
-          boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
-          transition: "transform 0.2s, box-shadow 0.2s",
-          "&:hover": {
-            transform: "scale(1.05)",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
-          },
-          paddingLeft: 4,
-          paddingRight: 4,
-          display: "inline-flex",
-          alignItems: "center",
-          width: "auto",
-          maxWidth: "100%",
-          "& .MuiChip-icon": {
-            color: textColor,
-            fontSize: 18,
-            marginLeft: -2,
-            marginRight: 2,
-          },
-          "& .MuiChip-label": {
-            paddingLeft: 0,
-            paddingRight: 0,
-            whiteSpace: "nowrap",
-          },
-        }}
-      />
-    </div>
+          // marginLeft: -2,
+          marginRight: 1,
+        },
+        "& .MuiChip-label": {
+          paddingLeft: 0,
+          paddingRight: 0,
+          whiteSpace: "nowrap",
+        },
+      }}
+    />
+    // </div>
   );
 }

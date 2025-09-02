@@ -33,23 +33,21 @@ const contactInfo = [
 const Footer = () => {
   return (
     <footer className="w-full  text-white">
-      <div className="p-10  flex justify-between gap-6 flex-col md:flex-row flex-wrap w-full backdrop-blur-sm bg-black/85 ">
-        {/* Left: Logo & Description */}
-        <div className="w-full sm:w-[30%]">
+      <div className="p-10  flex justify-between gap-6 flex-col md:flex-row flex-wrap w-full backdrop-blur-sm bg-black/85">
+        <div className="w-full sm:w-[30%] flex flex-col">
           <Image
             src="/logo.png"
             width={200}
             height={32}
             alt="Apars Classroom Logo"
           />
-          <p className="mt-4 text-sm dark:text-slate-300 ">
+          <p className="mt-4 text-sm leading-relaxed">
             Apar&apos;s Classroom is committed to revolutionizing education
             through innovative learning solutions and expert guidance. Join us
             in building a brighter future for learners around the world.
           </p>
         </div>
 
-        {/* Middle: Quick Links */}
         <div className="w-full sm:w-[25%]">
           <h3 className="text-[1.2rem]  font-semibold   mb-2">Quick Links</h3>
           <ul className="flex flex-col gap-3">
@@ -64,7 +62,6 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Right: Contact Info */}
         <div className="w-full sm:w-[25%]">
           <h3 className="text-[1.2rem] font-semibold   mb-2">Contact Us</h3>
           <div className="flex flex-col gap-3   dark:text-slate-300">
@@ -89,7 +86,6 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom: Copyright */}
         <Copyright />
       </div>
     </footer>
