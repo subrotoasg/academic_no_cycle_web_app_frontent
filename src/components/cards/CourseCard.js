@@ -39,10 +39,10 @@ export default function CourseCard({ course }) {
       >
         <div style={{ position: "relative" }}>
           <CardMedia
-            sx={{ height: 160, objectFit: "contain" }}
+            component="img"
+            sx={{ objectFit: "fill", width: "100%", height: 180 }}
             image={course?.ProductImage}
             title={course?.productFullName || "Course Image"}
-            className="object-contain"
           />
           {/* 
           <div
