@@ -55,18 +55,16 @@ function Class() {
         </h1>
       </div>
 
-      <div className="md:flex gap-8 justify-between my-5">
+      <div className="md:flex gap-4 justify-between my-5">
         <div className="w-full">
           {chapterContents?.length > 0 ? (
             <>
               <h3 className="md:text-2xl font-semibold text-center my-7 text-indigo-500">
                 Available Classes
               </h3>{" "}
-              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-10 lg:mx-0 mx-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 lg:gap-6 mb-10 px-3">
                 {chapterContents?.map((content) => (
-                  <div key={content.id}>
-                    <ClassCard content={content} />
-                  </div>
+                  <ClassCard content={content} key={content.id} />
                 ))}
               </div>
             </>
