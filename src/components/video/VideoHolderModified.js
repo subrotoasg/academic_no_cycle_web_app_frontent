@@ -6,19 +6,24 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useSelector } from "react-redux";
 import { currentUser } from "@/redux/Features/authentication";
 import { Eye, Maximize, Minimize } from "lucide-react";
+import Image from "next/image";
+import backupImg from "../../../public/img/backup.png";
 
 const YouTubeOverlayPlayer = ({ videoId }) => {
   const containerRef = useRef(null);
   const playerRef = useRef(null);
   const ytPlayer = useRef(null);
   const progressRef = useRef(null);
+  const isDragging = useRef(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [timeDisplay, setTimeDisplay] = useState("0:00 / 0:00");
   const [progress, setProgress] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [volume, setVolume] = useState(100);
 
-  //  ------- controls visibility -------------
+  // const singleTapTimer = useRef(null);
+
+  //  ------------ controls visibility -------------
   const [showControls, setShowControls] = useState(true);
   const hideTimer = useRef(null);
 
@@ -71,8 +76,11 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
     }
   };
 
-  // Double tap full screen
   const lastTap = useRef(0);
+
+  // const handleSingleTap = () => {
+  //   togglePlay(); // play or pause
+  // };
 
   const handleDoubleTap = () => {
     const now = Date.now();
@@ -89,6 +97,17 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
   const handleTap = (e) => {
     handleUserActivity();
     handleDoubleTap(e);
+    // // If there's already a pending single tap, it's a double tap
+    // if (singleTapTimer.current) {
+    //   clearTimeout(singleTapTimer.current);
+    //   singleTapTimer.current = null;
+    //   handleDoubleTap(); // fullscreen
+    // } else {
+    //   singleTapTimer.current = setTimeout(() => {
+    //     handleSingleTap(); // play/pause
+    //     singleTapTimer.current = null;
+    //   }, 250); // adjust delay if needed
+    // }
   };
 
   useEffect(() => {
@@ -252,12 +271,6 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
     ytPlayer.current.setPlaybackRate(parseFloat(rate));
   };
 
-  // const seekToPercent = (e) => {
-  //   if (!ytPlayer.current) return;
-  //   const rect = e.target.getBoundingClientRect();
-  //   const percent = (e.clientX - rect.left) / rect.width;
-  //   ytPlayer.current.seekTo(ytPlayer.current.getDuration() * percent, true);
-  // };
   const seekToPercent = (e) => {
     if (!ytPlayer.current || !progressRef.current) return;
 
@@ -278,7 +291,20 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
     setProgress(percent * 100);
   };
 
-  // FullScreen controller
+  const handleDragStart = (e) => {
+    isDragging.current = true;
+    seekToPercent(e);
+  };
+
+  const handleDragMove = (e) => {
+    if (!isDragging.current) return;
+    seekToPercent(e);
+  };
+
+  const handleDragEnd = () => {
+    isDragging.current = false;
+  };
+  // FullScreen
   const goFullscreen = () => {
     if (!containerRef.current) return;
     const container = containerRef.current;
@@ -299,6 +325,7 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
       className="relative w-full aspect-video bg-black rounded-lg overflow-hidden"
       ref={containerRef}
       onDoubleClick={handleTap}
+      // onClick={handleTap}
       onTouchEnd={handleTap}
     >
       <div
@@ -316,19 +343,22 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
           {!isPlaying && (
             <button
               onClick={togglePlay}
-              className="bg-black/50 text-white p-4 rounded-full pointer-events-auto"
+              className="bg-black/60 text-white p-3 rounded-full pointer-events-auto text-lg"
             >
               ▶
             </button>
           )}
         </div>
 
-        <div className="bg-black/50 px-4 py-2 flex items-center justify-between pointer-events-auto">
+        <div className="bg-black/80 px-4 py-2 flex items-center justify-between pointer-events-auto">
           <div className="flex items-center gap-2">
-            <button onClick={togglePlay} className="text-lg text-white">
+            <button
+              onClick={togglePlay}
+              className="text-lg md:text-xl text-white pr-2"
+            >
               {isPlaying ? "⏸" : "▶"}
             </button>
-            <div className="relative group flex items-center">
+            {/* <div className="relative group flex items-center">
               <div className="hidden md:flex items-center">
                 <button onClick={toggleMute} className="z-10">
                   {ytPlayer.current?.isMuted?.() ? "🔇" : "🔊"}
@@ -356,6 +386,19 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
                   className="h-2 w-8"
                 />
               </div>
+            </div> */}
+            <div className="flex items-center gap-2">
+              <button onClick={toggleMute} className="text-lg md:text-xl">
+                {ytPlayer.current?.isMuted?.() ? "🔇" : "🔊"}
+              </button>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={volume}
+                onChange={changeVolume}
+                className="h-2 w-8 md:w-24 accent-blue-500"
+              />
             </div>
 
             <span className="text-xs text-white">{timeDisplay}</span>
@@ -365,7 +408,14 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
             ref={progressRef}
             className="flex-1 mx-2 h-2 bg-gray-500 rounded cursor-pointer"
             onClick={seekToPercent}
-            onTouchStart={seekToPercent}
+            // onTouchStart={seekToPercent}
+            onMouseDown={handleDragStart}
+            onMouseMove={handleDragMove}
+            onMouseUp={handleDragEnd}
+            onMouseLeave={handleDragEnd}
+            onTouchStart={handleDragStart}
+            onTouchMove={handleDragMove}
+            onTouchEnd={handleDragEnd}
           >
             <div
               className="h-2 bg-red-500 rounded"
@@ -374,11 +424,15 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
           </div>
 
           <div className="flex items-center gap-2">
-            <button onClick={() => skip(-5)}>⏪ </button>
-            <button onClick={() => skip(5)}>⏩</button>
+            <button onClick={() => skip(-5)} className="text-base md:text-lg">
+              ⏪{" "}
+            </button>
+            <button onClick={() => skip(5)} className="text-base md:text-lg">
+              ⏩
+            </button>
             <select
               onChange={(e) => changeSpeed(e.target.value)}
-              className="text-xs text-white"
+              className="text-xs md:text-sm text-white"
             >
               {[0.5, 0.75, 1, 1.25, 1.5, 2].map((v) => (
                 <option key={v} value={v}>
@@ -390,11 +444,11 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
             {!isFullscreen ? (
               <button onClick={goFullscreen}>
                 {" "}
-                <Maximize className="w-5 h-5 text-white" />
+                <Maximize className="w-5 h-5 md:w-6 md:h-6 text-white" />
               </button>
             ) : (
               <button onClick={exitFullscreen}>
-                <Minimize className="w-5 h-5 text-white" />
+                <Minimize className="w-5 h-5 md:w-6 md:h-6 text-white" />
               </button>
             )}
           </div>
@@ -413,13 +467,13 @@ const PDFViewer = ({ id, title }) => {
 
   return (
     <motion.div
-      className="w-full mt-8"
+      className="w-full flex justify-center items-center"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
     >
       <iframe
-        className="w-full min-h-[80vh] border-2 border-gray-300 dark:border-gray-700 rounded-lg shadow-xl"
+        className="w-full  min-h-[60vh] md:min-h-[90vh] border-2 border-gray-300 dark:border-gray-700 rounded-lg shadow-xl"
         src={getDrivePreviewURL(id)}
         title={title}
       />
@@ -430,19 +484,13 @@ const PDFViewer = ({ id, title }) => {
 const TabButton = ({ title, isActive, onClick }) => (
   <button
     onClick={onClick}
-    className={`py-2 px-4 font-semibold text-base relative transition-colors ${
+    className={`py-1 md:py-2 px-2 md:px-4 font-semibold text-xs md:text-base transition-colors rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-400 ${
       isActive
-        ? "text-indigo-500 dark:text-indigo-400"
-        : "text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+        ? "bg-indigo-500 text-white dark:bg-indigo-600"
+        : "bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-500 dark:text-gray-200 dark:hover:bg-blue-700"
     }`}
   >
     {title}
-    {isActive && (
-      <motion.div
-        className="absolute bottom-[-2px] left-0 right-0 h-0.5 bg-indigo-500 dark:bg-indigo-400"
-        layoutId="underline"
-      />
-    )}
   </button>
 );
 
@@ -450,6 +498,7 @@ const VideoHolderModified = ({ classContent }) => {
   const user = useSelector(currentUser);
   const isAdmin = user?.role === "admin";
   const [activeTab, setActiveTab] = useState(null);
+  const pdfRef = useRef(null);
 
   const { data: chapterContentsData, isLoading } =
     useGetClassContentsBySubjectChapterIdQuery(
@@ -461,9 +510,26 @@ const VideoHolderModified = ({ classContent }) => {
       ?.id;
 
   const chapterContents = chapterContentsData?.data;
+  // console.log(chapterContents);
+  const toggleTab = (key) => {
+    setActiveTab((prev) => {
+      const isOpening = prev !== key;
+      const newActive = isOpening ? key : null;
 
-  const toggleTab = (key) =>
-    setActiveTab((prev) => (prev === key ? null : key));
+      if (isOpening) {
+        setTimeout(() => {
+          if (pdfRef.current) {
+            pdfRef.current.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }
+        }, 100);
+      }
+
+      return newActive;
+    });
+  };
 
   return (
     <div className="min-h-auto bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 rounded-xl mx-auto">
@@ -561,17 +627,31 @@ const VideoHolderModified = ({ classContent }) => {
                           ? `/admin/content/${content.id}?title=${content.classTitle}`
                           : `/course/${courseId}/content/${content.id}?title=${content.classTitle}`
                       }
-                      className="block p-2 rounded-lg bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-300 shadow-md"
+                      className="flex items-center p-2 rounded-lg bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-300 shadow-md"
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.1, duration: 0.4 }}
                     >
-                      <p className="font-semibold text-gray-800 dark:text-white">
-                        {content.classTitle}
-                      </p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Lesson {content.classNo}
-                      </p>
+                      {" "}
+                      {/* Thumbnail */}
+                      <div className="flex-shrink-0 w-16 h-12 md:w-24 md:h-16 rounded-md overflow-hidden mr-3">
+                        <Image
+                          src={content.thumbneil || backupImg}
+                          alt={content.classTitle}
+                          className="w-full h-full object-fill"
+                          width={50}
+                          height={30}
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0 text-sm">
+                        <p className="font-semibold text-gray-800 dark:text-white truncate">
+                          {content.classTitle}
+                        </p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                          Lesson {content.classNo} •{" "}
+                          {content.instructor || "Unknown"}
+                        </p>
+                      </div>
                     </motion.a>
                   ))
                 ) : (
@@ -584,18 +664,18 @@ const VideoHolderModified = ({ classContent }) => {
           </div>
         </div>
 
-        <div className="mt-10 container">
-          <div className="flex border-b-1 border-gray-200 dark:border-gray-700 pb-2">
+        <div className="mt-10 w-full  px-2 sm:px-4">
+          <div className="flex border-gray-200 dark:border-gray-700 mb-2 gap-2">
             {classContent?.lectureSheet && (
               <TabButton
-                title="Lecture "
+                title="Lecture Sheet "
                 isActive={activeTab === "lectureSheet"}
                 onClick={() => toggleTab("lectureSheet")}
               />
             )}
             {classContent?.practiceSheet && (
               <TabButton
-                title="Practice "
+                title="Practice Sheet "
                 isActive={activeTab === "practiceSheet"}
                 onClick={() => toggleTab("practiceSheet")}
               />
@@ -608,11 +688,15 @@ const VideoHolderModified = ({ classContent }) => {
               />
             )}
           </div>
-          <AnimatePresence>
-            {activeTab && (
-              <PDFViewer id={classContent[activeTab]} title={activeTab} />
-            )}
-          </AnimatePresence>
+          <div className="mt-2">
+            <AnimatePresence>
+              {activeTab && (
+                <div ref={pdfRef} className="w-full">
+                  <PDFViewer id={classContent[activeTab]} title={activeTab} />
+                </div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
       </div>
     </div>

@@ -39,32 +39,11 @@ export default function CourseCard({ course }) {
       >
         <div style={{ position: "relative" }}>
           <CardMedia
-            sx={{ height: 160, objectFit: "contain" }}
+            component="img"
+            sx={{ objectFit: "fill", width: "100%", height: 180 }}
             image={course?.ProductImage}
             title={course?.productFullName || "Course Image"}
-            className="object-contain"
           />
-          {/* 
-          <div
-            style={{
-              position: "absolute",
-              top: 8,
-              right: 8,
-              backgroundColor: "rgba(0,0,0,0.6)",
-              color: "#36f23c",
-              padding: "2px 8px",
-              borderRadius: 12,
-              fontSize: 12,
-              fontWeight: "bold",
-              pointerEvents: "none",
-              userSelect: "none",
-              minWidth: 30,
-              textAlign: "center",
-            }}
-            title="Enrolled Students"
-          >
-            {course?._count?.student ?? 0} Enrolled
-          </div> */}
         </div>
         <CardContent className="flex-1 text-xl">
           <Tooltip title={course?.productFullName || ""} arrow>
@@ -85,15 +64,7 @@ export default function CourseCard({ course }) {
             </Typography>
           </Tooltip>
 
-          <div
-            style={{
-              display: "flex",
-              gap: "4px",
-              justifyContent: "center",
-              marginTop: 1,
-              alignItems: "center",
-            }}
-          >
+          <div className="flex gap-1 justify-center items-center mt-3">
             <CourseSubCategoryPill subCategory={course?.SubCategory} />
             <CourseEnrolledPill count={course?._count?.student} />
           </div>
@@ -128,16 +99,16 @@ export default function CourseCard({ course }) {
               View Course
             </Link>
           ) : (
-            <>
+            <div className="flex w-full gap-2 ">
               <a
                 href={permalink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-gradient-to-r from-indigo-800 to-indigo-500 hover:from-indigo-400 hover:to-indigo-700 hover:bg-blue-700 text-white px-2 py-2 rounded-lg   transition
+                className="w-1/2  bg-gradient-to-r from-indigo-800 to-indigo-500 hover:from-indigo-400 hover:to-indigo-700 hover:bg-blue-700 text-white px-2 py-2 rounded-lg   transition
                 transform text-xs hover:rounded-full font-bold hover:scale-105
                 hover:shadow-xl
                 focus:outline-none
-                focus:ring-1 focus:ring-offset-1 focus:ring-gray-400"
+                focus:ring-1 focus:ring-offset-1 focus:ring-gray-400 text-center"
                 onClick={(e) => e.stopPropagation()}
               >
                 Enroll Now
@@ -153,14 +124,13 @@ export default function CourseCard({ course }) {
                     window.location.href = "/login";
                   }
                 }}
-                className="
-                access-now-btn
+                className="w-1/2
                 text-white
                 bg-gradient-to-r from-blue-800 to-blue-500
                 hover:from-blue-500 hover:to-blue-800
                 shadow-lg
                 text-xs
-                px-4 py-2
+                px-2 py-2
                 rounded-lg
                 font-bold
                 transition
@@ -170,11 +140,12 @@ export default function CourseCard({ course }) {
                 hover:shadow-xl
                 focus:outline-none
                 focus:ring-1 focus:ring-offset-1 focus:ring-gray-400
+                text-center
               "
               >
                 Access Now
               </button>
-            </>
+            </div>
           )}
         </CardActions>
       </Card>

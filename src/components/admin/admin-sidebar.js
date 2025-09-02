@@ -126,6 +126,11 @@ export const AdminSidebar = () => {
       icon: Bell,
       badge: "Beta",
     },
+    {
+      title: "Student Records",
+      href: "/admin/studentInfo",
+      icon: Users,
+    },
   ];
 
   if (!hasMounted) {

@@ -32,19 +32,19 @@ export default function EnrolledCourseCard({ courseInfo }) {
 
   return (
     <Card
-      sx={{ maxWidth: 345, height: 300, position: "relative" }}
+      sx={{ maxWidth: 345, height: 360, position: "relative" }}
       className="transition-transform duration-400 hover:shadow-lg hover:scale-[1.01] rounded-4xl flex flex-col justify-between cursor-pointer"
       onClick={handleCardClick}
     >
-      <div
+      {/* <div
         style={{
           position: "absolute",
-          top: 12,
-          right: 12,
+          top: 150,
+          right: 2,
           backgroundColor: "#168c41",
           borderRadius: "50%",
-          width: 28,
-          height: 28,
+          width: 24,
+          height: 24,
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -56,12 +56,12 @@ export default function EnrolledCourseCard({ courseInfo }) {
         aria-label="Enrolled"
       >
         <CheckCircleIcon sx={{ color: "white", fontSize: 20 }} />
-      </div>
+      </div> */}
       <CardMedia
-        sx={{ height: 160, objectFit: "contain" }}
+        component="img"
+        sx={{ objectFit: "fill", width: "100%", height: 180 }}
         image={course?.ProductImage}
         title={course?.productFullName || "Course Image"}
-        className="object-contain"
       />
       <CardContent className="flex-1">
         <Typography

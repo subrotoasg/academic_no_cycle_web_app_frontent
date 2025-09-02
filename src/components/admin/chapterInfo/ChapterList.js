@@ -87,7 +87,7 @@ export function ChapterList() {
         if (res?.success) {
           Swal.fire({
             title: "Deleted!",
-            text: `"${
+            text: `${
               Chapter?.title || Chapter?.chapter?.chapterName
             } has been successfully deleted.`,
             icon: "success",

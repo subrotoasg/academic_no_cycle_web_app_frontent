@@ -37,13 +37,6 @@ const Login = () => {
 
   const user = useSelector(currentUser);
 
-  // Prevent redirect before password set
-  // useEffect(() => {
-  //   if (user && step !== "newPassword") {
-  //     router.replace(user.role === "admin" ? "/admin" : "/");
-  //   }
-  // }, [user, router, step]);
-
   useEffect(() => {
     if (user && step !== "newPassword") {
       if (user.role === "admin") {

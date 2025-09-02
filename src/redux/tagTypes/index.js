@@ -10,6 +10,7 @@ export const tagTypesValue = {
   NOTICEROUTINE: "noticeRoutine",
   LIVE_CLASS: "liveClass",
   USER_INFO: "userInfo",
+  STUDENT: "student",
 };
 
 // Array tags

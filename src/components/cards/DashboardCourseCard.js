@@ -29,16 +29,16 @@ export default function DashboardCourseCard({ course }) {
 
   return (
     <Card
-      sx={{ maxWidth: 345, height: 350 }}
+      sx={{ maxWidth: 345, height: 380 }}
       className="relative transition-transform duration-400 hover:shadow-lg hover:scale-[1.01] rounded-4xl flex flex-col justify-between cursor-pointer"
       onClick={handleCardClick}
     >
       <div style={{ position: "relative" }}>
         <CardMedia
-          sx={{ height: 160, objectFit: "contain" }}
+          component="img"
           image={course?.ProductImage}
           title={course?.productFullName || "Course Image"}
-          className="object-contain"
+          sx={{ objectFit: "fill", width: "100%", height: 180 }}
         />
 
         {!isEnrolled && (
@@ -103,7 +103,7 @@ export default function DashboardCourseCard({ course }) {
         </div>
       </CardContent>
 
-      <CardActions className="flex justify-center items-center mb-3">
+      <CardActions className="flex justify-center items-center mb-2">
         <a
           href={permalink}
           target="_blank"

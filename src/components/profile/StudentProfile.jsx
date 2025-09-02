@@ -110,10 +110,10 @@ const StudentProfile = ({ onUpdate }) => {
   const fileInputRef = useRef(null);
 
   useEffect(() => {
-    if (!isLoading && student) {
-      setFormData(student);
+    if (!isLoading && data?.data && Object.keys(formData).length === 0) {
+      setFormData(data.data);
     }
-  }, [isLoading, student]);
+  }, [isLoading, data?.data]);
 
   const validateName = (value) => {
     if (!value || value.trim().length === 0) {
@@ -349,6 +349,7 @@ const StudentProfile = ({ onUpdate }) => {
           "Content-Type": "application/pdf",
           "x-access-token": token,
         },
+        credentials: "include",
       });
       if (!res.ok) {
         toast.error("Sorry!, Something went wrong");
@@ -425,7 +426,7 @@ const StudentProfile = ({ onUpdate }) => {
           <p className="text-gray-600 dark:text-gray-300 font-bold text-sm">
             {formData?.presentDivision
               ? `${formData?.presentDivision}, Bangladesh`
-              : "ACS"}
+              : "STUDENT"}
           </p>
         </div>
       </div>

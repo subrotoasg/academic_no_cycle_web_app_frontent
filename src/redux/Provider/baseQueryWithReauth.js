@@ -25,36 +25,6 @@ export const baseQueryWithReauth = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions);
   // console.log(result);
 
-  // Check for token expiration
-  // if (
-  //   result.error &&
-  //   (result.error.status === 401 ||
-  //     result.error.data?.message === "jwt expired" ||
-  //     result.error.data?.erroSourses?.some((e) => e.message === "jwt expired"))
-  // ) {
-  //   // Try refreshing token
-  //   const refreshResult = await baseQuery(
-  //     {
-  //       url: "/refresh-token",
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/x-www-form-urlencoded",
-  //       },
-  //       body: qs.stringify({ refreshToken: getCookie("refreshToken") }),
-  //     },
-  //     api,
-  //     extraOptions
-  //   );
-
-  //   if (refreshResult.data) {
-  //     api.dispatch(setUserFromToken(refreshResult.data.data));
-
-  //     result = await baseQuery(args, api, extraOptions);
-  //   } else {
-  //     api.dispatch(removeUser());
-  //   }
-  // }
-
   if (
     result.error &&
     (result.error.status === 401 ||
@@ -97,9 +67,7 @@ function handleForceLogout(api) {
   api.dispatch(removeUser());
   api.dispatch(clearEnrolledCourses());
   api.dispatch(clearArchiveAccess());
-  // if (typeof window !== "undefined") {
-  //   window.location.href = "/login"; // redirect to login
-  // }
+
   if (typeof window !== "undefined") {
     setTimeout(() => {
       window.location.href = "/login";
