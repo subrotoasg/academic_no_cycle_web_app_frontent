@@ -343,19 +343,22 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
           {!isPlaying && (
             <button
               onClick={togglePlay}
-              className="bg-black/50 text-white p-4 rounded-full pointer-events-auto"
+              className="bg-black/60 text-white p-3 rounded-full pointer-events-auto text-lg"
             >
               ▶
             </button>
           )}
         </div>
 
-        <div className="bg-black/50 px-4 py-2 flex items-center justify-between pointer-events-auto">
+        <div className="bg-black/80 px-4 py-2 flex items-center justify-between pointer-events-auto">
           <div className="flex items-center gap-2">
-            <button onClick={togglePlay} className="text-lg text-white">
+            <button
+              onClick={togglePlay}
+              className="text-lg md:text-xl text-white pr-2"
+            >
               {isPlaying ? "⏸" : "▶"}
             </button>
-            <div className="relative group flex items-center">
+            {/* <div className="relative group flex items-center">
               <div className="hidden md:flex items-center">
                 <button onClick={toggleMute} className="z-10">
                   {ytPlayer.current?.isMuted?.() ? "🔇" : "🔊"}
@@ -383,6 +386,19 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
                   className="h-2 w-8"
                 />
               </div>
+            </div> */}
+            <div className="flex items-center gap-2">
+              <button onClick={toggleMute} className="text-lg md:text-xl">
+                {ytPlayer.current?.isMuted?.() ? "🔇" : "🔊"}
+              </button>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={volume}
+                onChange={changeVolume}
+                className="h-2 w-8 md:w-24 accent-blue-500"
+              />
             </div>
 
             <span className="text-xs text-white">{timeDisplay}</span>
@@ -408,11 +424,15 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
           </div>
 
           <div className="flex items-center gap-2">
-            <button onClick={() => skip(-5)}>⏪ </button>
-            <button onClick={() => skip(5)}>⏩</button>
+            <button onClick={() => skip(-5)} className="text-base md:text-lg">
+              ⏪{" "}
+            </button>
+            <button onClick={() => skip(5)} className="text-base md:text-lg">
+              ⏩
+            </button>
             <select
               onChange={(e) => changeSpeed(e.target.value)}
-              className="text-xs text-white"
+              className="text-xs md:text-sm text-white"
             >
               {[0.5, 0.75, 1, 1.25, 1.5, 2].map((v) => (
                 <option key={v} value={v}>
@@ -424,11 +444,11 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
             {!isFullscreen ? (
               <button onClick={goFullscreen}>
                 {" "}
-                <Maximize className="w-5 h-5 text-white" />
+                <Maximize className="w-5 h-5 md:w-6 md:h-6 text-white" />
               </button>
             ) : (
               <button onClick={exitFullscreen}>
-                <Minimize className="w-5 h-5 text-white" />
+                <Minimize className="w-5 h-5 md:w-6 md:h-6 text-white" />
               </button>
             )}
           </div>
