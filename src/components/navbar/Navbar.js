@@ -233,6 +233,17 @@ export default function Navbar() {
                     isMobile={isMobile}
                   />
                 </li>
+
+                <li>
+                  <NavItem
+                    href="https://exam.aparsclassroom.com"
+                    icon={
+                      <Bookmark className="w-5 h-5 text-gray-500 dark:text-white" />
+                    }
+                    label="Visit Exam Site"
+                    isMobile={isMobile}
+                  />
+                </li>
               </>
             ) : null}
           </>
@@ -368,16 +379,41 @@ export default function Navbar() {
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   {user?.role === "student" ? (
-                    <DropdownMenuItem asChild>
-                      <Link
-                        href="/student/profile"
-                        className="cursor-pointer font-semibold text-gray-800 dark:text-white 
-      hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2 w-full h-full"
-                      >
-                        <User className="w-4 h-4 text-gray-500 dark:text-white" />
-                        Profile
-                      </Link>
-                    </DropdownMenuItem>
+                    //               <DropdownMenuItem asChild>
+                    //                 <Link
+                    //                   href="/student/profile"
+                    //                   className="cursor-pointer font-semibold text-gray-800 dark:text-white
+                    // hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2 w-full h-full"
+                    //                 >
+                    //                   <User className="w-4 h-4 text-gray-500 dark:text-white" />
+                    //                   Profile
+                    //                 </Link>
+                    //               </DropdownMenuItem>
+                    <>
+                      <DropdownMenuItem asChild>
+                        <Link
+                          href="/student/profile"
+                          className="cursor-pointer font-semibold text-gray-800 dark:text-white 
+        hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2 w-full h-full"
+                        >
+                          <User className="w-4 h-4 text-gray-500 dark:text-white" />
+                          Profile
+                        </Link>
+                      </DropdownMenuItem>
+
+                      <DropdownMenuItem asChild>
+                        <Link
+                          href="https://exam.aparsclassroom.com"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="cursor-pointer font-semibold text-gray-800 dark:text-white 
+        hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2 w-full h-full"
+                        >
+                          <Bookmark className="w-4 h-4 text-gray-500 dark:text-white" />
+                          Visit Exam Site
+                        </Link>
+                      </DropdownMenuItem>
+                    </>
                   ) : null}
 
                   <DropdownMenuItem
