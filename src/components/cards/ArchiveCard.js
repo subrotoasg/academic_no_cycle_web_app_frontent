@@ -24,7 +24,7 @@ export default function ArchiveCourseCard({ archiveData }) {
         transition: "transform 0.3s",
         "&:hover": { transform: "scale(1.01)" },
       }}
-      className="rounded-3xl"
+      className="rounded-3xl mx-auto"
     >
       <Link
         href={`/course/${id}`}
@@ -37,9 +37,15 @@ export default function ArchiveCourseCard({ archiveData }) {
             height="180"
             image={archiveImg?.src}
             alt={productFullName || "Archived Course Image"}
+            // sx={{
+            //   height: 160,
+            //   objectFit: "cover",
+            //   backgroundColor: "#f5f5f5",
+            // }}
             sx={{
+              objectFit: "fill",
+              width: "100%",
               height: 160,
-              objectFit: "cover",
               backgroundColor: "#f5f5f5",
             }}
           />

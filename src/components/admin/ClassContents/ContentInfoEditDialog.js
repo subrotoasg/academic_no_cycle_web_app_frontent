@@ -353,7 +353,7 @@ export default function ContentInfoEditDialog({
                   alt="Thumbnail Preview"
                   width={300}
                   height={200}
-                  className="w-24 h-16 rounded-md object-cover"
+                  className="w-28 md:w-32 h-20 md:h-24 rounded-md object-fill"
                 />
               </div>
 

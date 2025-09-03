@@ -18,7 +18,7 @@ const Featured = ({ courseId }) => {
   return (
     <div className="container mx-auto p-4">
       <div className="text-center mb-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-blue-500">
+        <h2 className="text-xl md:text-3xl font-bold text-indigo-500">
           Featured Highlights
         </h2>
         <p className="text-xs md:text-lg text-gray-600 dark:text-gray-300 my-8 ">

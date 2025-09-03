@@ -71,7 +71,10 @@ function CourseContent() {
               </div>
             ))}
             {archiveData?.data && (
-              <ArchiveCourseCard archiveData={archiveData} />
+              <div className="transition-transform transform hover:scale-105">
+                {" "}
+                <ArchiveCourseCard archiveData={archiveData} />
+              </div>
             )}
           </>
         )}

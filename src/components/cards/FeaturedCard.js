@@ -6,7 +6,7 @@ import featureImg from "../../../public/feature.jpg";
 
 function FeaturedCard({ feature }) {
   return (
-    <div className="max-w-xs h-full flex flex-col  border border-gray-300 rounded-lg shadow-sm bg-blue-300 hover:scale-[1.05] ">
+    <div className="max-w-xs h-full flex flex-col  border border-gray-300 rounded-lg shadow-sm bg-blue-300 hover:scale-[1.05] mx-auto">
       <div className="relative w-full h-48 overflow-hidden rounded-t-lg">
         {feature?.type && (
           <span className="absolute flex items-center gap-1 bottom-2 right-2 bg-slate-300 font-bold text-blue-600 text-xs px-2 py-1 rounded-full z-10">

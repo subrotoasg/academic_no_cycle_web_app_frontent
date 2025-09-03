@@ -35,7 +35,7 @@ const NoticeBoard = ({ courseId }) => {
   return (
     <div className="container mx-auto p-2 marquee-mobile">
       <div className="my-2 md:my-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-center text-blue-500 my-3 md:my-5">
+        <h2 className="text-xl md:text-3xl font-bold text-center text-indigo-500 my-3 md:my-5">
           Announcements
         </h2>
         <Marquee>
