@@ -147,6 +147,11 @@ export default function LiveClassForm() {
           timer: 1000,
         });
         resetForm();
+      } else {
+        toast.error(
+          res?.error?.data?.message ||
+            "Failed to schedule live class, please try again"
+        );
       }
     } catch (err) {
       toast.error(
@@ -187,7 +192,14 @@ export default function LiveClassForm() {
           label="Class Title"
           name="title"
           placeholder="Enter class title"
-          rules={{ required: "Class title is required" }}
+          // rules={{ required: "Class title is required" }}
+          rules={{
+            minLength: {
+              required: "Class title is required",
+              value: 3,
+              message: "Title must be at least 3 characters long",
+            },
+          }}
         />
         <InputField
           label="Class Number"
@@ -205,7 +217,14 @@ export default function LiveClassForm() {
           name="description"
           placeholder="Enter class description"
           textarea
-          required
+          rules={{
+            minLength: {
+              required: "Class Description is required",
+              value: 5,
+              message: "Description must be at least 5 characters long",
+            },
+          }}
+          // required
         />
         <Dropdown
           label="Instructor"

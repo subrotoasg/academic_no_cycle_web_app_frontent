@@ -108,6 +108,23 @@ export default function LiveClassEditDialog({
 
   const [updateLiveClass, { isLoading }] = useUpdateLiveClassMutation();
 
+  // Function to convert UTC time to local datetime string for input
+  const utcToLocalDateTime = (utcString) => {
+    if (!utcString) return "";
+
+    const date = new Date(utcString);
+    if (isNaN(date.getTime())) return "";
+
+    // Format to YYYY-MM-DDTHH:MM for datetime-local input
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  };
+
   useEffect(() => {
     if (selectedLiveClass) {
       reset({
@@ -115,7 +132,7 @@ export default function LiveClassEditDialog({
         classNumber: selectedLiveClass.classNo,
         description: selectedLiveClass.description,
         instructor: selectedLiveClass.instructor,
-        startTime: selectedLiveClass.startTime?.slice(0, 16) || "",
+        startTime: utcToLocalDateTime(selectedLiveClass.startTime),
       });
       setImagePreview(selectedLiveClass.thumbnail || null);
       setSelectedFile(null);
@@ -217,7 +234,14 @@ export default function LiveClassEditDialog({
               label="Class Title"
               name="title"
               placeholder="Enter class title"
-              rules={{ required: "Class title is required" }}
+              // rules={{ required: "Class title is required" }}
+              rules={{
+                minLength: {
+                  required: "Class title is required",
+                  value: 3,
+                  message: "Title must be at least 3 characters long",
+                },
+              }}
             />
 
             <InputField
@@ -225,6 +249,14 @@ export default function LiveClassEditDialog({
               name="description"
               placeholder="Enter class description"
               textarea
+              rules={{
+                minLength: {
+                  required: "Class description is required",
+                  value: 5,
+                  message: "Description must be at least 5 characters long",
+                },
+              }}
+              // required
             />
             <Dropdown
               label="Instructor"
