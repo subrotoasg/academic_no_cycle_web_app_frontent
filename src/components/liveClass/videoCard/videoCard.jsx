@@ -37,7 +37,8 @@ const VideoCard = ({ video, setSelectedClass, setIsPlaying }) => {
             //     : "/scheduled.jpg"
             // })`,
             backgroundImage: `url(${getThumbnail(video)})`,
-            backgroundSize: "cover",
+            // backgroundSize: "cover",
+            backgroundSize: "100% 100%",
             backgroundPosition: "center",
           }}
         >
