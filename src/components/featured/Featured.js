@@ -26,7 +26,7 @@ const Featured = ({ courseId }) => {
           limited-time discounts, and special coupon codes
         </p>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6 p-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5 p-2">
         {features.map((feature, index) => (
           <div key={feature.id}>
             <FeaturedCard feature={feature} />
