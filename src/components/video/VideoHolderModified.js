@@ -550,7 +550,7 @@ const VideoHolderModified = ({ classContent }) => {
                   }}
                 >
                   <iframe
-                    src={`https://iframe.mediadelivery.net/embed/${classContent.libraryId}/${classContent.videoUrl}?autoplay=true&loop=false&muted=false&preload=true&responsive=true`}
+                    src={`https://iframe.mediadelivery.net/embed/${classContent?.libraryId}/${classContent?.videoUrl}?autoplay=true&loop=false&muted=false&preload=true&responsive=true`}
                     loading="lazy"
                     style={{
                       border: 0,
@@ -565,7 +565,7 @@ const VideoHolderModified = ({ classContent }) => {
                   />
                 </div>
               ) : (
-                <YouTubeOverlayPlayer videoId={classContent.videoUrl} />
+                <YouTubeOverlayPlayer videoId={classContent?.videoUrl} />
               )}
             </motion.div>
 
@@ -581,13 +581,13 @@ const VideoHolderModified = ({ classContent }) => {
 
               {classContent?.description && (
                 <p className="mt-4 text-xs md:text-xl text-gray-600 dark:text-gray-300">
-                  {classContent.description}
+                  {classContent?.description}
                 </p>
               )}
 
               {classContent?.instructor && (
                 <p className="mt-2 text-sm md:text-lg font-medium text-gray-700 dark:text-gray-400">
-                  Instructor: {classContent.instructor}
+                  Instructor: {classContent?.instructor}
                 </p>
               )}
 
@@ -595,13 +595,13 @@ const VideoHolderModified = ({ classContent }) => {
                 <Eye className="w-4 h-4 md:w-5 md:h-5 mr-1 text-blue-500" />
                 <AnimatePresence mode="wait">
                   <motion.span
-                    key={classContent.views}
+                    key={classContent?.views}
                     initial={{ y: 10, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     exit={{ y: -10, opacity: 0 }}
                     transition={{ duration: 0.4 }}
                   >
-                    Views: {classContent.views}
+                    Views: {classContent?.views}
                   </motion.span>
                 </AnimatePresence>
               </div>
@@ -624,8 +624,8 @@ const VideoHolderModified = ({ classContent }) => {
                       key={content.id}
                       href={
                         isAdmin
-                          ? `/admin/content/${content.id}?title=${content.classTitle}`
-                          : `/course/${courseId}/content/${content.id}?title=${content.classTitle}`
+                          ? `/admin/content/${content?.id}?title=${content?.classTitle}`
+                          : `/course/${courseId}/content/${content?.id}?title=${content?.classTitle}`
                       }
                       className="flex items-center p-2 rounded-lg bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-300 shadow-md"
                       initial={{ opacity: 0, x: 20 }}
@@ -636,8 +636,8 @@ const VideoHolderModified = ({ classContent }) => {
                       {/* Thumbnail */}
                       <div className="flex-shrink-0 w-16 h-12 md:w-24 md:h-16 rounded-md overflow-hidden mr-3">
                         <Image
-                          src={content.thumbneil || backupImg}
-                          alt={content.classTitle}
+                          src={content?.thumbneil || backupImg}
+                          alt={content?.classTitle}
                           className="w-full h-full object-fill"
                           width={50}
                           height={30}
@@ -645,11 +645,11 @@ const VideoHolderModified = ({ classContent }) => {
                       </div>
                       <div className="flex-1 min-w-0 text-sm">
                         <p className="font-semibold text-gray-800 dark:text-white truncate">
-                          {content.classTitle}
+                          {content?.classTitle}
                         </p>
                         <p className="text-sm text-gray-500 dark:text-gray-400">
-                          Lesson {content.classNo} •{" "}
-                          {content.instructor || "Unknown"}
+                          Lesson {content?.classNo} •{" "}
+                          {content?.instructor || "Unknown"}
                         </p>
                       </div>
                     </motion.a>
