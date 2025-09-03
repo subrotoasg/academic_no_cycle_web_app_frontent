@@ -124,7 +124,7 @@ export default function LiveClassForm() {
     const liveClassInfo = {
       courseSubjectChapterId: data.chapter,
       title: data.title,
-      classNo: data.classNumber,
+      classNumber: data.classNumber,
       description: data.description,
       instructor: data.instructor,
       startTime: data.startTime,
