@@ -104,6 +104,7 @@ export default function LiveClassForm() {
     { label: "Omar Faruk", value: "Omar Faruk" },
     { label: "Apurbo Opu", value: "Apurbo Opu" },
     { label: "Sharoare Hosan Emon", value: "Sharoare Hosan Emon" },
+    { label: "Instructor (Tech Team)", value: "Instructor (Tech Team)" },
   ];
 
   useEffect(() => {
