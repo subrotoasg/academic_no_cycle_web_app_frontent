@@ -1,14 +1,37 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
+import "swiper/css/autoplay";
 import VideoCard from "../videoCard/videoCard";
 
 const VideoCarousel = ({ videos, title, setSelectedClass }) => {
   const carouselId = title?.toLowerCase().replace(/[\sঃ]/g, "-");
+  const swiperRef = useRef(null);
+  const prevBtnRef = useRef(null);
+  const nextBtnRef = useRef(null);
+
+  useEffect(() => {
+    if (swiperRef.current && swiperRef.current.swiper) {
+      const swiperInstance = swiperRef.current.swiper;
+
+      if (prevBtnRef.current) {
+        prevBtnRef.current.classList.toggle(
+          "swiper-button-disabled",
+          swiperInstance.isBeginning
+        );
+      }
+      if (nextBtnRef.current) {
+        nextBtnRef.current.classList.toggle(
+          "swiper-button-disabled",
+          swiperInstance.isEnd
+        );
+      }
+    }
+  }, [videos]);
   return (
     <div className="my-8 px-4">
       <div className="container mx-auto">
@@ -16,7 +39,7 @@ const VideoCarousel = ({ videos, title, setSelectedClass }) => {
           <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">
             {title}
           </h2>
-          {videos?.length > 4 && (
+          {videos?.length > 0 && (
             <div className="flex space-x-3">
               <button
                 className={`${carouselId}-prev rounded-full p-2 cursor-pointer bg-white dark:bg-gray-700 shadow-md hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors duration-200 border border-gray-200 dark:border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed`}
@@ -82,6 +105,12 @@ const VideoCarousel = ({ videos, title, setSelectedClass }) => {
               nextEl: `.${carouselId}-next`,
               disabledClass: "swiper-button-disabled",
             }}
+            autoplay={{
+              delay: 3000,
+              disableOnInteraction: false,
+              pauseOnMouseEnter: true,
+            }}
+            loop={true}
             pagination={{ clickable: true }}
             scrollbar={{ draggable: true }}
             className="pb-12"
