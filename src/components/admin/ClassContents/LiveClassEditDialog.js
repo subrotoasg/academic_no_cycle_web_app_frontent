@@ -28,7 +28,7 @@ export default function LiveClassEditDialog({
   selectedLiveClass,
   refetchLiveClasses,
 }) {
-  console.log(selectedLiveClass);
+  // console.log(selectedLiveClass);
   const defaultValues = {
     courseId: "",
     subject: "",
