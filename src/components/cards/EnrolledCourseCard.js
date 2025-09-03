@@ -33,7 +33,7 @@ export default function EnrolledCourseCard({ courseInfo }) {
   return (
     <Card
       sx={{ maxWidth: 345, height: 360, position: "relative" }}
-      className="transition-transform duration-400 hover:shadow-lg hover:scale-[1.01] rounded-4xl flex flex-col justify-between cursor-pointer"
+      className="transition-transform duration-400 hover:shadow-lg hover:scale-[1.01] rounded-4xl flex flex-col justify-between cursor-pointer mx-auto"
       onClick={handleCardClick}
     >
       {/* <div

@@ -251,12 +251,12 @@ export default function LiveClassEditDialog({
                 className="w-full border rounded-md h-10 dark:bg-gray-800 dark:text-white dark:border-gray-700"
               />
               {imagePreview && (
-                <div className="mt-3 w-28 h-28 relative border rounded-md overflow-hidden">
+                <div className="mt-3 w-24 md:w-32 h-20 md:h-24 relative border rounded-md overflow-hidden">
                   <Image
                     src={imagePreview}
                     alt="Thumbnail Preview"
                     fill
-                    className="object-cover"
+                    className="object-fill"
                   />
                 </div>
               )}

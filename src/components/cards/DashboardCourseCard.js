@@ -30,7 +30,7 @@ export default function DashboardCourseCard({ course }) {
   return (
     <Card
       sx={{ maxWidth: 345, height: 380 }}
-      className="relative transition-transform duration-400 hover:shadow-lg hover:scale-[1.01] rounded-4xl flex flex-col justify-between cursor-pointer"
+      className="relative transition-transform duration-400 hover:shadow-lg hover:scale-[1.01] rounded-4xl flex flex-col justify-between cursor-pointer mx-auto"
       onClick={handleCardClick}
     >
       <div style={{ position: "relative" }}>

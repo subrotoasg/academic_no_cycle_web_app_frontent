@@ -26,7 +26,7 @@ const SubjectCard = ({ courseSubject }) => {
           transform: "scale(1.01)",
         },
       }}
-      className="rounded-3xl"
+      className="rounded-3xl mx-auto"
     >
       <Link
         href={{
@@ -39,6 +39,7 @@ const SubjectCard = ({ courseSubject }) => {
           <CardMedia
             component="img"
             image={imageUrl}
+            height="180"
             alt={title}
             sx={{
               objectFit: "fill",
