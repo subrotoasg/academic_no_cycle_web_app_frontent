@@ -159,7 +159,13 @@ export default function NoticeInfoEditDialog({
               label="Notice Title"
               name="title"
               placeholder="Enter the title"
-              rules={{ required: "Title is required." }}
+              rules={{
+                required: "Title is required.",
+                minLength: {
+                  value: 3,
+                  message: "Title must be at least 3 characters",
+                },
+              }}
             />
 
             <InputField
@@ -167,6 +173,13 @@ export default function NoticeInfoEditDialog({
               name="description"
               placeholder="Provide a short description"
               textarea
+              rules={{
+                required: "Description is required.",
+                minLength: {
+                  value: 5,
+                  message: "Description must be at least 5 characters",
+                },
+              }}
             />
 
             <InputField
@@ -213,13 +226,13 @@ export default function NoticeInfoEditDialog({
               >
                 Upload Image
               </label>
-              <div className="mt-2 w-48 md:w-64 relative rounded-md overflow-hidden">
+              <div className="mt-2 w-48 md:w-64 h-28 md:h-40 relative rounded-md overflow-hidden">
                 <Image
-                  src={imagePreview || "/placeholder.jpg"}
+                  src={imagePreview}
                   alt="Image Preview"
                   width={300}
                   height={200}
-                  className="w-36 h-32 rounded-md object-cover"
+                  className="w-full h-full rounded-md object-fill"
                 />
               </div>
               <input

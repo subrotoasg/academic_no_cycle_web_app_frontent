@@ -94,7 +94,7 @@ export default function FeaturedInfoEditDialog({
       if (res?.success) {
         Swal.fire({
           icon: "success",
-          title: "Featured Info Successfully Updated!",
+          title: "Featured Info Successfully Updated",
           timer: 1500,
         });
         onOpenChange(false);
@@ -124,7 +124,13 @@ export default function FeaturedInfoEditDialog({
               label="Feature Title"
               name="title"
               placeholder="Enter the title"
-              rules={{ required: "Title is required." }}
+              rules={{
+                required: "Title is required",
+                minLength: {
+                  value: 3,
+                  message: "Title must be at least 3 characters long",
+                },
+              }}
             />
 
             <Dropdown
@@ -143,6 +149,13 @@ export default function FeaturedInfoEditDialog({
               name="description"
               placeholder="Enter a short description"
               textarea
+              rules={{
+                required: "Description is required",
+                minLength: {
+                  value: 5,
+                  message: "Description must be at least 5 characters long",
+                },
+              }}
             />
 
             {selectedType === "Coupon" && (
@@ -170,13 +183,13 @@ export default function FeaturedInfoEditDialog({
               >
                 Upload Image
               </label>
-              <div className="mt-2 w-48 md:w-64 relative border rounded-md overflow-hidden">
+              <div className="mt-2 w-40 md:w-64 h-24 md:h-32 relative border rounded-md overflow-hidden">
                 <Image
-                  src={imagePreview || "/placeholder.jpg"}
+                  src={imagePreview}
                   alt="Image Preview"
                   width={300}
                   height={200}
-                  className="w-full h-auto rounded-md object-cover"
+                  className="w-full h-full rounded-md object-fill"
                 />
               </div>
 

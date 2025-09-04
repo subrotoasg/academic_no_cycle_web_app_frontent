@@ -122,7 +122,13 @@ function FeaturedForm() {
           label="Feature Title"
           name="title"
           placeholder="Enter title"
-          rules={{ required: "Featured title is required" }}
+          rules={{
+            required: "Title is required",
+            minLength: {
+              value: 3,
+              message: "Title must be at least 3 characters long",
+            },
+          }}
         />
         <Dropdown
           label="Feature Type"
@@ -133,9 +139,15 @@ function FeaturedForm() {
         <InputField
           label="Description"
           name="description"
-          placeholder="Write feature description "
+          placeholder="Feature description "
           textarea
-          rules={{ required: "Description is required" }}
+          rules={{
+            required: "Description is required",
+            minLength: {
+              value: 5,
+              message: "Description must be at least 5 characters long",
+            },
+          }}
         />
         {selectedType === "Coupon" && (
           <InputField
@@ -157,12 +169,12 @@ function FeaturedForm() {
             className="w-full border  rounded-md dark:bg-gray-800 dark:text-white dark:border-gray-700"
           />
           {imagePreview && (
-            <div className="mt-3 w-32 h-32 relative border rounded-md overflow-hidden">
+            <div className="mt-3 w-32 h-24 md:w-44 md:h-32 relative border rounded-md overflow-hidden">
               <Image
                 src={imagePreview}
                 alt="Image Preview"
                 fill
-                className="object-cover"
+                className="object-fill h-full w-full"
               />
             </div>
           )}
