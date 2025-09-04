@@ -1,9 +1,10 @@
 import Image from "next/image";
 import React from "react";
 import { IoLocationOutline } from "react-icons/io5";
-import { MdOutlineEmail } from "react-icons/md";
+import { MdOutlineEmail, MdPhone } from "react-icons/md";
 import { TbWorldWww } from "react-icons/tb";
 import Copyright from "./Copyright";
+import { FaFacebookF } from "react-icons/fa";
 
 const quickLinks = [
   { name: "Home", url: "/" },
@@ -17,6 +18,17 @@ const contactInfo = [
   {
     icon: <IoLocationOutline className="text-xl" />,
     text: "Dhaka, Bangladesh",
+  },
+  {
+    icon: <MdPhone className="text-xl" />,
+    text: "Help Line: +8809677005588",
+    url: "tel:+8809677005588",
+  },
+
+  {
+    icon: <FaFacebookF className="text-xl" />,
+    text: "ACS Facebook Page",
+    url: "https://www.facebook.com/Academy.of.Champion.Students",
   },
   {
     icon: <MdOutlineEmail className="text-xl" />,

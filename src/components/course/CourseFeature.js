@@ -29,9 +29,16 @@ const CourseFeature = () => {
   const courses = useMemo(() => {
     const allCourses = courseData?.data?.data || [];
     return allCourses.filter(
-      (course) => !(course.markAsArchieve || course.productId == 548)
+      // (course) => !(course.markAsArchieve || course.productId == 548)
+      (course) =>
+        !(
+          course.markAsArchieve ||
+          course.productId == 548 ||
+          course.productId == 529
+        )
     );
   }, [courseData]);
+
   //  Get all unique subcategories from the courses
   const subCategories = useMemo(() => {
     const unique = Array.from(
