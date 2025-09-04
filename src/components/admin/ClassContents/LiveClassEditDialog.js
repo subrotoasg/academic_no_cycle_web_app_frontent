@@ -128,13 +128,13 @@ export default function LiveClassEditDialog({
   useEffect(() => {
     if (selectedLiveClass) {
       reset({
-        title: selectedLiveClass.title,
-        classNumber: selectedLiveClass.classNo,
-        description: selectedLiveClass.description,
-        instructor: selectedLiveClass.instructor,
-        startTime: utcToLocalDateTime(selectedLiveClass.startTime),
+        title: selectedLiveClass?.title,
+        classNumber: selectedLiveClass?.classNo,
+        description: selectedLiveClass?.description,
+        instructor: selectedLiveClass?.instructor,
+        startTime: utcToLocalDateTime(selectedLiveClass?.startTime),
       });
-      setImagePreview(selectedLiveClass.thumbnail || null);
+      setImagePreview(selectedLiveClass?.thumbnail || null);
       setSelectedFile(null);
     }
   }, [selectedLiveClass, reset]);
@@ -176,7 +176,6 @@ export default function LiveClassEditDialog({
         id: selectedLiveClass.id,
         formData,
       }).unwrap();
-      // console.log(res);
       if (res?.success) {
         Swal.fire({
           icon: "success",
@@ -186,9 +185,9 @@ export default function LiveClassEditDialog({
         refetchLiveClasses();
         onOpenChange(false);
       }
-    } catch (err) {
+    } catch (error) {
       toast.error(
-        err?.data?.message || "Failed to update live class, please try again"
+        error?.data?.message || "Failed to update live class, please try again"
       );
     }
   };
@@ -236,8 +235,8 @@ export default function LiveClassEditDialog({
               placeholder="Enter class title"
               // rules={{ required: "Class title is required" }}
               rules={{
+                required: "Class title is required",
                 minLength: {
-                  required: "Class title is required",
                   value: 3,
                   message: "Title must be at least 3 characters long",
                 },
@@ -250,8 +249,8 @@ export default function LiveClassEditDialog({
               placeholder="Enter class description"
               textarea
               rules={{
+                required: "Class description is required",
                 minLength: {
-                  required: "Class description is required",
                   value: 5,
                   message: "Description must be at least 5 characters long",
                 },

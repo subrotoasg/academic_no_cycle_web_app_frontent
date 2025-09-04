@@ -49,14 +49,14 @@ export default function AdminForm() {
         newAdminId: newAdmin.id,
         courseId,
       }).unwrap();
-
-      Swal.fire({
-        icon: "success",
-        title: "Admin successfully created & assigned",
-        timer: 1500,
-      });
-
-      reset();
+      if (assignRes?.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Admin successfully added & assigned",
+          timer: 1500,
+        });
+        reset();
+      }
     } catch (err) {
       try {
         const { data: existingAdmin } = await dispatch(

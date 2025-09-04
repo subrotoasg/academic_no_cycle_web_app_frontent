@@ -134,28 +134,22 @@ export default function LiveClassForm() {
       formData.append("file", selectedFile);
     }
     formData.append("data", JSON.stringify(liveClassInfo));
-    // toast.warning(
-    //   "Live Class functionality is disabled for testing. Please wait for reactivation"
-    // );
+
     try {
-      const res = await createLiveClass(formData);
-      // console.log(res);
-      if (res?.data?.success) {
+      const res = await createLiveClass(formData).unwrap();
+
+      if (res?.success) {
         Swal.fire({
           icon: "success",
           title: "Live Class Scheduled Successfully",
           timer: 1000,
         });
         resetForm();
-      } else {
-        toast.error(
-          res?.error?.data?.message ||
-            "Failed to schedule live class, please try again"
-        );
       }
-    } catch (err) {
+    } catch (error) {
       toast.error(
-        err?.data?.message || "Failed to schedule live class, please try again"
+        error?.data?.message ||
+          "Failed to schedule live class, please try again"
       );
     }
   };
@@ -194,8 +188,8 @@ export default function LiveClassForm() {
           placeholder="Enter class title"
           // rules={{ required: "Class title is required" }}
           rules={{
+            required: "Class title is required",
             minLength: {
-              required: "Class title is required",
               value: 3,
               message: "Title must be at least 3 characters long",
             },
@@ -218,8 +212,8 @@ export default function LiveClassForm() {
           placeholder="Enter class description"
           textarea
           rules={{
+            required: "Class Description is required",
             minLength: {
-              required: "Class Description is required",
               value: 5,
               message: "Description must be at least 5 characters long",
             },
