@@ -112,19 +112,24 @@ const LiveClassList = () => {
 
     if (result.isConfirmed) {
       try {
-        await deleteLiveClass(liveClass.id).unwrap();
-        Swal.fire({
-          title: "Deleted!",
-          text: `"${liveClass?.title}" was deleted successfully.`,
-          icon: "success",
-          timer: 2000,
-          showConfirmButton: false,
-        });
-        refetchLiveClasses();
+        const res = await deleteLiveClass(liveClass.id).unwrap();
+
+        if (res?.success) {
+          Swal.fire({
+            title: "Deleted!",
+            text: `"${liveClass?.title}" was deleted successfully.`,
+            icon: "success",
+            timer: 2000,
+            showConfirmButton: false,
+          });
+          refetchLiveClasses();
+        }
       } catch (error) {
         Swal.fire({
           title: "Error",
-          text: "Something went wrong while deleting. Please try again.",
+          text:
+            error?.data?.message ||
+            "Failed to delete live class Schedule. Please try again.",
           icon: "error",
         });
       }
