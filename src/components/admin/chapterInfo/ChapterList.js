@@ -84,7 +84,7 @@ export function ChapterList() {
     if (result.isConfirmed) {
       try {
         const res = await deleteCourseSubjectChapter(Chapter.id).unwrap();
-        console.log(res);
+        // console.log(res);
         if (res?.success) {
           Swal.fire({
             title: "Deleted!",

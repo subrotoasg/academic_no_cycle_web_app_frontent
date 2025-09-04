@@ -155,9 +155,9 @@ export default function ClassContentForm() {
     formData.append("data", JSON.stringify(contentInfo));
 
     try {
-      const res = await createClassContent(formData);
-
-      if (res?.data.success) {
+      const res = await createClassContent(formData).unwrap();
+      // console.log(res);
+      if (res?.success) {
         Swal.fire({
           icon: "success",
           title: "Class Content Successfully Uploaded",
@@ -165,9 +165,9 @@ export default function ClassContentForm() {
         });
         resetForm();
       }
-    } catch (err) {
+    } catch (error) {
       toast.error(
-        err?.data?.message || "Content Upload Failed, please Try again"
+        error?.data?.message || "Content Upload Failed, please Try again"
       );
     }
   };
@@ -183,12 +183,6 @@ export default function ClassContentForm() {
           name="courseId"
           options={courseOptions}
           rules={{ required: "Course is required" }}
-        />
-        <Dropdown
-          label="Video Hosting Type"
-          name="type"
-          options={types}
-          rules={{ required: "Hosting type is required" }}
         />
         {selectedCourseId && (
           <Dropdown
@@ -206,6 +200,12 @@ export default function ClassContentForm() {
             rules={{ required: "Chapter is required" }}
           />
         )}
+        <Dropdown
+          label="Video Hosting Type"
+          name="type"
+          options={types}
+          rules={{ required: "Hosting type is required" }}
+        />
         <InputField
           label="Class Title"
           name="title"

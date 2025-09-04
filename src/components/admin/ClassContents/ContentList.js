@@ -122,19 +122,23 @@ const ContentList = () => {
 
     if (result.isConfirmed) {
       try {
-        await deleteClassContent(content.id).unwrap();
-        Swal.fire({
-          title: "Deleted!",
-          text: `"${content?.classTitle}" was deleted successfully.`,
-          icon: "success",
-          timer: 2000,
-          showConfirmButton: false,
-        });
-        refetchClassContents();
+        const res = await deleteClassContent(content.id).unwrap();
+        if (res?.success) {
+          Swal.fire({
+            title: "Deleted!",
+            text: `"${content?.classTitle}" was deleted successfully.`,
+            icon: "success",
+            timer: 2000,
+            showConfirmButton: false,
+          });
+          refetchClassContents();
+        }
       } catch (error) {
         Swal.fire({
           title: "Error",
-          text: "Something went wrong while deleting. Please try again.",
+          text:
+            error?.data?.message ||
+            "Something went wrong while deleting. Please try again.",
           icon: "error",
         });
       }
