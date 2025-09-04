@@ -6,6 +6,8 @@ import ClassCard from "@/components/cards/ClassCard";
 import Loading from "@/components/admin/utilities/Loading";
 import { useGetClassContentsBySubjectChapterIdQuery } from "@/redux/services/contentsApi";
 import { MoveLeft } from "lucide-react";
+import { useUploadingLiveClassQuery } from "@/redux/services/liveClassApi";
+import UploadingClass from "@/components/liveClass/uploadingClass/UploadingClasses";
 
 function Class() {
   const params = useParams();
@@ -54,7 +56,6 @@ function Class() {
           {chapterTitle}
         </h1>
       </div>
-
       <div className="md:flex gap-4 justify-between my-5">
         <div className="w-full">
           {chapterContents?.length > 0 ? (
@@ -73,6 +74,7 @@ function Class() {
               No classes available for this chapter.
             </p>
           )}
+          <UploadingClass subjectChapterId={subjectChapterId} />
           {/* Go Back Button */}
           <div className="text-center my-10 md:my-14">
             <button

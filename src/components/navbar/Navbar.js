@@ -202,7 +202,6 @@ export default function Navbar() {
       <li>
         <NavItem href="/" icon={<FaHome />} label="Home" isMobile={isMobile} />
       </li>
-
       {user &&
         (user?.role === "admin" ? (
           <li>
@@ -217,7 +216,7 @@ export default function Navbar() {
           <>
             {user?.role === "student" ? (
               <>
-                <li>
+                <li className="md:hidden block">
                   <NavItem
                     href="/student/profile"
                     icon={<FaUser />}
