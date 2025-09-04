@@ -89,8 +89,9 @@ export default function NoticeForm() {
     formData.append("data", JSON.stringify(NoticeInfo));
 
     try {
-      const res = await createNoticeRoutine(formData);
-      if (res?.data?.success) {
+      const res = await createNoticeRoutine(formData).unwrap();
+
+      if (res?.success) {
         Swal.fire({
           icon: "success",
           title: "Notice Successfully Added",
@@ -149,8 +150,8 @@ export default function NoticeForm() {
           rules={{
             required: "Description is required.",
             minLength: {
-              value: 3,
-              message: "Description must be at least 3 characters",
+              value: 5,
+              message: "Description must be at least 5 characters",
             },
           }}
           textarea
@@ -197,12 +198,12 @@ export default function NoticeForm() {
             className="w-full border rounded-md dark:bg-gray-800 dark:text-white dark:border-gray-700"
           />
           {imagePreview && (
-            <div className="mt-3 w-32 h-32 relative border rounded-md overflow-hidden">
+            <div className="mt-3 w-44 md:w-64 md:h-40 h-28 relative border rounded-md overflow-hidden">
               <Image
                 src={imagePreview}
                 alt="Image Preview"
                 fill
-                className="object-cover"
+                className="h-full w-full object-fill"
               />
             </div>
           )}
