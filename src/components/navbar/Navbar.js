@@ -217,7 +217,7 @@ export default function Navbar() {
           <>
             {user?.role === "student" ? (
               <>
-                <li>
+                <li className="md:hidden block">
                   <NavItem
                     href="/student/profile"
                     icon={<FaUser />}

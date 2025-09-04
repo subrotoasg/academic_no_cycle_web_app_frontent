@@ -11,6 +11,7 @@ export const tagTypesValue = {
   LIVE_CLASS: "liveClass",
   USER_INFO: "userInfo",
   STUDENT: "student",
+  UPLOADINGCLASS: "uploadingClasses",
 };
 
 // Array tags

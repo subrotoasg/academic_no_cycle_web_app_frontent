@@ -61,6 +61,14 @@ const liveClassApiServices = baseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypesValue.LIVE_CLASS],
     }),
+    // uploadClasss Live Class
+    uploadingLiveClass: builder.query({
+      query: (params) => ({
+        url: `/live-class/uploading/${params?.subjectChapterId}`,
+        method: "GET",
+      }),
+      providesTags: [tagTypesValue.UPLOADINGCLASS],
+    }),
   }),
 });
 
@@ -71,6 +79,7 @@ export const {
   useCreateLiveClassMutation,
   useUpdateLiveClassMutation,
   useDeleteLiveClassMutation,
+  useUploadingLiveClassQuery,
 } = liveClassApiServices;
 
 export default liveClassApiServices;
