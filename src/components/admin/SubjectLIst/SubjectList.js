@@ -100,7 +100,9 @@ export function SubjectList() {
       } catch (error) {
         Swal.fire({
           title: "Error",
-          text: "An error occurred while deleting the Subject. Please try again.",
+          text:
+            error?.data?.message ||
+            "An error occurred while deleting the Subject. Please try again.",
           icon: "error",
         });
       }

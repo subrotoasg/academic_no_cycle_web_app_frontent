@@ -34,9 +34,7 @@ export default function ChapterImageEditDialog({
   useEffect(() => {
     if (chapter) {
       setImagePreview(
-        chapter?.courseSubjectChapterImage ||
-          chapter?.chapter?.chapterImage ||
-          "/placeholder.jpg"
+        chapter?.courseSubjectChapterImage || chapter?.chapter?.chapterImage
       );
       setSelectedFile(null);
     }
@@ -75,17 +73,23 @@ export default function ChapterImageEditDialog({
 
     try {
       setLoading(true);
-      await updateCourseSubjectChapter({ id: chapter.id, formData }).unwrap();
-      Swal.fire({
-        icon: "success",
-        title: "Chapter image updated successfully!",
-        timer: 1500,
-      });
-      setSelectedFile(null);
-      setImagePreview(null);
-      onOpenChange(false);
+      const res = await updateCourseSubjectChapter({
+        id: chapter.id,
+        formData,
+      }).unwrap();
+
+      if (res?.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Chapter info updated successfully",
+          timer: 1500,
+        });
+        setSelectedFile(null);
+        setImagePreview(null);
+        onOpenChange(false);
+      }
     } catch (error) {
-      toast.error(error?.data?.message || "Failed to update chapter image");
+      toast.error(error?.data?.message || "Failed to update chapter info");
     } finally {
       setLoading(false);
     }
@@ -114,13 +118,13 @@ export default function ChapterImageEditDialog({
                 Upload Chapter Image
               </label>
 
-              <div className="mt-2 w-48 md:w-64 relative border rounded-md overflow-hidden">
+              <div className="mt-2 w-48 md:w-64 h-32 md:h-40 relative border rounded-md overflow-hidden">
                 <Image
-                  src={imagePreview || "/placeholder.jpg"}
+                  src={imagePreview}
                   alt="Image Preview"
                   width={300}
                   height={200}
-                  className="w-full h-auto rounded-md object-cover"
+                  className="w-full h-full rounded-md object-fill"
                 />
               </div>
 
