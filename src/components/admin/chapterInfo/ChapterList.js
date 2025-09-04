@@ -84,6 +84,7 @@ export function ChapterList() {
     if (result.isConfirmed) {
       try {
         const res = await deleteCourseSubjectChapter(Chapter.id).unwrap();
+        console.log(res);
         if (res?.success) {
           Swal.fire({
             title: "Deleted!",
@@ -98,7 +99,9 @@ export function ChapterList() {
       } catch (error) {
         Swal.fire({
           title: "Error",
-          text: "An error occurred while deleting the Chapter. Please try again.",
+          text:
+            error?.data?.message ||
+            "An error occurred while deleting the Chapter. Please try again.",
           icon: "error",
         });
       }
