@@ -202,7 +202,6 @@ export default function Navbar() {
       <li>
         <NavItem href="/" icon={<FaHome />} label="Home" isMobile={isMobile} />
       </li>
-
       {user &&
         (user?.role === "admin" ? (
           <li>
