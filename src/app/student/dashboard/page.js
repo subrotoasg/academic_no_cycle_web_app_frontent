@@ -62,13 +62,12 @@ function StudentDashboard() {
 
   return (
     <div className="container mx-auto pt-16 md:pt-28 mb-10">
-      {/* <h1 className="text-2xl md:text-3xl font-bold mb-6 text-center">
-        Enrolled Courses
-      </h1> */}
-
-      {isLoading && isLiveClassLoading && (
-        <div className="text-center py-20 text-lg font-medium text-gray-600">
-          Loading courses ...
+      {isLoading && (
+        <div className="flex justify-center items-center min-h-[40vh]">
+          <div className="animate-spin rounded-full h-8 w-8 border-t-4 border-blue-500 border-solid"></div>
+          <span className="ml-4 text-blue-500 font-semibold text-base md:text-lg">
+            Loading courses...
+          </span>
         </div>
       )}
 
