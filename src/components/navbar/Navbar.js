@@ -295,11 +295,11 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-3">
-          {/* <Button
+          <Button
             onClick={toggleTheme}
             variant="outline"
             size="icon"
-            className="h-9 w-9"
+            className="h-6 w-6 md:h-8 md:w-8"
             aria-label="Toggle theme"
           >
             {mounted &&
@@ -308,7 +308,7 @@ export default function Navbar() {
               ) : (
                 <GoSun size={20} />
               ))}
-          </Button> */}
+          </Button>
 
           {/* Desktop only Login/Logout */}
           {/* <div className="hidden md:flex items-center gap-3">

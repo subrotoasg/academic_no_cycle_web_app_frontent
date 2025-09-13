@@ -1,5 +1,5 @@
 {
-  "name": "competitive-webapp",
+  "name": "academic-webapp",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,7 +9,7 @@
     "lint": "next lint",
     "pages:build": "next-on-pages",
     "preview": "npm run pages:build && wrangler pages dev",
-    "deploy": "wrangler pages deploy .vercel/output/static --project-name=competitive-webapp"
+    "deploy": "wrangler pages deploy .vercel/output/static --project-name=academic-webapp"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
