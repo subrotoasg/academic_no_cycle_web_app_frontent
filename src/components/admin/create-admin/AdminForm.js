@@ -16,7 +16,6 @@ import Dropdown from "@/components/form/Dropdown";
 import { useGetAllCourseQuery } from "@/redux/services/courseApi";
 
 export default function AdminForm() {
-  // const courses = useSelector(selectAllCourses);
   const {
     data: courseData,
     isLoading,
