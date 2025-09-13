@@ -10,19 +10,9 @@ export default function Home() {
   return (
     <div className="py-14 md:py-20">
       <HeaderTitle />
-      {/* <div data-aos="fade-up" className="overflow-hidden w-full p-1 ">
-        <HeroSection />
-      </div> */}
-
-      <div className="my-14">
+      <div className="mb-14 mt-5">
         <CourseFeature />
       </div>
-      {/* <div data-aos="fade-down">
-        <StudentReviews />
-      </div> */}
-      {/* <div data-aos="fade-up" >
-        <NewsletterForm />
-      </div> */}
     </div>
   );
 }

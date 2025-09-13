@@ -1,6 +1,5 @@
 "use client";
-
-import Loading from "@/components/admin/utilities/Loading";
+import LoadingData from "@/components/common/LoadingData";
 import Comments from "@/components/video/Comments";
 import VideoHolder from "@/components/video/VideoHolder";
 import VideoHolderModified from "@/components/video/VideoHolderModified";
@@ -24,7 +23,7 @@ const Videos = () => {
   if (isLoading) {
     return (
       <div className="mt-20">
-        <Loading />
+        <LoadingData />
       </div>
     );
   }

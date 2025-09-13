@@ -14,6 +14,7 @@ import {
 } from "@/redux/services/liveClassApi";
 import LiveClassTable from "./LiveClassTable";
 import LiveClassEditDialog from "./LiveClassEditDialog";
+import LoadingData from "@/components/common/LoadingData";
 
 const LiveClassList = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -162,7 +163,7 @@ const LiveClassList = () => {
 
       {(isLoading || isFetching) && (
         <div className="w-full flex justify-center py-8">
-          <Loading />
+          <LoadingData />
         </div>
       )}
 

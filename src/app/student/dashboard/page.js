@@ -5,13 +5,14 @@ import DashboardCourseCard from "@/components/cards/DashboardCourseCard";
 import StudentRoute from "@/PrivateRoute/StudentRoute";
 import { useGetMyCoursesQuery } from "@/redux/services/studentCourseApi";
 import { useGetAllCourseQuery } from "@/redux/services/courseApi";
-import { motion } from "framer-motion";
 import { useEffect, useMemo } from "react";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
 import { setEnrolledCourses } from "@/redux/Features/mycourses";
 import { useGetAllLiveClassQuery } from "@/redux/services/liveClassApi";
 import LiveClassLayout from "@/components/liveClass/LiveClassLayout";
+import LoadingData from "@/components/common/LoadingData";
+import ErrorDataFetching from "@/components/common/ErrorDataFetching";
 
 function StudentDashboard() {
   const dispatch = useDispatch();
@@ -59,33 +60,21 @@ function StudentDashboard() {
 
   const isLoading = enrolledLoading || allLoading || isLiveClassLoading;
   const isError = enrolledError || allError;
-
   return (
     <div className="container mx-auto pt-16 md:pt-28 mb-10">
-      {isLoading && (
-        <div className="flex justify-center items-center min-h-[40vh]">
-          <div className="animate-spin rounded-full h-8 w-8 border-t-4 border-blue-500 border-solid"></div>
-          <span className="ml-4 text-blue-500 font-semibold text-base md:text-lg">
-            Loading courses...
-          </span>
-        </div>
-      )}
+      {isLoading && <LoadingData />}
 
-      {isError && (
-        <div className="text-center py-20 text-lg font-medium text-red-500">
-          Failed to load courses info, please try again.
-        </div>
-      )}
+      {isError && <ErrorDataFetching />}
 
       {!isLoading &&
         !isError &&
-        isLiveClassLoading &&
+        !isLiveClassLoading &&
         EnrolledCourses.length === 0 && (
           <>
-            <h1 className="text-2xl md:text-3xl font-bold mb-6 text-center">
+            {/* <h1 className="text-2xl md:text-3xl font-bold mb-6 text-center">
               Enrolled Courses
-            </h1>
-            <div className="text-center py-10 text-lg font-medium text-gray-500">
+            </h1> */}
+            <div className="text-center pb-10 text-lg font-medium text-gray-500">
               আপনি এখনও কোনো কোর্স অ্যাক্সেস করেননি। <br />
               <p className="text-blue-600 font-semibold cursor-pointer hover:underline my-3">
                 নির্দিষ্ট কোর্সের জন্য অ্যাক্সেস কোড প্রদান করে আপনার কোর্সে
@@ -102,9 +91,6 @@ function StudentDashboard() {
                 Available Courses
               </h2>
               <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-4 md:py-8 p-4">
-                {/* {sortedCourses?.map((course) => (
-                <DashboardCourseCard key={course.id} course={course} />
-              ))} */}
                 {sortedCourses
                   ?.filter((course) => course.productId !== 548)
                   ?.map((course) => (
@@ -118,29 +104,29 @@ function StudentDashboard() {
       {!isLoading && !isError && EnrolledCourses?.length > 0 && (
         <>
           <LiveClassLayout data={liveClasssData} />
-          <div className="mb-12">
-            <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-white text-center md:mb-5 mb-2 md:text-left md:pl-4">
-              Enrolled Courses
-            </h2>
-            <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-4">
-              {sortedCourses
-                ?.filter((course) => course.isEnrolled)
-                ?.map((course) => (
-                  <EnrolledCourseCard
-                    key={course.id}
-                    courseInfo={{ courseId: course.id, course }}
-                  />
-                ))}
+          {EnrolledCourses?.length > 0 ? (
+            <div className="mb-12">
+              <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-white text-center md:mb-5 mb-2 md:text-left md:pl-4">
+                Enrolled Courses
+              </h2>
+              <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-4">
+                {sortedCourses
+                  ?.filter((course) => course.isEnrolled)
+                  ?.map((course) => (
+                    <EnrolledCourseCard
+                      key={course.id}
+                      courseInfo={{ courseId: course.id, course }}
+                    />
+                  ))}
+              </div>
             </div>
-          </div>
-
+          ) : null}
           <div>
             <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-white text-center md:mb-5 mb-2 md:text-left md:pl-4">
               Available Courses
             </h2>
             <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-4">
               {sortedCourses
-                // .filter((course) => !course.isEnrolled)
                 ?.filter(
                   (course) => !(course.isEnrolled || course.productId == 548)
                 )

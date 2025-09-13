@@ -15,6 +15,7 @@ import {
 } from "@/redux/services/featuredApi";
 import { selectAllCourses } from "@/redux/Features/courseInfo";
 import CourseSelect from "@/components/form/CourseSelect";
+import LoadingData from "@/components/common/LoadingData";
 
 export function FeaturedList() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -132,7 +133,7 @@ export function FeaturedList() {
       </div>
       {(isLoading || isFetching) && (
         <div className="w-full flex justify-center py-8">
-          <Loading />
+          <LoadingData />
         </div>
       )}
 

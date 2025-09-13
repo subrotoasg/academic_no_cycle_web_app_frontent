@@ -14,67 +14,75 @@ import CourseSubCategoryPill from "../admin/utilities/CourseSubjectCategoryPill"
 import { Tooltip } from "@mui/material";
 import CourseEnrolledPill from "../admin/utilities/CourseEnrolledPill";
 
-export default function CourseCard(params) {
-  const course = params?.cycle;
+export default function CycleCard(params) {
+  const cycle = params?.cycle;
   const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const permalink = course?.Permalink;
+  const permalink = cycle?.course?.Permalink;
   const user = useSelector(currentUser);
-
-  const isEnrolled = course?.isEnrolled === true;
+  const isEnrolled = cycle?.isEnrolled === true;
   const isAdmin = user?.role === "admin";
 
   const handleCardClick = () => {
     if (isEnrolled || isAdmin) {
-      window.location.href = `/course/${course.id}`;
+      window.location.href = `/course/${course?.id}`;
     } else if (permalink) {
       window.open(permalink, "_blank");
     }
   };
-
   return (
     <>
       <Card
-        sx={{ maxWidth: 345, height: 380 }}
-        className="transition-transform duration-400 hover:shadow-lg hover:scale-[1.01] rounded-4xl flex flex-col justify-between"
+        // sx={{ maxWidth: 345, height: 320 }}
+        className="transition-all duration-300 ease-out hover:scale-[1.01] hover:shadow-xl hover:-translate-y-1 rounded-2xl flex flex-col justify-between cursor-pointer"
         onClick={handleCardClick}
       >
         <div style={{ position: "relative" }}>
           <CardMedia
             component="img"
-            sx={{ objectFit: "fill", width: "100%", height: 180 }}
-            image={course?.cycleImage}
-            title={course?.productFullName || "Course Image"}
+            sx={{ objectFit: "fill", width: "100%", height: 150 }}
+            image={cycle?.cycleImage}
+            title={cycle?.productFullName || "Course Image"}
           />
         </div>
         <CardContent className="flex-1 text-xl">
-          <Tooltip title={course?.productFullName || ""} arrow>
+          <Tooltip title={cycle?.productFullName || ""} arrow>
             <Typography
               gutterBottom
               component="div"
-              className="line-clamp-3 cursor-help"
+              className="line-clamp-3 text-justify"
               sx={{
                 display: "-webkit-box",
                 WebkitBoxOrient: "vertical",
                 WebkitLineClamp: 3,
                 overflow: "hidden",
                 textOverflow: "ellipsis",
-                height: 70,
+                textAlign: "justify",
+                textJustify: "inter-word",
+                hyphens: "auto",
+                wordBreak: "break-word",
               }}
             >
-              {course?.productFullName}
+              {cycle?.course?.productFullName}
             </Typography>
           </Tooltip>
+          <Typography
+            gutterBottom
+            component="div"
+            className="cursor-help text-center text-green-700 font-semibold"
+          >
+            {cycle?.title}
+          </Typography>
 
-          <div className="flex gap-1 justify-center items-center mt-3">
-            <CourseSubCategoryPill subCategory={course?.SubCategory} />
-            <CourseEnrolledPill count={course?._count?.student} />
+          <div className="flex gap-1 justify-center items-center mt-2">
+            <CourseSubCategoryPill subCategory={cycle?.course?.SubCategory} />
+            <CourseEnrolledPill count={cycle?._count?.student} />
           </div>
         </CardContent>
 
         <CardActions className="flex justify-center items-center mb-3">
           {isEnrolled || isAdmin ? (
             <Link
-              href={`/course/${course.id}`}
+              href={`/course/${cycle?.id}`}
               className="
               bg-gradient-to-r from-green-900 to-green-700
               hover:from-green-700 hover:to-green-900
@@ -93,6 +101,7 @@ export default function CourseCard(params) {
               hover:shadow-xl
               hover:font-bold
               focus:outline-none
+              cursor-pointer
               focus:ring-1 focus:ring-offset-2 focus:ring-gray-400
             "
               onClick={(e) => e.stopPropagation()}
@@ -109,6 +118,7 @@ export default function CourseCard(params) {
                 transform text-xs hover:rounded-full font-bold hover:scale-105
                 hover:shadow-xl
                 focus:outline-none
+                cursor-pointer
                 focus:ring-1 focus:ring-offset-1 focus:ring-gray-400 text-center"
                 onClick={(e) => e.stopPropagation()}
               >
@@ -136,6 +146,7 @@ export default function CourseCard(params) {
                 font-bold
                 transition
                 transform
+                cursor-pointer
                 hover:rounded-full
                 hover:scale-105
                 hover:shadow-xl

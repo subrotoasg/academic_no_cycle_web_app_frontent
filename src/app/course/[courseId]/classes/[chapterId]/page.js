@@ -8,6 +8,7 @@ import { useGetClassContentsBySubjectChapterIdQuery } from "@/redux/services/con
 import { MoveLeft } from "lucide-react";
 import { useUploadingLiveClassQuery } from "@/redux/services/liveClassApi";
 import UploadingClass from "@/components/liveClass/uploadingClass/UploadingClasses";
+import LoadingData from "@/components/common/LoadingData";
 
 function Class() {
   const params = useParams();
@@ -32,7 +33,7 @@ function Class() {
   if (isLoading || !subjectChapterId) {
     return (
       <div className="mt-20">
-        <Loading />
+        <LoadingData />
       </div>
     );
   }

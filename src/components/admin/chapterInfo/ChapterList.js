@@ -14,6 +14,7 @@ import {
 } from "@/redux/services/chapterAPi";
 import { selectAllCourses } from "@/redux/Features/courseInfo";
 import CourseSelect from "@/components/form/CourseSelect";
+import LoadingData from "@/components/common/LoadingData";
 
 export function ChapterList() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -135,7 +136,7 @@ export function ChapterList() {
 
       {(isLoading || isFetching) && (
         <div className="w-full flex justify-center py-8">
-          <Loading />
+          <LoadingData />
         </div>
       )}
 

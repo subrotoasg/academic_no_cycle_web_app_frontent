@@ -12,6 +12,7 @@ import {
   selectSelectedCourse,
 } from "@/redux/Features/courseInfo";
 import CourseSelect from "@/components/form/CourseSelect";
+import LoadingData from "@/components/common/LoadingData";
 
 export default function AdminList() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -81,7 +82,7 @@ export default function AdminList() {
       </div>
       {(isLoading || isFetching) && (
         <div className="w-full flex justify-center py-8">
-          <Loading />
+          <LoadingData />
         </div>
       )}
 

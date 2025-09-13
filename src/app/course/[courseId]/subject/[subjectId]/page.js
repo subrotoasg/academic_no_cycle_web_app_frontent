@@ -5,6 +5,7 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Loading from "@/components/admin/utilities/Loading";
 import { useGetChaptersByCourseSubjectIdQuery } from "@/redux/services/chapterAPi";
 import { MoveLeft } from "lucide-react";
+import LoadingData from "@/components/common/LoadingData";
 
 function Subject() {
   const params = useParams();
@@ -29,7 +30,7 @@ function Subject() {
   if (isLoading || !courseSubjectId) {
     return (
       <div className="mt-20">
-        <Loading />
+        <LoadingData />
       </div>
     );
   }

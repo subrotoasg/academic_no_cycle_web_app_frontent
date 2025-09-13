@@ -12,6 +12,7 @@ import { useGetNoticeRoutinesByCourseIdQuery } from "@/redux/services/noticeRout
 import DashboardCharts from "./DashboardCharts";
 import { selectAllCourses } from "@/redux/Features/courseInfo";
 import CourseSelect from "@/components/form/CourseSelect";
+import LoadingData from "@/components/common/LoadingData";
 
 function AdminDashboard() {
   const [selectedCourseId, setSelectedCourseId] = useState("");
@@ -128,7 +129,7 @@ function AdminDashboard() {
         {selectedCourseId ? (
           isAnyLoading ? (
             <div className="flex justify-center py-8">
-              <Loading />
+              <LoadingData />
             </div>
           ) : (
             <DashboardCharts stats={staticData} statsData={statsData} />

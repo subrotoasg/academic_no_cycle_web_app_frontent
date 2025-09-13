@@ -45,7 +45,7 @@ const contactInfo = [
 const Footer = () => {
   return (
     <footer className="w-full  text-white">
-      <div className="p-10  flex justify-between gap-6 flex-col md:flex-row flex-wrap w-full backdrop-blur-sm bg-black/85">
+      <div className="px-10 flex justify-between gap-6 flex-col md:flex-row flex-wrap w-full backdrop-blur-sm bg-black/85">
         <div className="w-full sm:w-[30%] flex flex-col">
           <Image
             src="/logo.png"
@@ -77,7 +77,7 @@ const Footer = () => {
         <div className="w-full sm:w-[25%]">
           <h3 className="text-[1.2rem] font-semibold   mb-2">Contact Us</h3>
           <div className="flex flex-col gap-3   dark:text-slate-300">
-            {contactInfo.map((contact, index) => (
+            {contactInfo?.map((contact, index) => (
               <div
                 key={index}
                 className="flex items-center gap-2 text-base hover:text-[#1A73E8] transition-all duration-300 cursor-pointer"

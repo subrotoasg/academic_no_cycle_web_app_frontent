@@ -12,6 +12,7 @@ export const tagTypesValue = {
   USER_INFO: "userInfo",
   STUDENT: "student",
   UPLOADINGCLASS: "uploadingClasses",
+  COURSE_CYCLE: "COURSECYCLE",
 };
 
 // Array tags

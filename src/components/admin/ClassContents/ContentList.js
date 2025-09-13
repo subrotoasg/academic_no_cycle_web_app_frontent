@@ -16,6 +16,7 @@ import {
 } from "@/redux/services/contentsApi";
 import { selectAllCourses } from "@/redux/Features/courseInfo";
 import CourseSelect from "@/components/form/CourseSelect";
+import LoadingData from "@/components/common/LoadingData";
 
 const ContentList = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -169,7 +170,7 @@ const ContentList = () => {
 
       {(isLoading || isFetching) && (
         <div className="w-full flex justify-center py-8">
-          <Loading />
+          <LoadingData />
         </div>
       )}
 

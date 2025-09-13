@@ -6,6 +6,7 @@ import { useGetNoticeRoutinesByCourseIdQuery } from "@/redux/services/noticeRout
 import Loading from "@/app/loading";
 import Marquee from "react-fast-marquee";
 import "animate.css";
+import LoadingData from "../common/LoadingData";
 
 const NoticeBoard = ({ courseId }) => {
   const { data: notices, isLoading } = useGetNoticeRoutinesByCourseIdQuery({
@@ -15,11 +16,7 @@ const NoticeBoard = ({ courseId }) => {
   const today = new Date();
 
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center py-10">
-        <p>Checking Announcements ...</p>
-      </div>
-    );
+    return <LoadingData />;
   }
 
   const filteredNotices = notices?.data?.data?.filter((notice) => {

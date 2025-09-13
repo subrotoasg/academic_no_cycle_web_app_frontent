@@ -15,6 +15,7 @@ import {
 } from "@/redux/services/subjectsApi";
 import { selectAllCourses } from "@/redux/Features/courseInfo";
 import CourseSelect from "@/components/form/CourseSelect";
+import LoadingData from "@/components/common/LoadingData";
 
 export function SubjectList() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -128,7 +129,7 @@ export function SubjectList() {
 
       {(isLoading || isFetching) && (
         <div className="w-full flex justify-center py-8">
-          <Loading />
+          <LoadingData />
         </div>
       )}
 
