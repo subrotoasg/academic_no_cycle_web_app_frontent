@@ -2,10 +2,10 @@
 
 import React from "react";
 
-function CourseSelect({
-  label = "Select Course",
-  courses = [],
-  selectedCourseId,
+function CycleSelect({
+  label = "Select Cycle",
+  cycles = [],
+  selectedCycleId,
   onChange,
 }) {
   return (
@@ -14,18 +14,18 @@ function CourseSelect({
         {label}
       </label>
       <select
-        value={selectedCourseId}
+        value={selectedCycleId}
         onChange={(e) => onChange(e.target.value)}
         className="w-full p-2 border border-gray-300 rounded-md dark:bg-gray-800 dark:text-white text-xs md:text-sm"
       >
-        {courses?.length === 0 ? (
-          <option value="">No course assigned yet</option>
+        {cycles?.length === 0 ? (
+          <option value="">No cycle available</option>
         ) : (
           <>
-            <option value="">-- Select Course --</option>
-            {courses?.map((course) => (
-              <option key={course?.id} value={course?.id}>
-                {course?.productFullName} ({course?.productName})
+            <option value="">-- Select Cycle --</option>
+            {cycles?.map((cycle) => (
+              <option key={cycle?.id} value={cycle?.id}>
+                {cycle?.title} ({cycle?.course?.productName})
               </option>
             ))}
           </>
@@ -35,4 +35,4 @@ function CourseSelect({
   );
 }
 
-export default CourseSelect;
+export default CycleSelect;

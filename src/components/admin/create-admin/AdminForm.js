@@ -11,26 +11,29 @@ import adminApiServices, {
   useAssignCoursesToAdminsMutation,
   useCreateAdminMutation,
 } from "@/redux/services/adminApi";
-import { useDispatch, useSelector } from "react-redux";
-import { selectAllCourses } from "@/redux/Features/courseInfo";
+import { useDispatch } from "react-redux";
 import Dropdown from "@/components/form/Dropdown";
+import { useGetAllCourseQuery } from "@/redux/services/courseApi";
 
 export default function AdminForm() {
-  const courses = useSelector(selectAllCourses);
-
+  const {
+    data: courseData,
+    isLoading,
+    isError,
+  } = useGetAllCourseQuery({ limit: 1000 });
+  // console.log(courseData?.data?.data);
+  const courses = courseData?.data;
   const courseOptions =
     courses?.data?.map((course) => ({
-      label: course.productFullName,
-      value: course.id,
+      label: `${course?.productFullName} (${course?.productName})`,
+      value: course?.id,
     })) || [];
   const methods = useForm({
     defaultValues: { username: "", email: "", phone: "", courseId: "" },
   });
 
   const dispatch = useDispatch();
-
   const { handleSubmit, reset } = methods;
-
   const [createAdmin, { isLoading: isCreating }] = useCreateAdminMutation();
   const [assignCoursesToAdmins, { isLoading: isAssigning }] =
     useAssignCoursesToAdminsMutation();
@@ -71,7 +74,7 @@ export default function AdminForm() {
           }).unwrap();
           Swal.fire({
             icon: "success",
-            title: "Admin assigned to course!",
+            title: "Admin assigned to course successfully",
             timer: 1500,
           });
           reset();

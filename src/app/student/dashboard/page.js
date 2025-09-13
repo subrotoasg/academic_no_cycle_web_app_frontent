@@ -71,12 +71,12 @@ function StudentDashboard() {
         !isLiveClassLoading &&
         EnrolledCourses.length === 0 && (
           <>
-            {/* <h1 className="text-2xl md:text-3xl font-bold mb-6 text-center">
+            <h1 className="text-2xl md:text-3xl font-bold mb-6 text-center">
               Enrolled Courses
-            </h1> */}
+            </h1>
             <div className="text-center pb-10 text-lg font-medium text-gray-500">
               আপনি এখনও কোনো কোর্স অ্যাক্সেস করেননি। <br />
-              <p className="text-blue-600 font-semibold cursor-pointer hover:underline my-3">
+              <p className="text-blue-600 font-semibold my-3">
                 নির্দিষ্ট কোর্সের জন্য অ্যাক্সেস কোড প্রদান করে আপনার কোর্সে
                 প্রবেশ করুন।
               </p>

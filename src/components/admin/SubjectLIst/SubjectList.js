@@ -5,33 +5,45 @@ import SearchBar from "../utilities/SearchBar";
 import PaginationControls from "../utilities/PaginationControls";
 import Swal from "sweetalert2";
 import Loading from "../utilities/Loading";
-import { useSelector } from "react-redux";
-
 import { SubjectsTable } from "./SubjectTable";
 import SubjectsImageEditDialog from "./SubjectInfoEditDialog";
 import {
   useDeleteCourseSubjectMutation,
   useGetCourseSubjectQuery,
 } from "@/redux/services/subjectsApi";
-import { selectAllCourses } from "@/redux/Features/courseInfo";
 import CourseSelect from "@/components/form/CourseSelect";
 import LoadingData from "@/components/common/LoadingData";
+import { useGetAllCourseQuery } from "@/redux/services/courseApi";
+import { useGetAllCourseCycleBasedOnCourseIdQuery } from "@/redux/services/cycleApi";
+import CycleSelect from "@/components/form/CycleSelect";
 
 export function SubjectList() {
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(100);
   const [selectedCourseId, setSelectedCourseId] = useState("");
-  const courses = useSelector(selectAllCourses);
+  const [selectedCycleId, setSelectedCycleId] = useState("");
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [SubjectInfoModalOpen, setSubjectInfoModalOpen] = useState(false);
   const [SubjectEditModalOpen, setSubjectEditModalOpen] = useState(false);
+  const { data: courseData } = useGetAllCourseQuery({ limit: 1000 });
+  // console.log(courseData?.data?.data);
+  const courses = courseData?.data;
 
   useEffect(() => {
     if (courses?.data?.length > 0 && !selectedCourseId) {
-      setSelectedCourseId(courses.data[0].id);
+      setSelectedCourseId(courses?.data[0]?.id);
     }
   }, [courses, selectedCourseId]);
+  const {
+    data: cycleData,
+    isLoading: cycleLoading,
+    isError: cycleError,
+  } = useGetAllCourseCycleBasedOnCourseIdQuery(selectedCourseId, {
+    skip: !selectedCourseId,
+  });
+  console.log(cycleData);
+
   const { data, isError, isLoading, isFetching } = useGetCourseSubjectQuery(
     {
       page,
@@ -45,10 +57,9 @@ export function SubjectList() {
   );
 
   const SubjectData = data?.data;
-
   const meta = data?.data?.meta;
 
-  const totalPages = meta?.totalCount ? Math.ceil(meta.totalCount / limit) : 1;
+  const totalPages = meta?.totalCount ? Math.ceil(meta?.totalCount / limit) : 1;
   useEffect(() => {
     setPage(1);
   }, [searchQuery]);
@@ -62,7 +73,6 @@ export function SubjectList() {
   }, [SubjectData]);
   const handleSubjectEditModal = (Subject) => {
     setSelectedSubject(Subject);
-
     setSubjectEditModalOpen(true);
   };
   const handleSubjectInfoModal = (Subject) => {
@@ -125,6 +135,12 @@ export function SubjectList() {
         courses={courses?.data}
         selectedCourseId={selectedCourseId}
         onChange={setSelectedCourseId}
+      />
+      <CycleSelect
+        label="Select Cycle"
+        cycles={cycleData?.data}
+        selectedCycleId={selectedCycleId}
+        onChange={setSelectedCycleId}
       />
 
       {(isLoading || isFetching) && (
