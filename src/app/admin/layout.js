@@ -12,21 +12,19 @@ export default function AdminLayout({ children }) {
   const defaultLimit = 100;
   const dispatch = useDispatch();
 
-  const {
-    data: courseData,
-    isLoading,
-    isError,
-    isSuccess,
-    refetch: refetchCourses,
-  } = useGetAllCourseQuery({ limit: defaultLimit });
-
-  useEffect(() => {
-    if (isSuccess && courseData?.data) {
-      dispatch(setCourses(courseData.data));
-    }
-  }, [isSuccess, courseData, dispatch]);
-
-  const courses = useSelector(selectAllCourses);
+  // const {
+  //   data: courseData,
+  //   isLoading,
+  //   isError,
+  //   isSuccess,
+  //   refetch: refetchCourses,
+  // } = useGetAllCourseQuery({ limit: defaultLimit });
+  // console.log(courseData?.data?.data);
+  // useEffect(() => {
+  //   if (isSuccess && courseData?.data) {
+  //     dispatch(setCourses(courseData.data));
+  //   }
+  // }, [isSuccess, courseData, dispatch]);
 
   return (
     <PrivateRouter>

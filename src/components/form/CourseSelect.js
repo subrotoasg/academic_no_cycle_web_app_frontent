@@ -18,20 +18,14 @@ function CourseSelect({
         onChange={(e) => onChange(e.target.value)}
         className="w-full p-2 border border-gray-300 rounded-md dark:bg-gray-800 dark:text-white text-xs md:text-sm"
       >
-        {/* <option value="">-- Select Course --</option>
-        {courses?.map((course) => (
-          <option key={course.id} value={course.id}>
-            {course.productFullName}
-          </option>
-        ))} */}
         {courses?.length === 0 ? (
           <option value="">No course assigned yet</option>
         ) : (
           <>
             <option value="">-- Select Course --</option>
-            {courses.map((course) => (
-              <option key={course.id} value={course.id}>
-                {course.productFullName}
+            {courses?.map((course) => (
+              <option key={course?.id} value={course?.id}>
+                {course?.productFullName} ({course?.productName})
               </option>
             ))}
           </>
