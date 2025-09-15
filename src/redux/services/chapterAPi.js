@@ -13,6 +13,15 @@ const chapterApiServices = baseApi.injectEndpoints({
     //   providesTags: [tagTypesValue.CHAPTER],
     // }),
 
+    // Get Chapters by Cycle Subject ID
+    // getChaptersByCycleSubjectId: builder.query({
+    //   query: (courseSubjectId) => ({
+    //     url: `/cycle/subject/chapter/chapters/${courseSubjectId}`,
+    //     method: "GET",
+    //   }),
+    //   providesTags: [tagTypesValue.CHAPTER],
+    // }),
+
     // Get Chapters by CourseSubject ID
     getChaptersByCourseSubjectId: builder.query({
       query: (courseSubjectId) => ({
@@ -61,6 +70,7 @@ const chapterApiServices = baseApi.injectEndpoints({
 
 export const {
   // useGetChaptersBySubjectIdQuery,
+  // useGetChaptersByCycleSubjectIdQuery,
   useGetChaptersByCourseSubjectIdQuery,
   useGetCourseSubjectChaptersQuery,
   useUpdateCourseSubjectChapterMutation,

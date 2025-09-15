@@ -14,7 +14,7 @@ const cycleChapterApiServices = baseApi.injectEndpoints({
     }),
 
     // Get Chapters by CycleSubject ID
-    getChaptersByCycleSubjectId: builder.query({
+    getAllChaptersByCycleSubjectId: builder.query({
       query: (cycleSubjectId) => ({
         url: `/cycle/subject/chapter/chapters/${cycleSubjectId}`,
         method: "GET",
@@ -76,7 +76,7 @@ const cycleChapterApiServices = baseApi.injectEndpoints({
 
 export const {
   useGetChaptersBySubjectIdQuery,
-  useGetChaptersByCycleSubjectIdQuery,
+  useGetAllChaptersByCycleSubjectIdQuery,
   useGetAllChaptersByCycleIdQuery,
   useGetCycleSubjectChaptersQuery,
   useUpdateCycleSubjectChapterMutation,

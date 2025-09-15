@@ -36,27 +36,6 @@ export default function EnrolledCourseCard({ courseInfo }) {
       className="transition-transform duration-400 hover:shadow-lg hover:scale-[1.01] rounded-4xl flex flex-col justify-between cursor-pointer mx-auto"
       onClick={handleCardClick}
     >
-      {/* <div
-        style={{
-          position: "absolute",
-          top: 150,
-          right: 2,
-          backgroundColor: "#168c41",
-          borderRadius: "50%",
-          width: 24,
-          height: 24,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          boxShadow: "0 0 6px rgba(22,163,74,0.6)",
-          zIndex: 10,
-          border: "2px solid black",
-        }}
-        title="Enrolled"
-        aria-label="Enrolled"
-      >
-        <CheckCircleIcon sx={{ color: "white", fontSize: 20 }} />
-      </div> */}
       <CardMedia
         component="img"
         sx={{ objectFit: "fill", width: "100%", height: 180 }}
@@ -79,25 +58,26 @@ export default function EnrolledCourseCard({ courseInfo }) {
       <CardActions className="flex justify-center items-center pb-2">
         <button
           className="
-    bg-gradient-to-r from-green-900 to-green-700
-    hover:from-green-700 hover:to-green-900
-    text-white
-    px-4 py-2
-    rounded-lg
-    w-full
-    text-center
-    text-sm
-    font-semibold
-    shadow-md
-    transition
-    transform
-    hover:scale-103
-    hover:rounded-full
-    hover:shadow-xl
-    hover:font-bold
-    focus:outline-none
-    focus:ring-1 focus:ring-offset-2 focus:ring-gray-400
-  "
+                  bg-gradient-to-r from-green-900 to-green-700
+                  hover:from-green-700 hover:to-green-900
+                  text-white
+                  px-4 py-2
+                  rounded-lg
+                  w-full
+                  text-center
+                  text-sm
+                  font-semibold
+                  shadow-md
+                  transition
+                  transform
+                  hover:scale-103
+                  hover:rounded-full
+                  hover:shadow-xl
+                  hover:font-bold
+                  focus:outline-none
+                  focus:ring-1 focus:ring-offset-2 focus:ring-gray-400
+                  cursor-pointer
+                "
           onClick={handleButtonClick}
         >
           View Course

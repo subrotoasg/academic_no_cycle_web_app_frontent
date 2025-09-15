@@ -4,12 +4,18 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "**",
+        hostname: "apars.b-cdn.net",
+        pathname: "/varsity/**",
+      },
+      {
+        protocol: "https",
+        hostname: "fai-cg.b-cdn.net",
+        pathname: "/**",
       },
     ],
-    unoptimized: true,
+    // unoptimized: true,
   },
-  // reactStrictMode: false,
+  reactStrictMode: false,
 };
 
 export default nextConfig;

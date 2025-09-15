@@ -14,7 +14,7 @@ import { useGetAllCourseCycleBasedOnCourseIdQuery } from "@/redux/services/cycle
 import CycleSelect from "@/components/form/CycleSelect";
 import {
   useDeleteCycleSubjectMutation,
-  useGetSubjectsByCycleIdQuery,
+  useGetCycleSubjectsByCycleIdQuery,
 } from "@/redux/services/cycleSubjectApi";
 
 export function SubjectList() {
@@ -49,17 +49,18 @@ export function SubjectList() {
       setSelectedCycleId(cycleData?.data[0]?.id);
     }
   }, [cycleData, selectedCycleId]);
-  const { data, isError, isLoading, isFetching } = useGetSubjectsByCycleIdQuery(
-    {
-      page,
-      limit,
-      searchTerm: searchQuery,
-      cycleId: selectedCycleId,
-    },
-    {
-      skip: !selectedCycleId,
-    }
-  );
+  const { data, isError, isLoading, isFetching } =
+    useGetCycleSubjectsByCycleIdQuery(
+      {
+        page,
+        limit,
+        searchTerm: searchQuery,
+        cycleId: selectedCycleId,
+      },
+      {
+        skip: !selectedCycleId,
+      }
+    );
   // console.log(data);
   const SubjectData = data?.data;
   const meta = data?.data?.meta;
