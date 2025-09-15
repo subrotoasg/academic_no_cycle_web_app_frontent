@@ -9,11 +9,11 @@ import { toast } from "sonner";
 import Swal from "sweetalert2";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
-import { useSelector } from "react-redux";
-import { useGetSubjectsByCourseIdQuery } from "@/redux/services/subjectsApi";
-import { useGetChaptersByCourseSubjectIdQuery } from "@/redux/services/chapterAPi";
 import { useCreateClassContentMutation } from "@/redux/services/contentsApi";
-import { selectAllCourses } from "@/redux/Features/courseInfo";
+import { useGetAllCourseQuery } from "@/redux/services/courseApi";
+import { useGetAllCourseCycleBasedOnCourseIdQuery } from "@/redux/services/cycleApi";
+import { useGetCycleSubjectsByCycleIdQuery } from "@/redux/services/cycleSubjectApi";
+import { useGetAllChaptersByCycleSubjectIdQuery } from "@/redux/services/cycleChapterApi";
 
 export default function ClassContentForm() {
   const types = [
@@ -40,26 +40,59 @@ export default function ClassContentForm() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const selectedCourseId = useWatch({ control, name: "courseId" });
+  const selectedCycleId = useWatch({ control, name: "cycleId" });
   const selectedSubjectId = useWatch({ control, name: "subject" });
   const fileInputRef = useRef(null);
 
-  const courses = useSelector(selectAllCourses);
+  const {
+    data: courseData,
+    isLoading: isCourseLoading,
+    isError,
+  } = useGetAllCourseQuery({ limit: 1000 });
+
+  const courses = courseData?.data;
   const courseOptions =
     courses?.data?.map((course) => ({
-      label: course.productFullName,
-      value: course.id,
+      label: `${course?.productFullName} (${course?.productName})`,
+      value: course?.id,
     })) || [];
+
+  const {
+    data: cycleData,
+    isLoading: isCycleLoading,
+    isError: cycleError,
+  } = useGetAllCourseCycleBasedOnCourseIdQuery(selectedCourseId, {
+    skip: !selectedCourseId,
+  });
+  // console.log(cycleData);
+
+  const cycleOptions = isCycleLoading
+    ? [{ label: "Loading cycles...", value: "" }]
+    : cycleData?.data?.length
+    ? cycleData.data.map((cycle) => ({
+        label: `${cycle?.title} (${cycle?.course?.productName})`,
+        value: cycle?.id,
+      }))
+    : [{ label: "No cycles available", value: "" }];
 
   const {
     data: subjects,
     isLoading: isSubjectLoading,
     isError: isSubjectError,
-  } = useGetSubjectsByCourseIdQuery(selectedCourseId, {
-    skip: !selectedCourseId,
-  });
+  } = useGetCycleSubjectsByCycleIdQuery(
+    {
+      cycleId: selectedCycleId,
+      page: 1,
+      limit: 100,
+      searchTerm: "",
+    },
+    {
+      skip: !selectedCycleId,
+    }
+  );
 
   const { data: chapters, isLoading: isChapterLoading } =
-    useGetChaptersByCourseSubjectIdQuery(selectedSubjectId, {
+    useGetAllChaptersByCycleSubjectIdQuery(selectedSubjectId, {
       skip: !selectedSubjectId,
     });
 
@@ -70,8 +103,8 @@ export default function ClassContentForm() {
     ? [{ label: "Loading subjects...", value: "" }]
     : subjects?.data?.length
     ? subjects.data.map((sub) => ({
-        label: sub.subject.title,
-        value: sub.id,
+        label: sub?.subject?.title,
+        value: sub?.id,
       }))
     : [{ label: "No subjects available", value: "" }];
 
@@ -138,7 +171,7 @@ export default function ClassContentForm() {
 
     const formData = new FormData();
     const contentInfo = {
-      courseSubjectChapterId: data.chapter,
+      cycleSubjectChapterId: data.chapter,
       hostingType: data.type,
       classTitle: data.title,
       classNo: data.classNumber,
@@ -185,6 +218,14 @@ export default function ClassContentForm() {
           rules={{ required: "Course is required" }}
         />
         {selectedCourseId && (
+          <Dropdown
+            label="Select Cycle"
+            name="cycleId"
+            options={cycleOptions}
+            rules={{ required: "Cycle is required" }}
+          />
+        )}
+        {selectedCycleId && (
           <Dropdown
             label="Select Subject"
             name="subject"

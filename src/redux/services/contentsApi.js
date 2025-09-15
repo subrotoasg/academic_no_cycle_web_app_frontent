@@ -6,7 +6,7 @@ const classContentApiServices = baseApi.injectEndpoints({
     // Create Class Content
     createClassContent: builder.mutation({
       query: (formData) => ({
-        url: "/class",
+        url: "/cycle/class/content",
         method: "POST",
         body: formData,
       }),
