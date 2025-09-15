@@ -19,12 +19,12 @@ export default function CycleCard(params) {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const permalink = cycle?.course?.Permalink;
   const user = useSelector(currentUser);
-  const isEnrolled = cycle?.isEnrolled === true;
+  const isEnrolled = cycle?.isEnrolled;
   const isAdmin = user?.role === "admin";
 
   const handleCardClick = () => {
     if (isEnrolled || isAdmin) {
-      window.location.href = `/course/${course?.id}`;
+      window.location.href = `/course/${course?.id}` || "/";
     } else if (permalink) {
       window.open(permalink, "_blank");
     }
@@ -82,7 +82,7 @@ export default function CycleCard(params) {
         <CardActions className="flex justify-center items-center mb-3">
           {isEnrolled || isAdmin ? (
             <Link
-              href={`/course/${cycle?.id}`}
+              href={`/course/${cycle?.course?.id}/subject/${cycle?.id}`}
               className="
               bg-gradient-to-r from-green-900 to-green-700
               hover:from-green-700 hover:to-green-900

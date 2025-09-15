@@ -47,6 +47,17 @@ const classContentApiServices = baseApi.injectEndpoints({
           : [{ type: "classContent", id: "LIST" }],
     }),
 
+    // Get Class Contents by Cycle SubjectChapter ID
+    getClassContentsByCycleSubjectChapterId: builder.query({
+      query: (cycleSubjectChapterId) => ({
+        url: `/cycle/class/content/classes/${cycleSubjectChapterId}`,
+        method: "GET",
+      }),
+      providesTags: (result, error, subjectChapterId) => [
+        { type: "classContent", id: subjectChapterId },
+      ],
+    }),
+
     // Get Class Contents by SubjectChapter ID
     getClassContentsBySubjectChapterId: builder.query({
       query: (subjectChapterId) => ({
@@ -100,6 +111,7 @@ export const {
   useGetClassContentByClassIdQuery,
   useGetAllClassContentsQuery,
   useGetClassContentsBySubjectChapterIdQuery,
+  useGetClassContentsByCycleSubjectChapterIdQuery,
   useUpdateClassContentMutation,
   useDeleteClassContentMutation,
   useAddLiveClassMutation,

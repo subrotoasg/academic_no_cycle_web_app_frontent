@@ -4,31 +4,30 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-function ChapterCard({ chapter }) {
-  console.log(chapter);
-  const imageUrl = chapter?.chapter?.chapterImage || "/img/aparsLogo.jpg";
-  const courseId = chapter?.cycleSubject?.cycle?.course?.id;
-  const chapterId = chapter?.chapter?.id;
+function CycleSubjectCard({ subject }) {
+  const imageUrl = subject?.subject?.subjectImage || "/img/aparsLogo.jpg";
+  const courseId = subject?.cycle?.course?.id;
   return (
     <Link
       href={{
-        pathname: `/course/${courseId}/classes/${chapterId}`,
+        pathname: `/course/${courseId}/cycle-chapter/${subject?.id}`,
         query: {
-          title: chapter?.chapter?.chapterName,
+          title: subject?.subject?.title,
         },
       }}
       className="block rounded-xl overflow-hidden shadow-md hover:scale-102 bg-gray-600"
     >
       <div className="p-2">
         <h3 className="text-xl font-semibold text-white ">
-          {chapter?.chapter?.chapterName}
+          {subject?.subject?.title}
         </h3>
       </div>
       <div className="relative w-full h-48">
         <Image
           src={imageUrl}
-          alt={chapter?.chapter?.chapterName || "Chapter image"}
+          alt={subject?.subject?.title || "subject image"}
           layout="fill"
+          loading="lazy"
           className="object-fit rounded-b-xl"
         />
       </div>
@@ -36,4 +35,4 @@ function ChapterCard({ chapter }) {
   );
 }
 
-export default ChapterCard;
+export default CycleSubjectCard;
