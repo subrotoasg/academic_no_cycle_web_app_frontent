@@ -14,6 +14,7 @@ export const tagTypesValue = {
   UPLOADINGCLASS: "uploadingClasses",
   COURSE_CYCLE: "COURSECYCLE",
   CYCLE_SUBJECT: "cycleSubject",
+  CYCLE_CHAPTER: "cycleChapter",
 };
 
 // Array tags

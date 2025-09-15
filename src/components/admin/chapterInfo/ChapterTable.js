@@ -23,19 +23,19 @@ export function ChapterTable({
       <Table className="min-w-full border border-gray-100 text-center">
         <TableHeader>
           <TableRow>
-            <TableHead className="text-center text-sm md:text-base border">
+            <TableHead className="text-center text-sm md:text-base border font-bold">
               Subject Title
             </TableHead>
-            <TableHead className="text-center text-sm md:text-base border">
+            <TableHead className="text-center text-sm md:text-base border font-bold">
               Chapter Name
             </TableHead>
-            <TableHead className="text-center text-sm md:text-base border">
+            <TableHead className="text-center text-sm md:text-base border font-bold">
               Chapter Image
             </TableHead>
-            <TableHead className="text-center text-sm md:text-base border">
+            <TableHead className="text-center text-sm md:text-base border font-bold">
               Edit
             </TableHead>
-            <TableHead className="text-center text-sm md:text-base border">
+            <TableHead className="text-center text-sm md:text-base border font-bold">
               Delete
             </TableHead>
           </TableRow>
@@ -43,10 +43,12 @@ export function ChapterTable({
 
         <TableBody>
           {Chapters?.length > 0 ? (
-            Chapters.map((chapter) => (
+            Chapters?.map((chapter) => (
               <TableRow key={chapter?.id}>
                 <TableCell className="text-center border">
-                  {chapter?.courseSubject?.subject?.title || "N/A"}
+                  {chapter?.cycleSubject?.title ||
+                    chapter?.cycleSubject?.subject?.title ||
+                    "N/A"}
                 </TableCell>
                 <TableCell className="text-center border">
                   {chapter?.title || chapter?.chapter?.chapterName || "N/A"}
@@ -54,8 +56,9 @@ export function ChapterTable({
                 <TableCell className="text-center border">
                   <Image
                     src={
-                      chapter?.courseSubjectChapterImage ||
-                      chapter?.chapter?.chapterImage
+                      chapter?.cycleSubjectChapterImage ||
+                      chapter?.chapter?.chapterImage ||
+                      "placeholder-image.png"
                     }
                     alt={
                       chapter?.title ||
@@ -90,7 +93,7 @@ export function ChapterTable({
           ) : (
             <TableRow>
               <TableCell colSpan={5} className="h-24 text-center border">
-                No results found.
+                No data found.
               </TableCell>
             </TableRow>
           )}

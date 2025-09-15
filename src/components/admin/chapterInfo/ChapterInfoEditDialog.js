@@ -14,13 +14,14 @@ import { useEffect, useRef, useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
-import { useUpdateCourseSubjectChapterMutation } from "@/redux/services/chapterAPi";
+import { useUpdateCycleSubjectChapterMutation } from "@/redux/services/cycleChapterApi";
 
 export default function ChapterImageEditDialog({
   isOpen,
   onOpenChange,
   chapter,
 }) {
+  // console.log(chapter);
   const methods = useForm();
   const { handleSubmit } = methods;
 
@@ -29,12 +30,14 @@ export default function ChapterImageEditDialog({
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
 
-  const [updateCourseSubjectChapter] = useUpdateCourseSubjectChapterMutation();
+  const [updateCycleSubjectChapter] = useUpdateCycleSubjectChapterMutation();
 
   useEffect(() => {
     if (chapter) {
       setImagePreview(
-        chapter?.courseSubjectChapterImage || chapter?.chapter?.chapterImage
+        chapter?.cycleSubjectChapterImage ||
+          chapter?.chapter?.chapterImage ||
+          null
       );
       setSelectedFile(null);
     }
@@ -73,7 +76,7 @@ export default function ChapterImageEditDialog({
 
     try {
       setLoading(true);
-      const res = await updateCourseSubjectChapter({
+      const res = await updateCycleSubjectChapter({
         id: chapter.id,
         formData,
       }).unwrap();

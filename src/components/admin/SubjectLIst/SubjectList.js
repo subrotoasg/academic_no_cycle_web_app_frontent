@@ -44,6 +44,11 @@ export function SubjectList() {
   });
   // console.log(cycleData);
 
+  useEffect(() => {
+    if (cycleData?.data?.length > 0 && !selectedCycleId) {
+      setSelectedCycleId(cycleData?.data[0]?.id);
+    }
+  }, [cycleData, selectedCycleId]);
   const { data, isError, isLoading, isFetching } = useGetSubjectsByCycleIdQuery(
     {
       page,
