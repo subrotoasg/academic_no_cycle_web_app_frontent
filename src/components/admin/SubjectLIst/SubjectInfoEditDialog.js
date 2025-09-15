@@ -14,7 +14,7 @@ import { useEffect, useRef, useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
-import { useUpdateCourseSubjectMutation } from "@/redux/services/subjectsApi";
+import { useUpdateCycleSubjectMutation } from "@/redux/services/cycleSubjectApi";
 
 export default function SubjectsImageEditDialog({
   isOpen,
@@ -29,12 +29,12 @@ export default function SubjectsImageEditDialog({
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
 
-  const [updateCourseSubject] = useUpdateCourseSubjectMutation();
+  const [updateCycleSubject] = useUpdateCycleSubjectMutation();
 
   useEffect(() => {
     if (Subject) {
       setImagePreview(
-        Subject?.courseSubjectImage || Subject?.subject?.subjectImage
+        Subject?.cycleSubjectImage || Subject?.subject?.subjectImage
       );
       setSelectedFile(null);
     }
@@ -73,7 +73,7 @@ export default function SubjectsImageEditDialog({
 
     try {
       setLoading(true);
-      const res = await updateCourseSubject({
+      const res = await updateCycleSubject({
         id: Subject.id,
         formData,
       }).unwrap();

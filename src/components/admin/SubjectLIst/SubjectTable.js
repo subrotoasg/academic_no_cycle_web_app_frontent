@@ -22,16 +22,16 @@ export function SubjectsTable({
       <Table className="min-w-full border border-gray-100 text-center">
         <TableHeader>
           <TableRow>
-            <TableHead className="text-center text-sm md:text-base border">
+            <TableHead className="text-center text-sm md:text-base border font-bold">
               Subject Name
             </TableHead>
-            <TableHead className="text-center text-sm md:text-base border">
+            <TableHead className="text-center text-sm md:text-base border font-bold">
               Subject Image
             </TableHead>
-            <TableHead className="text-center text-sm md:text-base border">
+            <TableHead className="text-center text-sm md:text-base border font-bold">
               Edit
             </TableHead>
-            <TableHead className="text-center text-sm md:text-base border">
+            <TableHead className="text-center text-sm md:text-base border font-bold">
               Delete
             </TableHead>
           </TableRow>
@@ -39,7 +39,7 @@ export function SubjectsTable({
 
         <TableBody>
           {Subjects?.length > 0 ? (
-            Subjects.map((Subject) => (
+            Subjects?.map((Subject) => (
               <TableRow key={Subject?.id}>
                 <TableCell className="text-center border">
                   {Subject?.title || Subject?.subject?.title || "N/A"}
@@ -47,8 +47,9 @@ export function SubjectsTable({
                 <TableCell className="text-center border">
                   <Image
                     src={
-                      Subject?.courseSubjectImage ||
-                      Subject?.subject?.subjectImage
+                      Subject?.cycleSubjectImage ||
+                      Subject?.subject?.subjectImage ||
+                      "placeholder-image.png"
                     }
                     alt={
                       Subject?.title ||

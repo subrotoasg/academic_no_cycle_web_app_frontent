@@ -76,8 +76,8 @@ const cycleSubjectApi = baseApi.injectEndpoints({
 
     //  Delete Cycle Subject
     deleteCycleSubject: builder.mutation({
-      query: (id) => ({
-        url: `/cycle-subject/${id}`,
+      query: (subjectId) => ({
+        url: `/cycle-subject/${subjectId}`,
         method: "DELETE",
       }),
       invalidatesTags: [{ type: "cycleSubject", id: "LIST" }],
