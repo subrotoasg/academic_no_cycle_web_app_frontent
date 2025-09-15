@@ -5,7 +5,11 @@ import Link from "next/link";
 import React from "react";
 
 function CycleSubjectCard({ subject }) {
-  const imageUrl = subject?.subject?.subjectImage || "/img/aparsLogo.jpg";
+  console.log(subject);
+  const imageUrl =
+    subject?.cycleSubjectImage ||
+    subject?.subject?.subjectImage ||
+    "/img/aparsLogo.jpg";
   const courseId = subject?.cycle?.course?.id;
   return (
     <Link

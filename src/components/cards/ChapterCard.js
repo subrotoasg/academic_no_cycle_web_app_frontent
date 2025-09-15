@@ -6,7 +6,10 @@ import React from "react";
 
 function ChapterCard({ chapter }) {
   console.log(chapter);
-  const imageUrl = chapter?.chapter?.chapterImage || "/img/aparsLogo.jpg";
+  const imageUrl =
+    chapter?.cycleSubjectChapterImage ||
+    chapter?.chapter?.chapterImage ||
+    "/img/aparsLogo.jpg";
   const courseId = chapter?.cycleSubject?.cycle?.course?.id;
   const chapterId = chapter?.chapter?.id;
   return (
