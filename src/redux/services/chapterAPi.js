@@ -5,23 +5,31 @@ import baseApi from "./baseApi";
 const chapterApiServices = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // Get Chapters by Subject ID
-    getChaptersBySubjectId: builder.query({
-      query: (subjectId) => ({
-        url: `/chapter/all/chapters/${subjectId}`,
-        method: "GET",
-      }),
-      providesTags: [tagTypesValue.CHAPTER],
-    }),
+    // getChaptersBySubjectId: builder.query({
+    //   query: (subjectId) => ({
+    //     url: `/chapter/all/chapters/${subjectId}`,
+    //     method: "GET",
+    //   }),
+    //   providesTags: [tagTypesValue.CHAPTER],
+    // }),
 
     // Get Chapters by Cycle Subject ID
-    getChaptersByCycleSubjectId: builder.query({
+    // getChaptersByCycleSubjectId: builder.query({
+    //   query: (courseSubjectId) => ({
+    //     url: `/cycle/subject/chapter/chapters/${courseSubjectId}`,
+    //     method: "GET",
+    //   }),
+    //   providesTags: [tagTypesValue.CHAPTER],
+    // }),
+
+    // Get Chapters by CourseSubject ID
+    getChaptersByCourseSubjectId: builder.query({
       query: (courseSubjectId) => ({
-        url: `/cycle/subject/chapter/chapters/${courseSubjectId}`,
+        url: `/course/subject/chapter/course-subject/${courseSubjectId}`,
         method: "GET",
       }),
       providesTags: [tagTypesValue.CHAPTER],
     }),
-
     // Get Course Subject Chapters by Course ID
     getCourseSubjectChapters: builder.query({
       query: (queryParams) => {
@@ -61,8 +69,9 @@ const chapterApiServices = baseApi.injectEndpoints({
 });
 
 export const {
-  useGetChaptersBySubjectIdQuery,
-  useGetChaptersByCycleSubjectIdQuery,
+  // useGetChaptersBySubjectIdQuery,
+  // useGetChaptersByCycleSubjectIdQuery,
+  useGetChaptersByCourseSubjectIdQuery,
   useGetCourseSubjectChaptersQuery,
   useUpdateCourseSubjectChapterMutation,
   useDeleteCourseSubjectChapterMutation,

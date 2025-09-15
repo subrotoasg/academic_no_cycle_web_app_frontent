@@ -5,48 +5,67 @@ import SearchBar from "../utilities/SearchBar";
 import PaginationControls from "../utilities/PaginationControls";
 import Swal from "sweetalert2";
 import Loading from "../utilities/Loading";
-import { useSelector } from "react-redux";
 import { ChapterTable } from "./ChapterTable";
 import ChapterInfoEditDialog from "./ChapterInfoEditDialog";
-import {
-  useDeleteCourseSubjectChapterMutation,
-  useGetCourseSubjectChaptersQuery,
-} from "@/redux/services/chapterAPi";
-import { selectAllCourses } from "@/redux/Features/courseInfo";
 import CourseSelect from "@/components/form/CourseSelect";
 import LoadingData from "@/components/common/LoadingData";
+import { useGetAllCourseQuery } from "@/redux/services/courseApi";
+import { useGetAllCourseCycleBasedOnCourseIdQuery } from "@/redux/services/cycleApi";
+import {
+  useDeleteCycleSubjectChapterMutation,
+  useGetAllChaptersByCycleIdQuery,
+} from "@/redux/services/cycleChapterApi";
+import CycleSelect from "@/components/form/CycleSelect";
 
 export function ChapterList() {
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const [selectedCourseId, setSelectedCourseId] = useState("");
-  const courses = useSelector(selectAllCourses);
+  const [selectedCycleId, setSelectedCycleId] = useState("");
   const [selectedChapter, setSelectedChapter] = useState(null);
   const [ChapterInfoModalOpen, setChapterInfoModalOpen] = useState(false);
   const [ChapterEditModalOpen, setChapterEditModalOpen] = useState(false);
+  const { data: courseData } = useGetAllCourseQuery({ limit: 1000 });
+  const courses = courseData?.data;
 
   useEffect(() => {
     if (courses?.data?.length > 0 && !selectedCourseId) {
-      setSelectedCourseId(courses.data[0].id);
+      setSelectedCourseId(courses?.data[0]?.id);
     }
   }, [courses, selectedCourseId]);
+
+  const {
+    data: cycleData,
+    isLoading: cycleLoading,
+    isError: cycleError,
+  } = useGetAllCourseCycleBasedOnCourseIdQuery(selectedCourseId, {
+    skip: !selectedCourseId,
+  });
+
+  useEffect(() => {
+    if (cycleData?.data?.length > 0 && !selectedCycleId) {
+      setSelectedCycleId(cycleData?.data[0]?.id);
+    }
+  }, [cycleData, selectedCycleId]);
+
   const { data, isError, isLoading, isFetching } =
-    useGetCourseSubjectChaptersQuery(
+    useGetAllChaptersByCycleIdQuery(
       {
         page,
         limit,
         searchTerm: searchQuery,
-        courseId: selectedCourseId,
+        cycleId: selectedCycleId,
       },
       {
-        skip: !selectedCourseId,
+        skip: !selectedCycleId,
       }
     );
+  // console.log(data);
 
   const ChapterData = data?.data?.data;
   const meta = data?.data?.meta;
-  const totalPages = meta?.totalCount ? Math.ceil(meta.totalCount / limit) : 1;
+  const totalPages = meta?.totalCount ? Math.ceil(meta?.totalCount / limit) : 1;
   useEffect(() => {
     setPage(1);
   }, [searchQuery]);
@@ -60,14 +79,13 @@ export function ChapterList() {
   }, [ChapterData]);
   const handleChapterEditModal = (Chapter) => {
     setSelectedChapter(Chapter);
-
     setChapterEditModalOpen(true);
   };
   const handleChapterInfoModal = (Chapter) => {
     setSelectedChapter(Chapter);
     setChapterInfoModalOpen(true);
   };
-  const [deleteCourseSubjectChapter] = useDeleteCourseSubjectChapterMutation();
+  const [deleteCycleSubjectChapter] = useDeleteCycleSubjectChapterMutation();
 
   const handleChapterDelete = async (Chapter) => {
     const result = await Swal.fire({
@@ -84,7 +102,7 @@ export function ChapterList() {
 
     if (result.isConfirmed) {
       try {
-        const res = await deleteCourseSubjectChapter(Chapter.id).unwrap();
+        const res = await deleteCycleSubjectChapter(Chapter?.id).unwrap();
         // console.log(res);
         if (res?.success) {
           Swal.fire({
@@ -119,13 +137,20 @@ export function ChapterList() {
         Browse, edit, or delete the uploaded Chapter
       </p>
 
-      <CourseSelect
-        label="Select Course"
-        courses={courses?.data}
-        selectedCourseId={selectedCourseId}
-        onChange={setSelectedCourseId}
-      />
-
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <CourseSelect
+          label="Select Course"
+          courses={courses?.data}
+          selectedCourseId={selectedCourseId}
+          onChange={setSelectedCourseId}
+        />
+        <CycleSelect
+          label="Select Cycle"
+          cycles={cycleData?.data}
+          selectedCycleId={selectedCycleId}
+          onChange={setSelectedCycleId}
+        />
+      </div>
       <div className="p-2">
         <SearchBar
           searchQuery={searchQuery}
@@ -148,7 +173,7 @@ export function ChapterList() {
 
       {!(isLoading || isFetching) && !isError && (
         <>
-          {!selectedCourseId || sortedChapter.length === 0 ? (
+          {!selectedCycleId || sortedChapter?.length === 0 ? (
             <div className="text-center text-gray-500 py-4">
               No Chapters Found
             </div>

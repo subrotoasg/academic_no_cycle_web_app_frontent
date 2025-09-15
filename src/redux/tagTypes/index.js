@@ -13,7 +13,8 @@ export const tagTypesValue = {
   STUDENT: "student",
   UPLOADINGCLASS: "uploadingClasses",
   COURSE_CYCLE: "COURSECYCLE",
-  CYCLE_SUBJECT: "CYCLESUBJECT",
+  CYCLE_SUBJECT: "cycleSubject",
+  CYCLE_CHAPTER: "cycleChapter",
 };
 
 // Array tags

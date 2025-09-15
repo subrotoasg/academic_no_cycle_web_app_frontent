@@ -7,15 +7,15 @@ import Swal from "sweetalert2";
 import Loading from "../utilities/Loading";
 import { SubjectsTable } from "./SubjectTable";
 import SubjectsImageEditDialog from "./SubjectInfoEditDialog";
-import {
-  useDeleteCourseSubjectMutation,
-  useGetCourseSubjectQuery,
-} from "@/redux/services/subjectsApi";
 import CourseSelect from "@/components/form/CourseSelect";
 import LoadingData from "@/components/common/LoadingData";
 import { useGetAllCourseQuery } from "@/redux/services/courseApi";
 import { useGetAllCourseCycleBasedOnCourseIdQuery } from "@/redux/services/cycleApi";
 import CycleSelect from "@/components/form/CycleSelect";
+import {
+  useDeleteCycleSubjectMutation,
+  useGetCycleSubjectsByCycleIdQuery,
+} from "@/redux/services/cycleSubjectApi";
 
 export function SubjectList() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -42,20 +42,26 @@ export function SubjectList() {
   } = useGetAllCourseCycleBasedOnCourseIdQuery(selectedCourseId, {
     skip: !selectedCourseId,
   });
-  console.log(cycleData);
+  // console.log(cycleData);
 
-  const { data, isError, isLoading, isFetching } = useGetCourseSubjectQuery(
-    {
-      page,
-      limit,
-      searchTerm: searchQuery,
-      courseId: selectedCourseId,
-    },
-    {
-      skip: !selectedCourseId,
+  useEffect(() => {
+    if (cycleData?.data?.length > 0 && !selectedCycleId) {
+      setSelectedCycleId(cycleData?.data[0]?.id);
     }
-  );
-
+  }, [cycleData, selectedCycleId]);
+  const { data, isError, isLoading, isFetching } =
+    useGetCycleSubjectsByCycleIdQuery(
+      {
+        page,
+        limit,
+        searchTerm: searchQuery,
+        cycleId: selectedCycleId,
+      },
+      {
+        skip: !selectedCycleId,
+      }
+    );
+  // console.log(data);
   const SubjectData = data?.data;
   const meta = data?.data?.meta;
 
@@ -79,7 +85,7 @@ export function SubjectList() {
     setSelectedSubject(Subject);
     setSubjectInfoModalOpen(true);
   };
-  const [deleteCourseSubject] = useDeleteCourseSubjectMutation();
+  const [deleteCycleSubject] = useDeleteCycleSubjectMutation();
 
   const handleSubjectDelete = async (Subject) => {
     const result = await Swal.fire({
@@ -96,7 +102,7 @@ export function SubjectList() {
 
     if (result.isConfirmed) {
       try {
-        const res = await deleteCourseSubject(Subject.id).unwrap();
+        const res = await deleteCycleSubject(Subject?.id).unwrap();
         if (res?.success) {
           Swal.fire({
             title: "Deleted!",
@@ -130,18 +136,20 @@ export function SubjectList() {
         Uploaded Subjects Management
       </p>
 
-      <CourseSelect
-        label="Select Course"
-        courses={courses?.data}
-        selectedCourseId={selectedCourseId}
-        onChange={setSelectedCourseId}
-      />
-      <CycleSelect
-        label="Select Cycle"
-        cycles={cycleData?.data}
-        selectedCycleId={selectedCycleId}
-        onChange={setSelectedCycleId}
-      />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <CourseSelect
+          label="Select Course"
+          courses={courses?.data}
+          selectedCourseId={selectedCourseId}
+          onChange={setSelectedCourseId}
+        />
+        <CycleSelect
+          label="Select Cycle"
+          cycles={cycleData?.data}
+          selectedCycleId={selectedCycleId}
+          onChange={setSelectedCycleId}
+        />
+      </div>
 
       {(isLoading || isFetching) && (
         <div className="w-full flex justify-center py-8">
@@ -157,7 +165,7 @@ export function SubjectList() {
 
       {!(isLoading || isFetching) && !isError && (
         <>
-          {!selectedCourseId || sortedSubject.length === 0 ? (
+          {!selectedCycleId || sortedSubject?.length === 0 ? (
             <div className="text-center text-gray-500 py-4">
               No Subjects Found
             </div>

@@ -5,18 +5,21 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Loading from "@/components/admin/utilities/Loading";
 import { MoveLeft } from "lucide-react";
 import LoadingData from "@/components/common/LoadingData";
-import { useGetChaptersByCycleSubjectIdQuery } from "@/redux/services/chapterAPi";
+// import { useGetChaptersByCycleSubjectIdQuery } from "@/redux/services/chapterAPi";
+import { useGetAllChaptersByCycleSubjectIdQuery } from "@/redux/services/cycleChapterApi";
 
 function CycleSubjectBasedChapter() {
   const params = useParams();
   const router = useRouter();
-  const courseSubjectId = params?.cycleSubjectId;
+  // const courseSubjectId = params?.cycleSubjectId;
+  const cycleSubjectId = params?.cycleSubjectId;
   const {
     data: subjectChapterData,
     isLoading,
     error,
-  } = useGetChaptersByCycleSubjectIdQuery(courseSubjectId, {
-    skip: !courseSubjectId,
+    // } = useGetChaptersByCycleSubjectIdQuery(courseSubjectId, {
+  } = useGetAllChaptersByCycleSubjectIdQuery(cycleSubjectId, {
+    skip: !cycleSubjectId,
   });
   const subjectChapters = subjectChapterData?.data;
   const subjectName =
@@ -24,7 +27,8 @@ function CycleSubjectBasedChapter() {
       ? subjectChapters[0].courseSubject?.subject?.title
       : "Subject Details";
 
-  if (isLoading || !courseSubjectId) {
+  // if (isLoading || !courseSubjectId) {
+  if (isLoading || !cycleSubjectId) {
     return (
       <div className="mt-20">
         <LoadingData />

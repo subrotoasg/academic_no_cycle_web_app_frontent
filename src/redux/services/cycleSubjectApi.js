@@ -1,5 +1,6 @@
 import { quearyUrlGenerator } from "../utilities/quearyParamsGenerator";
 import baseApi from "./baseApi";
+import { tagTypesValue } from "../tagTypes";
 
 const cycleSubjectApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -38,9 +39,17 @@ const cycleSubjectApi = baseApi.injectEndpoints({
           : [{ type: "cycleSubject", id: "LIST" }],
     }),
 
-    //  Get cycle Subjects By CourseId
-
+    // Get Subject by Cycle ID
     getSubjectsByCycleId: builder.query({
+      query: (cycleId) => ({
+        url: `/cycle-subject/subjects/${cycleId}`,
+        method: "GET",
+      }),
+      providesTags: [tagTypesValue.CYCLE_SUBJECT],
+    }),
+
+    //  Get cycle Subjects By CourseId
+    getCycleSubjectsByCycleId: builder.query({
       query: (queryParams) => {
         const url = quearyUrlGenerator(
           `/cycle-subject/subjects/${queryParams.cycleId}`,
@@ -76,8 +85,8 @@ const cycleSubjectApi = baseApi.injectEndpoints({
 
     //  Delete Cycle Subject
     deleteCycleSubject: builder.mutation({
-      query: (id) => ({
-        url: `/cycle-subject/${id}`,
+      query: (subjectId) => ({
+        url: `/cycle-subject/${subjectId}`,
         method: "DELETE",
       }),
       invalidatesTags: [{ type: "cycleSubject", id: "LIST" }],
@@ -89,6 +98,7 @@ export const {
   useCreateCycleSubjectMutation,
   useGetAllCycleSubjectsByCourseIdQuery,
   useGetSubjectsByCycleIdQuery,
+  useGetCycleSubjectsByCycleIdQuery,
   useUpdateCycleSubjectMutation,
   useDeleteCycleSubjectMutation,
 } = cycleSubjectApi;
