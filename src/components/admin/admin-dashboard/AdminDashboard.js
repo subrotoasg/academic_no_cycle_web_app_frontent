@@ -10,18 +10,24 @@ import { useGetAllClassContentsQuery } from "@/redux/services/contentsApi";
 import { useGetFeaturesByCourseIdQuery } from "@/redux/services/featuredApi";
 import { useGetNoticeRoutinesByCourseIdQuery } from "@/redux/services/noticeRoutineApi";
 import DashboardCharts from "./DashboardCharts";
-import { selectAllCourses } from "@/redux/Features/courseInfo";
 import CourseSelect from "@/components/form/CourseSelect";
 import LoadingData from "@/components/common/LoadingData";
+import { useGetAllCourseQuery } from "@/redux/services/courseApi";
 
 function AdminDashboard() {
   const [selectedCourseId, setSelectedCourseId] = useState("");
-  const courses = useSelector(selectAllCourses);
+  const {
+    data: courseData,
+    isLoading,
+    isError,
+  } = useGetAllCourseQuery({ limit: 1000 });
+  // console.log(courseData?.data?.data);
+  const courses = courseData?.data;
   const user = useSelector(currentUser);
   const name = user?.name || "Admin";
   useEffect(() => {
     if (courses?.data?.length > 0 && !selectedCourseId) {
-      setSelectedCourseId(courses.data[0].id);
+      setSelectedCourseId(courses?.data[0]?.id);
     }
   }, [courses, selectedCourseId]);
 
@@ -58,10 +64,10 @@ function AdminDashboard() {
   const isAnyLoading =
     adminLoading || contentLoading || featureLoading || noticeLoading;
 
-  const admins = adminData?.data?.data.length || 0;
-  const videos = contentData?.data?.data.length || 0;
-  const features = featureData?.data?.data.length || 0;
-  const notices = noticeData?.data?.data.length || 0;
+  const admins = adminData?.data?.data?.length || 0;
+  const videos = contentData?.data?.data?.length || 0;
+  const features = featureData?.data?.data?.length || 0;
+  const notices = noticeData?.data?.data?.length || 0;
 
   const staticData = {
     admins: admins,
@@ -108,6 +114,14 @@ function AdminDashboard() {
     },
   ];
 
+  if (isError) {
+    return (
+      <div className="text-center text-red-500 font-medium py-10">
+        Failed to load courses. Please try again later.
+      </div>
+    );
+  }
+
   return (
     <div className="w-full p-2">
       <div data-aos="fade-down">
@@ -118,27 +132,29 @@ function AdminDashboard() {
           Visual representation of the course statistics
         </p>
       </div>
-      <div>
-        <CourseSelect
-          label="Select Course"
-          courses={courses?.data}
-          selectedCourseId={selectedCourseId}
-          onChange={setSelectedCourseId}
-        />
-
+      <div className="pt-8">
         {selectedCourseId ? (
           isAnyLoading ? (
             <div className="flex justify-center py-8">
               <LoadingData />
             </div>
           ) : (
-            <DashboardCharts stats={staticData} statsData={statsData} />
+            <>
+              {" "}
+              <CourseSelect
+                label="Select Course"
+                courses={courses?.data}
+                selectedCourseId={selectedCourseId}
+                onChange={setSelectedCourseId}
+              />
+              <DashboardCharts stats={staticData} statsData={statsData} />
+            </>
           )
-        ) : (
+        ) : !isLoading && courses?.data?.length === 0 ? (
           <div className="text-center text-muted-foreground text-sm mt-4">
             Please select a course to view dashboard data.
           </div>
-        )}
+        ) : null}
       </div>
     </div>
   );

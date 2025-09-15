@@ -45,7 +45,7 @@ const contactInfo = [
 const Footer = () => {
   return (
     <footer className="w-full  text-white">
-      <div className="px-10 flex justify-between gap-6 flex-col md:flex-row flex-wrap w-full backdrop-blur-sm bg-black/85">
+      <div className="p-10 flex justify-between gap-6 flex-col md:flex-row flex-wrap w-full backdrop-blur-sm bg-black/85">
         <div className="w-full sm:w-[30%] flex flex-col">
           <Image
             src="/logo.png"
