@@ -13,10 +13,10 @@ const subjectApiServices = baseApi.injectEndpoints({
       providesTags: [tagTypesValue.SUBJECT],
     }),
 
-    // Get Subjects by Course ID
-    getSubjectsByCourseId: builder.query({
-      query: (courseId) => ({
-        url: `/course-subject/subjects/${courseId}`,
+    // Get Subject by Cycle ID
+    getSubjectsByCycleId: builder.query({
+      query: (cycleId) => ({
+        url: `/cycle-subject/subjects/${cycleId}`,
         method: "GET",
       }),
       providesTags: [tagTypesValue.SUBJECT],
@@ -54,18 +54,17 @@ const subjectApiServices = baseApi.injectEndpoints({
         url: `/course-subject/${subjectId}`,
         method: "DELETE",
       }),
-      invalidatesTags: [tagTypesValue.SUBJECT], 
-      }),
+      invalidatesTags: [tagTypesValue.SUBJECT],
+    }),
   }),
 });
 
 export const {
   useGetSubjectsQuery,
-  useGetSubjectsByCourseIdQuery,
+  useGetSubjectsByCycleIdQuery,
   useGetCourseSubjectQuery,
   useUpdateCourseSubjectMutation,
   useDeleteCourseSubjectMutation,
-
 } = subjectApiServices;
 subjectApiServices;
 

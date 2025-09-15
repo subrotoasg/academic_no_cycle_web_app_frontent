@@ -13,14 +13,15 @@ const chapterApiServices = baseApi.injectEndpoints({
       providesTags: [tagTypesValue.CHAPTER],
     }),
 
-    // Get Chapters by CourseSubject ID
-    getChaptersByCourseSubjectId: builder.query({
+    // Get Chapters by Cycle Subject ID
+    getChaptersByCycleSubjectId: builder.query({
       query: (courseSubjectId) => ({
-        url: `/course/subject/chapter/course-subject/${courseSubjectId}`,
+        url: `/cycle/subject/chapter/chapters/${courseSubjectId}`,
         method: "GET",
       }),
       providesTags: [tagTypesValue.CHAPTER],
     }),
+
     // Get Course Subject Chapters by Course ID
     getCourseSubjectChapters: builder.query({
       query: (queryParams) => {
@@ -43,11 +44,10 @@ const chapterApiServices = baseApi.injectEndpoints({
         url: `/course/subject/chapter/${id}`,
         method: "PATCH",
         body: formData,
-        formData: true, 
+        formData: true,
       }),
       invalidatesTags: [tagTypesValue.CHAPTER],
     }),
-    
 
     // Delete Course Subject Chapter by Chapter ID
     deleteCourseSubjectChapter: builder.mutation({
@@ -57,17 +57,15 @@ const chapterApiServices = baseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypesValue.CHAPTER],
     }),
-
   }),
 });
 
 export const {
   useGetChaptersBySubjectIdQuery,
-  useGetChaptersByCourseSubjectIdQuery,
+  useGetChaptersByCycleSubjectIdQuery,
   useGetCourseSubjectChaptersQuery,
   useUpdateCourseSubjectChapterMutation,
   useDeleteCourseSubjectChapterMutation,
-
 } = chapterApiServices;
 
 export default chapterApiServices;

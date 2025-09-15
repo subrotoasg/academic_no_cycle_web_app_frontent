@@ -2,32 +2,29 @@
 import React from "react";
 import ChapterCard from "@/components/cards/ChapterCard";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import Loading from "@/components/admin/utilities/Loading";
-import { useGetChaptersByCourseSubjectIdQuery } from "@/redux/services/chapterAPi";
 import { MoveLeft } from "lucide-react";
 import LoadingData from "@/components/common/LoadingData";
+import { useGetSubjectsByCycleIdQuery } from "@/redux/services/subjectsApi";
+import CycleSubjectCard from "@/components/cards/CycleSubjectCard";
 
 function Subject() {
   const params = useParams();
   const router = useRouter();
-  const courseSubjectId = params?.subjectId;
-
+  const cycleBasedSubjectId = params?.cycleId;
   const {
-    data: subjectChapterData,
+    data: cycleBasedSubjectData,
     isLoading,
     error,
-  } = useGetChaptersByCourseSubjectIdQuery(courseSubjectId, {
-    skip: !courseSubjectId,
+  } = useGetSubjectsByCycleIdQuery(cycleBasedSubjectId, {
+    skip: !cycleBasedSubjectId,
   });
-
-  const subjectChapters = subjectChapterData?.data;
-
+  const cycleSubjects = cycleBasedSubjectData?.data;
   const subjectName =
-    subjectChapters && subjectChapters.length > 0
-      ? subjectChapters[0].courseSubject?.subject?.title
+    cycleSubjects && cycleSubjects.length > 0
+      ? cycleSubjects[0].courseSubject?.subject?.title
       : "Subject Details";
 
-  if (isLoading || !courseSubjectId) {
+  if (isLoading || !cycleBasedSubjectId) {
     return (
       <div className="mt-20">
         <LoadingData />
@@ -38,11 +35,10 @@ function Subject() {
   if (error) {
     return (
       <div className="text-center text-red-500 mt-26">
-        Failed to load chapters. Please try again later.
+        Failed to load Subject. Please try again later.
       </div>
     );
   }
-
   return (
     <div className="mt-24 mx-5 mb-5">
       <div className="text-center mb-12">
@@ -52,18 +48,18 @@ function Subject() {
       </div>
 
       <div className="w-full">
-        {!Array.isArray(subjectChapters) || subjectChapters.length === 0 ? (
+        {!Array.isArray(cycleSubjects) || cycleSubjects.length === 0 ? (
           <div className="text-center text-lg text-gray-500 mt-2 md:mt-10">
-            No chapters available yet.
+            No Subject available yet.
           </div>
         ) : (
           <>
             <h3 className="md:text-2xl font-semibold text-center my-7 md:my-10 text-indigo-500">
-              Available Chapters
+              Available Subjects
             </h3>{" "}
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 justify-center gap-4 md:gap-7 items-center">
-              {subjectChapters?.map((chapter) => (
-                <ChapterCard key={chapter.id} chapter={chapter} />
+              {cycleSubjects?.map((subject) => (
+                <CycleSubjectCard key={subject.id} subject={subject} />
               ))}
             </div>
           </>

@@ -3,8 +3,7 @@
 import React from "react";
 import { useParams, useRouter } from "next/navigation";
 import ClassCard from "@/components/cards/ClassCard";
-import Loading from "@/components/admin/utilities/Loading";
-import { useGetClassContentsBySubjectChapterIdQuery } from "@/redux/services/contentsApi";
+import { useGetClassContentsByCycleSubjectChapterIdQuery } from "@/redux/services/contentsApi";
 import { MoveLeft } from "lucide-react";
 import { useUploadingLiveClassQuery } from "@/redux/services/liveClassApi";
 import UploadingClass from "@/components/liveClass/uploadingClass/UploadingClasses";
@@ -14,13 +13,13 @@ function Class() {
   const params = useParams();
   const router = useRouter();
 
-  const subjectChapterId = params.chapterId;
+  const cycleSubjectChapterId = params.chapterId;
 
   const {
     data: chapterContentsData,
     isLoading,
     isError,
-  } = useGetClassContentsBySubjectChapterIdQuery(subjectChapterId);
+  } = useGetClassContentsByCycleSubjectChapterIdQuery(cycleSubjectChapterId);
 
   const chapterContents = chapterContentsData?.data;
   // console.log(chapterContents);
@@ -30,7 +29,7 @@ function Class() {
       ? chapterContents[0].courseSubjectChapter?.chapter?.chapterName
       : "Chapter Details";
 
-  if (isLoading || !subjectChapterId) {
+  if (isLoading || !cycleSubjectChapterId) {
     return (
       <div className="mt-20">
         <LoadingData />
@@ -75,7 +74,7 @@ function Class() {
               No classes available for this chapter.
             </p>
           )}
-          <UploadingClass subjectChapterId={subjectChapterId} />
+          <UploadingClass cycleSubjectChapterId={cycleSubjectChapterId} />
           {/* Go Back Button */}
           <div className="text-center my-10 md:my-14">
             <button
