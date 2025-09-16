@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
 import SearchBar from "../utilities/SearchBar";
 import PaginationControls from "../utilities/PaginationControls";
 import Loading from "../utilities/Loading";
@@ -9,30 +8,52 @@ import ContentTable from "./ContentTable";
 import ContentDetailsDialog from "./ContentDetailsDialog";
 import ContentInfoEditDialog from "./ContentInfoEditDialog";
 import Swal from "sweetalert2";
-import { useSelector } from "react-redux";
 import {
   useDeleteClassContentMutation,
   useGetAllClassContentsQuery,
 } from "@/redux/services/contentsApi";
-import { selectAllCourses } from "@/redux/Features/courseInfo";
 import CourseSelect from "@/components/form/CourseSelect";
 import LoadingData from "@/components/common/LoadingData";
+import { useGetAllCourseQuery } from "@/redux/services/courseApi";
+import { useGetAllCourseCycleBasedOnCourseIdQuery } from "@/redux/services/cycleApi";
+import CycleSelect from "@/components/form/CycleSelect";
 
 const ContentList = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const [selectedCourseId, setSelectedCourseId] = useState("");
-  const courses = useSelector(selectAllCourses);
+  const [selectedCycleId, setSelectedCycleId] = useState("");
   const [selectedContent, setSelectedContent] = useState(null);
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const {
+    data: courseData,
+    isLoading: isCourseLoading,
+    isError: isCourseError,
+  } = useGetAllCourseQuery({ limit: 1000 });
+  const courses = courseData?.data;
 
   useEffect(() => {
     if (courses?.data?.length > 0 && !selectedCourseId) {
-      setSelectedCourseId(courses.data[0].id);
+      setSelectedCourseId(courses?.data[0]?.id);
     }
   }, [courses, selectedCourseId]);
+
+  const {
+    data: cycleData,
+    isLoading: isCycleLoading,
+    isError: isCycleError,
+  } = useGetAllCourseCycleBasedOnCourseIdQuery(
+    { courseId: selectedCourseId, limit },
+    { skip: !selectedCourseId }
+  );
+
+  useEffect(() => {
+    if (cycleData?.data?.length > 0 && !selectedCycleId) {
+      setSelectedCycleId(cycleData?.data[0]?.id);
+    }
+  }, [cycleData, selectedCycleId]);
 
   const {
     data,
@@ -45,10 +66,10 @@ const ContentList = () => {
       page,
       limit,
       searchTerm: searchQuery,
-      courseId: selectedCourseId,
+      cycleId: selectedCycleId,
     },
     {
-      skip: !selectedCourseId,
+      skip: !selectedCycleId,
     }
   );
 
@@ -56,8 +77,10 @@ const ContentList = () => {
 
   const classContentsData = data?.data?.data;
 
+  // console.log(classContentsData);
+
   const meta = data?.data?.meta;
-  const totalPages = meta?.totalCount ? Math.ceil(meta.totalCount / limit) : 1;
+  const totalPages = meta?.totalCount ? Math.ceil(meta?.totalCount / limit) : 1;
   useEffect(() => {
     setPage(1);
   }, [searchQuery]);
@@ -154,19 +177,68 @@ const ContentList = () => {
       <p className="text-xs md:text-sm text-muted-foreground text-center">
         View and manage all recorded course videos available
       </p>
-      <CourseSelect
-        label="Select Course"
-        courses={courses?.data}
-        selectedCourseId={selectedCourseId}
-        onChange={setSelectedCourseId}
-      />
-      <div className="p-2">
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {(isCourseLoading || isCycleLoading) && (
+          <div className="col-span-2 flex justify-center py-6">
+            <LoadingData />
+          </div>
+        )}
+
+        {(isCourseError || isCycleError) &&
+          !isCourseLoading &&
+          !isCycleLoading && (
+            <div className="col-span-2 text-center text-red-500 py-4">
+              Failed to load data.
+            </div>
+          )}
+
+        {!isCourseLoading &&
+          !isCycleLoading &&
+          !isCourseError &&
+          !isCycleError && (
+            <>
+              {courses?.data?.length > 0 ? (
+                <CourseSelect
+                  label="Select Course"
+                  courses={courses?.data}
+                  selectedCourseId={selectedCourseId}
+                  onChange={setSelectedCourseId}
+                />
+              ) : (
+                <div className="col-span-1 text-center text-gray-500 py-4">
+                  No courses available
+                </div>
+              )}
+
+              {selectedCourseId ? (
+                cycleData?.data?.length > 0 ? (
+                  <CycleSelect
+                    label="Select Cycle"
+                    cycles={cycleData?.data}
+                    selectedCycleId={selectedCycleId}
+                    onChange={setSelectedCycleId}
+                  />
+                ) : (
+                  <div className="col-span-1 text-center text-gray-500 py-4">
+                    No cycles available
+                  </div>
+                )
+              ) : (
+                <div className="col-span-1 text-center text-gray-400 py-4">
+                  Select a course to see cycles
+                </div>
+              )}
+            </>
+          )}
+      </div>
+      {/* <div className="p-2">
         <SearchBar
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
           placeholder="Search by class title..."
         />
-      </div>
+      </div> */}
 
       {(isLoading || isFetching) && (
         <div className="w-full flex justify-center py-8">
@@ -180,14 +252,21 @@ const ContentList = () => {
         </div>
       )}
 
-      {!(isLoading || isFetching) && !isError && (
+      {!(isLoading || isFetching) && !isError && selectedCycleId && (
         <>
-          {!selectedCourseId || sortedData?.length === 0 ? (
+          {sortedData?.length === 0 ? (
             <div className="text-center text-gray-500 py-4">
               No Class Content Found
             </div>
           ) : (
             <>
+              <div className="p-2">
+                <SearchBar
+                  searchQuery={searchQuery}
+                  setSearchQuery={setSearchQuery}
+                  placeholder="Search by class title..."
+                />
+              </div>
               <ContentTable
                 contentData={sortedData}
                 handleContentDelete={handleContentDelete}

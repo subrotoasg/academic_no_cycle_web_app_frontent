@@ -9,11 +9,11 @@ import { toast } from "sonner";
 import Swal from "sweetalert2";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
-import { useSelector } from "react-redux";
-import { selectAllCourses } from "@/redux/Features/courseInfo";
-import { useGetSubjectsByCourseIdQuery } from "@/redux/services/subjectsApi";
-import { useGetChaptersByCourseSubjectIdQuery } from "@/redux/services/chapterAPi";
 import { useCreateLiveClassMutation } from "@/redux/services/liveClassApi";
+import { useGetAllCourseQuery } from "@/redux/services/courseApi";
+import { useGetAllCourseCycleBasedOnCourseIdQuery } from "@/redux/services/cycleApi";
+import { useGetCycleSubjectsByCycleIdQuery } from "@/redux/services/cycleSubjectApi";
+import { useGetAllChaptersByCycleSubjectIdQuery } from "@/redux/services/cycleChapterApi";
 
 export default function LiveClassForm() {
   const defaultValues = {
@@ -29,6 +29,7 @@ export default function LiveClassForm() {
   } = methods;
 
   const selectedCourseId = useWatch({ control, name: "courseId" });
+  const selectedCycleId = useWatch({ control, name: "cycleId" });
   const selectedSubjectId = useWatch({ control, name: "subject" });
 
   const [selectedFile, setSelectedFile] = useState(null);
@@ -49,39 +50,74 @@ export default function LiveClassForm() {
     setImagePreview(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
+  const {
+    data: courseData,
+    isLoading: isCourseLoading,
+    isError,
+  } = useGetAllCourseQuery({ limit: 1000 });
 
-  const courses = useSelector(selectAllCourses);
+  const courses = courseData?.data;
   const courseOptions =
     courses?.data?.map((course) => ({
-      label: course.productFullName,
-      value: course.id,
+      label: `${course?.productFullName} (${course?.productName})`,
+      value: course?.id,
     })) || [];
 
-  const { data: subjects, isLoading: isSubjectLoading } =
-    useGetSubjectsByCourseIdQuery(selectedCourseId, {
-      skip: !selectedCourseId,
-    });
+  const {
+    data: cycleData,
+    isLoading: isCycleLoading,
+    isError: cycleError,
+  } = useGetAllCourseCycleBasedOnCourseIdQuery(
+    { courseId: selectedCourseId, limit: 100 },
+    { skip: !selectedCourseId }
+  );
+  // console.log(cycleData);
+  const cycleOptions = isCycleLoading
+    ? [{ label: "Loading cycles...", value: "" }]
+    : cycleData?.data?.length
+    ? cycleData?.data?.map((cycle) => ({
+        label: `${cycle?.title} (${cycle?.course?.productName})`,
+        value: cycle?.id,
+      }))
+    : [{ label: "No cycles available", value: "" }];
 
-  const { data: chapters, isLoading: isChapterLoading } =
-    useGetChaptersByCourseSubjectIdQuery(selectedSubjectId, {
-      skip: !selectedSubjectId,
-    });
+  const {
+    data: subjects,
+    isLoading: isSubjectLoading,
+    isError: isSubjectError,
+  } = useGetCycleSubjectsByCycleIdQuery(
+    {
+      cycleId: selectedCycleId,
+      limit: 100,
+    },
+    {
+      skip: !selectedCycleId,
+    }
+  );
+  const {
+    data: chapters,
+    isLoading: isChapterLoading,
+    isError: isChapterError,
+  } = useGetAllChaptersByCycleSubjectIdQuery(
+    { cycleSubjectId: selectedSubjectId, limit: 100 },
+    { skip: !selectedSubjectId }
+  );
 
   const subjectOptions = isSubjectLoading
     ? [{ label: "Loading subjects...", value: "" }]
     : subjects?.data?.length
-    ? subjects.data.map((sub) => ({
-        label: sub.subject.title,
-        value: sub.id,
+    ? subjects?.data?.map((sub) => ({
+        label: sub?.subject?.title,
+        value: sub?.id,
       }))
     : [{ label: "No subjects available", value: "" }];
 
   const chapterOptions = isChapterLoading
     ? [{ label: "Loading chapters...", value: "" }]
     : chapters?.data?.length
-    ? chapters.data.map((ch) => ({
-        label: ch.chapter.chapterName,
-        value: ch.id,
+    ? chapters?.data?.map((ch) => ({
+        label: ch?.chapter?.chapterName,
+        value: ch?.id,
       }))
     : [{ label: "No chapters added yet", value: "" }];
 
@@ -166,7 +202,16 @@ export default function LiveClassForm() {
           options={courseOptions}
           rules={{ required: "Course is required" }}
         />
+
         {selectedCourseId && (
+          <Dropdown
+            label="Select Cycle"
+            name="cycleId"
+            options={cycleOptions}
+            rules={{ required: "Cycle is required" }}
+          />
+        )}
+        {selectedCycleId && (
           <Dropdown
             label="Select Subject"
             name="subject"

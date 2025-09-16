@@ -24,12 +24,15 @@ const classContentApiServices = baseApi.injectEndpoints({
       ],
     }),
 
-    // Get All Class Contents By Course ID
+    // Get All Class Contents By Cycle ID
     getAllClassContents: builder.query({
       query: (queryParams) => {
-        const { courseId, ...params } = queryParams;
+        const { cycleId, ...params } = queryParams;
 
-        const url = quearyUrlGenerator(`/class/all-info/${courseId}`, params);
+        const url = quearyUrlGenerator(
+          `/cycle/class/content/get-all-content-by-cycleId/${cycleId}`,
+          params
+        );
         return {
           url,
           method: "GET",
@@ -72,7 +75,7 @@ const classContentApiServices = baseApi.injectEndpoints({
     // Update Class Content
     updateClassContent: builder.mutation({
       query: ({ id, formData }) => ({
-        url: `/class/${id}`,
+        url: `cycle/class/content/${id}`,
         method: "PATCH",
         body: formData,
       }),
@@ -85,7 +88,7 @@ const classContentApiServices = baseApi.injectEndpoints({
     // Delete Class Content
     deleteClassContent: builder.mutation({
       query: (id) => ({
-        url: `/class/${id}`,
+        url: `/cycle/class/content/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: (result, error, id) => [
