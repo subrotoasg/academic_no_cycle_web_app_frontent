@@ -23,11 +23,16 @@ export default function AdminForm() {
   } = useGetAllCourseQuery({ limit: 1000 });
   // console.log(courseData?.data?.data);
   const courses = courseData?.data;
-  const courseOptions =
-    courses?.data?.map((course) => ({
-      label: `${course?.productFullName} (${course?.productName})`,
-      value: course?.id,
-    })) || [];
+  const courseOptions = isLoading
+    ? [{ label: "Loading courses...", value: "" }]
+    : isError
+    ? [{ label: "Failed to load courses", value: "" }]
+    : courseData?.data?.length
+    ? courseData?.data?.map((course) => ({
+        label: `${course?.productFullName} (${course?.productName})`,
+        value: course?.id,
+      }))
+    : [{ label: "No courses available", value: "" }];
   const methods = useForm({
     defaultValues: { username: "", email: "", phone: "", courseId: "" },
   });
