@@ -27,8 +27,8 @@ export default function AdminForm() {
     ? [{ label: "Loading courses...", value: "" }]
     : isError
     ? [{ label: "Failed to load courses", value: "" }]
-    : courseData?.data?.length
-    ? courseData?.data?.map((course) => ({
+    : courses?.data?.length
+    ? courses?.data?.map((course) => ({
         label: `${course?.productFullName} (${course?.productName})`,
         value: course?.id,
       }))

@@ -6,27 +6,31 @@ import SearchBar from "../utilities/SearchBar";
 import PaginationControls from "../utilities/PaginationControls";
 import Loading from "../utilities/Loading";
 import { useGetAdminsByCourseIdQuery } from "@/redux/services/adminApi";
-import { useSelector } from "react-redux";
+
 import {
   selectAllCourses,
   selectSelectedCourse,
 } from "@/redux/Features/courseInfo";
 import CourseSelect from "@/components/form/CourseSelect";
 import LoadingData from "@/components/common/LoadingData";
+import { useGetAllCourseQuery } from "@/redux/services/courseApi";
 
 export default function AdminList() {
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const [selectedCourseId, setSelectedCourseId] = useState("");
-  const courses = useSelector(selectAllCourses);
-  // const course = useSelector(
-  //   selectedCourseId ? selectSelectedCourse(selectedCourseId) : () => null
-  // );
 
+  const {
+    data: courseData,
+    isLoading: isCourseLoading,
+    isError: isCourseError,
+  } = useGetAllCourseQuery({ limit: 1000 });
+  // console.log(courseData?.data?.data);
+  const courses = courseData?.data;
   useEffect(() => {
     if (courses?.data?.length > 0 && !selectedCourseId) {
-      setSelectedCourseId(courses.data[0].id);
+      setSelectedCourseId(courses?.data[0]?.id);
     }
   }, [courses, selectedCourseId]);
 
@@ -45,7 +49,7 @@ export default function AdminList() {
 
   const meta = data?.data?.meta;
   const adminData = data?.data?.data;
-  const totalPages = meta?.totalCount ? Math.ceil(meta.totalCount / limit) : 1;
+  const totalPages = meta?.totalCount ? Math.ceil(meta?.totalCount / limit) : 1;
   useEffect(() => {
     setPage(1);
   }, [searchQuery]);
@@ -67,48 +71,79 @@ export default function AdminList() {
       <p className="text-xs md:text-sm text-muted-foreground text-center mt-2">
         Manage and oversee course administrators
       </p>
-      <CourseSelect
-        label="Select Course"
-        courses={courses?.data}
-        selectedCourseId={selectedCourseId}
-        onChange={setSelectedCourseId}
-      />
-      <div className="p-2">
-        <SearchBar
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          placeholder="Search by email"
-        />
-      </div>
-      {(isLoading || isFetching) && (
-        <div className="w-full flex justify-center py-8">
-          <LoadingData />
-        </div>
-      )}
 
-      {isError && !(isLoading || isFetching) && (
-        <div className="text-center text-red-500 py-4">
-          Failed to load admins.
-        </div>
-      )}
+      <div className="my-4">
+        {isCourseLoading && (
+          <div className="w-full flex justify-center py-6">
+            <LoadingData />
+          </div>
+        )}
 
-      {!(isLoading || isFetching) && !isError && (
-        <>
-          {sortedData.length === 0 ? (
+        {isCourseError && !isCourseLoading && (
+          <div className="text-center text-red-500 py-4">
+            Failed to load courses.
+          </div>
+        )}
+
+        {!isCourseLoading && !isCourseError && courses?.data?.length > 0 && (
+          <CourseSelect
+            label="Select Course"
+            courses={courses?.data}
+            selectedCourseId={selectedCourseId}
+            onChange={setSelectedCourseId}
+          />
+        )}
+
+        {!isCourseLoading &&
+          !isCourseError &&
+          (!courses?.data || courses?.data?.length === 0) && (
             <div className="text-center text-gray-500 py-4">
-              No Admins Found
+              No courses available
             </div>
-          ) : (
+          )}
+      </div>
+
+      {!isCourseLoading && !isCourseError && courses?.data?.length > 0 && (
+        <>
+          <div className="p-2">
+            <SearchBar
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              placeholder="Search by email"
+            />
+          </div>
+
+          {(isLoading || isFetching) && (
+            <div className="w-full flex justify-center py-8">
+              <LoadingData />
+            </div>
+          )}
+
+          {isError && !(isLoading || isFetching) && (
+            <div className="text-center text-red-500 py-4">
+              Failed to load admins.
+            </div>
+          )}
+
+          {!(isLoading || isFetching) && !isError && (
             <>
-              <AdminTable admins={sortedData} refetch={refetch} />
-              <PaginationControls
-                currentPage={page}
-                totalPages={totalPages}
-                pageSize={limit}
-                setPageSize={setLimit}
-                setCurrentPage={setPage}
-                totalItems={meta?.totalCount}
-              />
+              {sortedData.length === 0 ? (
+                <div className="text-center text-gray-500 py-4">
+                  No Admins Found
+                </div>
+              ) : (
+                <>
+                  <AdminTable admins={sortedData} refetch={refetch} />
+                  <PaginationControls
+                    currentPage={page}
+                    totalPages={totalPages}
+                    pageSize={limit}
+                    setPageSize={setLimit}
+                    setCurrentPage={setPage}
+                    totalItems={meta?.totalCount}
+                  />
+                </>
+              )}
             </>
           )}
         </>
