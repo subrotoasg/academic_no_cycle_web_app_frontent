@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/table";
 
 export default function ContentTable({
-  isCycle,
   contentData,
   handleSort,
   handleContentDelete,
@@ -25,15 +24,9 @@ export default function ContentTable({
       <Table className="min-w-full border border-gray-100 text-center">
         <TableHeader>
           <TableRow>
-            {isCycle && (
-              <TableHead className="text-center text-sm md:text-base border">
-                Cycle Title
-              </TableHead>
-            )}
             <TableHead className="text-center text-sm md:text-base border">
               Subject
             </TableHead>
-
             <TableHead className="text-center text-sm md:text-base border">
               Chapter
             </TableHead>
@@ -66,19 +59,24 @@ export default function ContentTable({
 
         <TableBody>
           {contentData?.length > 0 ? (
-            contentData.map((content) => (
-              <TableRow key={content.id}>
+            contentData?.map((content) => (
+              <TableRow key={content?.id}>
                 <TableCell className="font-medium text-center border">
-                  {content?.courseSubjectChapter?.courseSubject?.subject?.title}
+                  {content?.cycleSubjectChapter?.cycleSubject?.title ||
+                    content?.cycleSubjectChapter?.cycleSubject?.subject
+                      ?.title ||
+                    "N/A"}
                 </TableCell>
                 <TableCell className="text-center border">
-                  {content?.courseSubjectChapter?.chapter?.chapterName}
+                  {content?.cycleSubjectChapter?.title ||
+                    content?.cycleSubjectChapter?.chapter?.chapterName ||
+                    "N/A"}
                 </TableCell>
                 <TableCell className="text-center border">
-                  {content?.classTitle}
+                  {content?.classTitle || "N/A"}
                 </TableCell>
                 <TableCell className="text-center border">
-                  {content?.classNo}
+                  {content?.classNo || "N/A"}
                 </TableCell>
                 <TableCell className="text-center border">
                   <Button

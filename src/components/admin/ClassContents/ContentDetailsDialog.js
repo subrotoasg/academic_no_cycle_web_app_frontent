@@ -15,6 +15,7 @@ export default function ContentDetailsDialog({
   isOpen,
   onOpenChange,
 }) {
+  console.log(selectedContent);
   const infoFields = [
     {
       label: "Course",

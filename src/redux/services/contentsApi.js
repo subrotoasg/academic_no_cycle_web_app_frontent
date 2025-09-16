@@ -24,12 +24,15 @@ const classContentApiServices = baseApi.injectEndpoints({
       ],
     }),
 
-    // Get All Class Contents By Course ID
+    // Get All Class Contents By Cycle ID
     getAllClassContents: builder.query({
       query: (queryParams) => {
-        const { courseId, ...params } = queryParams;
+        const { cycleId, ...params } = queryParams;
 
-        const url = quearyUrlGenerator(`/class/all-info/${courseId}`, params);
+        const url = quearyUrlGenerator(
+          `/cycle/class/content/get-all-content-by-cycleId/${cycleId}`,
+          params
+        );
         return {
           url,
           method: "GET",
