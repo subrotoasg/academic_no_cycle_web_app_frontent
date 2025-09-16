@@ -16,11 +16,11 @@ import Dropdown from "@/components/form/Dropdown";
 import InputField from "@/components/form/InputField";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
-import { useSelector } from "react-redux";
 import { useUpdateClassContentMutation } from "@/redux/services/contentsApi";
-import { useGetSubjectsByCourseIdQuery } from "@/redux/services/subjectsApi";
-import { useGetChaptersByCourseSubjectIdQuery } from "@/redux/services/chapterAPi";
-import { selectAllCourses } from "@/redux/Features/courseInfo";
+import { useGetAllCourseQuery } from "@/redux/services/courseApi";
+import { useGetAllCourseCycleBasedOnCourseIdQuery } from "@/redux/services/cycleApi";
+import { useGetCycleSubjectsByCycleIdQuery } from "@/redux/services/cycleSubjectApi";
+import { useGetAllChaptersByCycleSubjectIdQuery } from "@/redux/services/cycleChapterApi";
 
 export default function ContentInfoEditDialog({
   isOpen,
@@ -28,7 +28,7 @@ export default function ContentInfoEditDialog({
   selectedContent,
   refetchClassContents,
 }) {
-  // console.log(selectedContent);
+  console.log(selectedContent);
   const types = [
     { label: "Free Youtube", value: "freeyt" },
     { label: "Premium Youtube", value: "premyt" },
@@ -60,54 +60,90 @@ export default function ContentInfoEditDialog({
   const methods = useForm();
 
   // set value
+  const fileInputRef = useRef(null);
   const { reset, handleSubmit, control, setValue } = methods;
-
   const videoType = useWatch({ control, name: "type" });
   const videoId = useWatch({ control, name: "videoId" });
   const libraryId = useWatch({ control, name: "libraryId" });
   const [thumbnailPreview, setThumbnailPreview] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
-  const fileInputRef = useRef(null);
-  const [updateClassContent, { isLoading }] = useUpdateClassContentMutation();
-
   const selectedCourseId = useWatch({ control, name: "courseId" });
+  const selectedCycleId = useWatch({ control, name: "cycleId" });
   const selectedSubjectId = useWatch({ control, name: "subject" });
 
-  // Courses List
-  const courses = useSelector(selectAllCourses);
+  const [updateClassContent, { isLoading }] = useUpdateClassContentMutation();
+  const {
+    data: courseData,
+    isLoading: isCourseLoading,
+    isError,
+  } = useGetAllCourseQuery({ limit: 1000 });
+
+  const courses = courseData?.data;
   const courseOptions =
     courses?.data?.map((course) => ({
-      label: course.productFullName,
-      value: course.id,
+      label: `${course?.productFullName} (${course?.productName})`,
+      value: course?.id,
     })) || [];
 
-  // Subjects List
-  const { data: subjects, isLoading: isSubjectLoading } =
-    useGetSubjectsByCourseIdQuery(selectedCourseId, {
-      skip: !selectedCourseId,
-    });
+  const {
+    data: cycleData,
+    isLoading: isCycleLoading,
+    isError: cycleError,
+  } = useGetAllCourseCycleBasedOnCourseIdQuery(
+    { courseId: selectedCourseId, limit: 100 },
+    { skip: !selectedCourseId }
+  );
+  // console.log(cycleData);
+
+  const cycleOptions = isCycleLoading
+    ? [{ label: "Loading cycles...", value: "" }]
+    : cycleData?.data?.length
+    ? cycleData?.data?.map((cycle) => ({
+        label: `${cycle?.title} (${cycle?.course?.productName})`,
+        value: cycle?.id,
+      }))
+    : [{ label: "No cycles available", value: "" }];
+
+  const {
+    data: subjects,
+    isLoading: isSubjectLoading,
+    isError: isSubjectError,
+  } = useGetCycleSubjectsByCycleIdQuery(
+    {
+      cycleId: selectedCycleId,
+      limit: 100,
+    },
+    {
+      skip: !selectedCycleId,
+    }
+  );
 
   const subjectOptions = isSubjectLoading
     ? [{ label: "Loading subjects...", value: "" }]
     : subjects?.data?.length
-    ? subjects.data.map((sub) => ({
-        label: sub.subject.title,
-        value: sub.id,
+    ? subjects?.data?.map((sub) => ({
+        label: sub?.subject?.title,
+        value: sub?.id,
       }))
     : [{ label: "No subjects available", value: "" }];
 
   // Chapters List
-  const { data: chapters, isLoading: isChapterLoading } =
-    useGetChaptersByCourseSubjectIdQuery(selectedSubjectId, {
-      skip: !selectedSubjectId,
-    });
+
+  const {
+    data: chapters,
+    isLoading: isChapterLoading,
+    isError: isChapterError,
+  } = useGetAllChaptersByCycleSubjectIdQuery(
+    { cycleSubjectId: selectedSubjectId, limit: 100 },
+    { skip: !selectedSubjectId }
+  );
 
   const chapterOptions = isChapterLoading
     ? [{ label: "Loading chapters...", value: "" }]
     : chapters?.data?.length
-    ? chapters.data.map((ch) => ({
-        label: ch.chapter.chapterName,
-        value: ch.id,
+    ? chapters?.data?.map((ch) => ({
+        label: ch?.chapter?.chapterName,
+        value: ch?.id,
       }))
     : [{ label: "No chapters available", value: "" }];
 
@@ -115,10 +151,12 @@ export default function ContentInfoEditDialog({
     if (selectedContent) {
       reset({
         courseId:
-          selectedContent?.courseSubjectChapter?.courseSubject?.course?.id ||
-          "",
-        subject: selectedContent?.courseSubjectChapter?.courseSubject?.id || "",
-        chapter: selectedContent?.courseSubjectChapter?.id || "",
+          selectedContent?.cycleSubjectChapter?.cycleSubject?.cycle?.course
+            ?.id || "",
+        cycleId:
+          selectedContent?.cycleSubjectChapter?.cycleSubject?.cycle?.id || "",
+        subject: selectedContent?.cycleSubjectChapter?.cycleSubject?.id || "",
+        chapter: selectedContent?.cycleSubjectChapter?.id || "",
         type: selectedContent?.hostingType || "",
         title: selectedContent?.classTitle || "",
         classNumber: selectedContent?.classNo || "",
@@ -149,7 +187,7 @@ export default function ContentInfoEditDialog({
     const formData = new FormData();
 
     const contentInfo = {
-      courseSubjectChapterId: data.chapter,
+      cycleSubjectChapterId: data.chapter,
       hostingType: data.type,
       classTitle: data.title,
       classNo: data.classNumber,
@@ -169,7 +207,7 @@ export default function ContentInfoEditDialog({
 
     try {
       const res = await updateClassContent({
-        id: selectedContent.id,
+        id: selectedContent?.id,
         formData,
       }).unwrap();
 
@@ -194,10 +232,9 @@ export default function ContentInfoEditDialog({
         <DialogHeader>
           <DialogTitle className="text-2xl text-center">
             Content Edit for{" "}
-            {
-              selectedContent?.courseSubjectChapter?.courseSubject?.subject
-                ?.title
-            }
+            {selectedContent?.cycleSubjectChapter?.cycleSubject?.title ||
+              selectedContent?.cycleSubjectChapter?.cycleSubject?.subject
+                ?.title}
           </DialogTitle>
         </DialogHeader>
 
@@ -214,12 +251,21 @@ export default function ContentInfoEditDialog({
             />
             {selectedCourseId && (
               <Dropdown
+                label="Select Cycle"
+                name="cycleId"
+                options={cycleOptions}
+                rules={{ required: "Cycle is required" }}
+              />
+            )}
+            {selectedCycleId && (
+              <Dropdown
                 label="Select Subject"
                 name="subject"
                 options={subjectOptions}
                 rules={{ required: "Subject is required" }}
               />
             )}
+
             {selectedSubjectId && (
               <Dropdown
                 label="Select Chapter"

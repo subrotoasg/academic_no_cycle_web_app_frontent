@@ -70,7 +70,7 @@ export default function ClassContentForm() {
   const cycleOptions = isCycleLoading
     ? [{ label: "Loading cycles...", value: "" }]
     : cycleData?.data?.length
-    ? cycleData.data.map((cycle) => ({
+    ? cycleData?.data?.map((cycle) => ({
         label: `${cycle?.title} (${cycle?.course?.productName})`,
         value: cycle?.id,
       }))
@@ -83,9 +83,7 @@ export default function ClassContentForm() {
   } = useGetCycleSubjectsByCycleIdQuery(
     {
       cycleId: selectedCycleId,
-      page: 1,
       limit: 100,
-      searchTerm: "",
     },
     {
       skip: !selectedCycleId,
@@ -107,7 +105,7 @@ export default function ClassContentForm() {
   const subjectOptions = isSubjectLoading
     ? [{ label: "Loading subjects...", value: "" }]
     : subjects?.data?.length
-    ? subjects.data.map((sub) => ({
+    ? subjects?.data?.map((sub) => ({
         label: sub?.subject?.title,
         value: sub?.id,
       }))
@@ -116,9 +114,9 @@ export default function ClassContentForm() {
   const chapterOptions = isChapterLoading
     ? [{ label: "Loading chapters...", value: "" }]
     : chapters?.data?.length
-    ? chapters.data.map((ch) => ({
-        label: ch.chapter.chapterName,
-        value: ch.id,
+    ? chapters?.data?.map((ch) => ({
+        label: ch?.chapter?.chapterName,
+        value: ch?.id,
       }))
     : [{ label: "No chapters added yet", value: "" }];
 

@@ -75,7 +75,7 @@ const classContentApiServices = baseApi.injectEndpoints({
     // Update Class Content
     updateClassContent: builder.mutation({
       query: ({ id, formData }) => ({
-        url: `/class/${id}`,
+        url: `cycle/class/content/${id}`,
         method: "PATCH",
         body: formData,
       }),
@@ -88,7 +88,7 @@ const classContentApiServices = baseApi.injectEndpoints({
     // Delete Class Content
     deleteClassContent: builder.mutation({
       query: (id) => ({
-        url: `/class/${id}`,
+        url: `/cycle/class/content/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: (result, error, id) => [

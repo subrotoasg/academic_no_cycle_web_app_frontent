@@ -73,7 +73,7 @@ const ContentList = () => {
 
   const classContentsData = data?.data?.data;
 
-  console.log(classContentsData);
+  // console.log(classContentsData);
 
   const meta = data?.data?.meta;
   const totalPages = meta?.totalCount ? Math.ceil(meta?.totalCount / limit) : 1;
