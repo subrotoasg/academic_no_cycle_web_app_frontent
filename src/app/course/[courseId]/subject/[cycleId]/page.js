@@ -4,7 +4,6 @@ import ChapterCard from "@/components/cards/ChapterCard";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { MoveLeft } from "lucide-react";
 import LoadingData from "@/components/common/LoadingData";
-// import { useGetSubjectsByCycleIdQuery } from "@/redux/services/subjectsApi";
 import CycleSubjectCard from "@/components/cards/CycleSubjectCard";
 import { useGetSubjectsByCycleIdQuery } from "@/redux/services/cycleSubjectApi";
 

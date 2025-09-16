@@ -61,9 +61,10 @@ export default function ClassContentForm() {
     data: cycleData,
     isLoading: isCycleLoading,
     isError: cycleError,
-  } = useGetAllCourseCycleBasedOnCourseIdQuery(selectedCourseId, {
-    skip: !selectedCourseId,
-  });
+  } = useGetAllCourseCycleBasedOnCourseIdQuery(
+    { courseId: selectedCourseId, limit: 100 },
+    { skip: !selectedCourseId }
+  );
   // console.log(cycleData);
 
   const cycleOptions = isCycleLoading
@@ -91,10 +92,14 @@ export default function ClassContentForm() {
     }
   );
 
-  const { data: chapters, isLoading: isChapterLoading } =
-    useGetAllChaptersByCycleSubjectIdQuery(selectedSubjectId, {
-      skip: !selectedSubjectId,
-    });
+  const {
+    data: chapters,
+    isLoading: isChapterLoading,
+    isError: isChapterError,
+  } = useGetAllChaptersByCycleSubjectIdQuery(
+    { cycleSubjectId: selectedSubjectId, limit: 100 },
+    { skip: !selectedSubjectId }
+  );
 
   // console.log("chapter", chapters);
   const [createClassContent, { isLoading }] = useCreateClassContentMutation();

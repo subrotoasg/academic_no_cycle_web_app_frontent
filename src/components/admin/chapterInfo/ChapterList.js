@@ -39,10 +39,10 @@ export function ChapterList() {
     data: cycleData,
     isLoading: cycleLoading,
     isError: cycleError,
-  } = useGetAllCourseCycleBasedOnCourseIdQuery(selectedCourseId, {
-    skip: !selectedCourseId,
-  });
-
+  } = useGetAllCourseCycleBasedOnCourseIdQuery(
+    { courseId: selectedCourseId, limit: 100 },
+    { skip: !selectedCourseId }
+  );
   useEffect(() => {
     if (cycleData?.data?.length > 0 && !selectedCycleId) {
       setSelectedCycleId(cycleData?.data[0]?.id);

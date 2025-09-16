@@ -15,13 +15,18 @@ const cycleChapterApiServices = baseApi.injectEndpoints({
 
     // Get Chapters by CycleSubject ID
     getAllChaptersByCycleSubjectId: builder.query({
-      query: (cycleSubjectId) => ({
-        url: `/cycle/subject/chapter/chapters/${cycleSubjectId}`,
-        method: "GET",
-      }),
+      query: (queryParams) => {
+        const url = quearyUrlGenerator(
+          `/cycle/subject/chapter/chapters/${queryParams.cycleSubjectId}`,
+          queryParams
+        );
+        return {
+          url,
+          method: "GET",
+        };
+      },
       providesTags: [tagTypesValue.CYCLE_CHAPTER],
     }),
-
     // Get All Chapters By Cycle ID
     getAllChaptersByCycleId: builder.query({
       query: (queryParams) => {
