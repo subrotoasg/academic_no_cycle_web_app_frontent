@@ -39,9 +39,10 @@ export function SubjectList() {
     data: cycleData,
     isLoading: cycleLoading,
     isError: cycleError,
-  } = useGetAllCourseCycleBasedOnCourseIdQuery(selectedCourseId, {
-    skip: !selectedCourseId,
-  });
+  } = useGetAllCourseCycleBasedOnCourseIdQuery(
+    { courseId: selectedCourseId, limit },
+    { skip: !selectedCourseId }
+  );
   // console.log(cycleData);
 
   useEffect(() => {
@@ -52,9 +53,7 @@ export function SubjectList() {
   const { data, isError, isLoading, isFetching } =
     useGetCycleSubjectsByCycleIdQuery(
       {
-        page,
         limit,
-        searchTerm: searchQuery,
         cycleId: selectedCycleId,
       },
       {

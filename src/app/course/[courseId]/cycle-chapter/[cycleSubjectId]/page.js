@@ -5,29 +5,29 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Loading from "@/components/admin/utilities/Loading";
 import { MoveLeft } from "lucide-react";
 import LoadingData from "@/components/common/LoadingData";
-// import { useGetChaptersByCycleSubjectIdQuery } from "@/redux/services/chapterAPi";
 import { useGetAllChaptersByCycleSubjectIdQuery } from "@/redux/services/cycleChapterApi";
 
 function CycleSubjectBasedChapter() {
   const params = useParams();
   const router = useRouter();
-  // const courseSubjectId = params?.cycleSubjectId;
+
   const cycleSubjectId = params?.cycleSubjectId;
   const {
     data: subjectChapterData,
     isLoading,
     error,
-    // } = useGetChaptersByCycleSubjectIdQuery(courseSubjectId, {
-  } = useGetAllChaptersByCycleSubjectIdQuery(cycleSubjectId, {
-    skip: !cycleSubjectId,
-  });
+  } = useGetAllChaptersByCycleSubjectIdQuery(
+    { cycleSubjectId, limit: 100 },
+    {
+      skip: !cycleSubjectId,
+    }
+  );
   const subjectChapters = subjectChapterData?.data;
   const subjectName =
     subjectChapters && subjectChapters.length > 0
       ? subjectChapters[0].courseSubject?.subject?.title
       : "Subject Details";
 
-  // if (isLoading || !courseSubjectId) {
   if (isLoading || !cycleSubjectId) {
     return (
       <div className="mt-20">

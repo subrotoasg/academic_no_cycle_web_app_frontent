@@ -14,7 +14,10 @@ function CourseContent() {
   const params = useParams();
   const courseId = params?.courseId;
   const { data: cycleData, isLoading } =
-    useGetAllCourseCycleBasedOnCourseIdQuery(courseId);
+    useGetAllCourseCycleBasedOnCourseIdQuery({
+      courseId,
+      limit: 100,
+    });
   const { data: archiveData, isLoading: isArchiveLoading } =
     useGetArchivedCourseByIdQuery(courseId);
 
@@ -22,7 +25,7 @@ function CourseContent() {
     return <LoadingData />;
   }
   const cycleDatas = cycleData?.data;
-  const hascycleDatas = cycleDatas && cycleDatas.length > 0;
+  const hascycleDatas = cycleDatas && cycleDatas?.length > 0;
   const courseTitle = hascycleDatas
     ? cycleDatas[0]?.course?.productFullName
     : null;
@@ -48,10 +51,10 @@ function CourseContent() {
       </div>
       <div className="text-center mb-6">
         <h2 className="text-xl md:text-3xl font-bold text-center text-blue-500 my-10">
-          Available Classes
+          Available Cycles
         </h2>
         <p className="text-xs md:text-lg text-gray-600 dark:text-gray-300 mt-2">
-          Explore the classes available in the course and find the perfect fit
+          Explore the cycles available in the course and find the perfect fit
           for your academic path.
         </p>
       </div>

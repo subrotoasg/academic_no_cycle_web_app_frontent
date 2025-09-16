@@ -16,12 +16,18 @@ const CourseCycleApiServices = baseApi.injectEndpoints({
       providesTags: [tagTypesValue.COURSE_CYCLE],
     }),
 
-    // Get get All Course Cycle Based On CourseId
+    // Get All Course Cycle Based On CourseId
     getAllCourseCycleBasedOnCourseId: builder.query({
-      query: (id) => ({
-        url: `/cycle/course/${id}`,
-        method: "GET",
-      }),
+      query: (queryParams) => {
+        const url = quearyUrlGenerator(
+          `/cycle/course/${queryParams.courseId}`,
+          queryParams
+        );
+        return {
+          url,
+          method: "GET",
+        };
+      },
       providesTags: [tagTypesValue.COURSE_CYCLE],
     }),
 
