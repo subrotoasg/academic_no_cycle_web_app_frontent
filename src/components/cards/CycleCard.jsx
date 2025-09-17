@@ -40,7 +40,7 @@ export default function CycleCard(params) {
           <CardMedia
             component="img"
             sx={{ objectFit: "fill", width: "100%", height: 150 }}
-            image={cycle?.cycleImage}
+            image={cycle?.cycleImage || "/img/aparsLogo.jpg"}
             title={cycle?.productFullName || "Course Image"}
           />
         </div>

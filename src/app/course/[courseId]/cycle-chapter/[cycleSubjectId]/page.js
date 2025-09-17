@@ -24,7 +24,7 @@ function CycleSubjectBasedChapter() {
   const subjectChapters = subjectChapterData?.data;
   const subjectName =
     subjectChapters && subjectChapters.length > 0
-      ? subjectChapters[0].courseSubject?.subject?.title
+      ? subjectChapters?.[0].cycleSubject?.subject?.title
       : "Subject Details";
 
   // if (isLoading || !courseSubjectId) {
@@ -45,7 +45,7 @@ function CycleSubjectBasedChapter() {
   }
   return (
     <div className="mt-24 mx-5 mb-5">
-      <div className="text-center mb-12">
+      <div className="text-center">
         <h1 className="pt-3 text-center font-bold text-2xl sm:text-3xl mb-5 text-blue-500">
           {subjectName}
         </h1>

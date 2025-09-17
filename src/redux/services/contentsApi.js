@@ -24,6 +24,17 @@ const classContentApiServices = baseApi.injectEndpoints({
       ],
     }),
 
+    // Get Class Content By cycle Class ID
+    getClassContentByCycleClassId: builder.query({
+      query: (classId) => ({
+        url: `/cycle/class/content/${classId}`,
+        method: "GET",
+      }),
+      providesTags: (result, error, classId) => [
+        { type: "classContent", id: classId },
+      ],
+    }),
+
     // Get All Class Contents By Course ID
     getAllClassContents: builder.query({
       query: (queryParams) => {
@@ -109,6 +120,7 @@ const classContentApiServices = baseApi.injectEndpoints({
 export const {
   useCreateClassContentMutation,
   useGetClassContentByClassIdQuery,
+  useGetClassContentByCycleClassIdQuery,
   useGetAllClassContentsQuery,
   useGetClassContentsBySubjectChapterIdQuery,
   useGetClassContentsByCycleSubjectChapterIdQuery,
