@@ -5,8 +5,6 @@ import SearchBar from "../utilities/SearchBar";
 import PaginationControls from "../utilities/PaginationControls";
 import Loading from "../utilities/Loading";
 import Swal from "sweetalert2";
-import { useSelector } from "react-redux";
-import { selectAllCourses } from "@/redux/Features/courseInfo";
 import CourseSelect from "@/components/form/CourseSelect";
 import {
   useDeleteLiveClassMutation,
@@ -15,21 +13,27 @@ import {
 import LiveClassTable from "./LiveClassTable";
 import LiveClassEditDialog from "./LiveClassEditDialog";
 import LoadingData from "@/components/common/LoadingData";
+import { useGetAllCourseQuery } from "@/redux/services/courseApi";
 
 const LiveClassList = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const [selectedCourseId, setSelectedCourseId] = useState("");
-  const courses = useSelector(selectAllCourses);
 
   const [selectedLiveClass, setSelectedLiveClass] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [joinClassUrl, setJoinClassUrl] = useState(null);
 
+  const {
+    data: courseData,
+    isLoading: isCourseLoading,
+    isError: isCourseError,
+  } = useGetAllCourseQuery({ limit: 1000 });
+  const courses = courseData?.data;
   useEffect(() => {
     if (courses?.data?.length > 0 && !selectedCourseId) {
-      setSelectedCourseId(courses.data[0].id);
+      setSelectedCourseId(courses?.data[0]?.id);
     }
   }, [courses, selectedCourseId]);
 
@@ -46,9 +50,9 @@ const LiveClassList = () => {
   });
 
   const [deleteLiveClass] = useDeleteLiveClassMutation();
-  // console.log(data);
+  console.log(data);
   const meta = data?.meta;
-  const totalPages = meta?.totalCount ? Math.ceil(meta.totalCount / limit) : 1;
+  const totalPages = meta?.totalCount ? Math.ceil(meta?.totalCount / limit) : 1;
 
   useEffect(() => {
     setPage(1);

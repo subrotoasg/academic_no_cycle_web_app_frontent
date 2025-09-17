@@ -114,17 +114,9 @@ function AdminDashboard() {
     },
   ];
 
-  if (isError) {
-    return (
-      <div className="text-center text-red-500 font-medium py-10">
-        Failed to load courses. Please try again later.
-      </div>
-    );
-  }
-
   return (
     <div className="w-full p-2">
-      <div data-aos="fade-down">
+      <div>
         <h1 className="text-xl md:text-3xl font-bold text-center text-gray-800 dark:text-white pt-5">
           Welcome {name}
         </h1>
@@ -133,7 +125,11 @@ function AdminDashboard() {
         </p>
       </div>
       <div className="pt-8">
-        {selectedCourseId ? (
+        {isError ? (
+          <div className="text-center text-red-500 font-medium py-6">
+            Failed to load courses. Please try again later.
+          </div>
+        ) : selectedCourseId ? (
           isAnyLoading ? (
             <div className="flex justify-center py-8">
               <LoadingData />

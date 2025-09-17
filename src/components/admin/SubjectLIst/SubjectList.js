@@ -26,8 +26,11 @@ export function SubjectList() {
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [SubjectInfoModalOpen, setSubjectInfoModalOpen] = useState(false);
   const [SubjectEditModalOpen, setSubjectEditModalOpen] = useState(false);
-  const { data: courseData } = useGetAllCourseQuery({ limit: 1000 });
-  // console.log(courseData?.data?.data);
+  const {
+    data: courseData,
+    isLoading: isCourseLoading,
+    isError: isCourseError,
+  } = useGetAllCourseQuery({ limit: 1000 });
   const courses = courseData?.data;
 
   useEffect(() => {
@@ -37,11 +40,12 @@ export function SubjectList() {
   }, [courses, selectedCourseId]);
   const {
     data: cycleData,
-    isLoading: cycleLoading,
-    isError: cycleError,
-  } = useGetAllCourseCycleBasedOnCourseIdQuery(selectedCourseId, {
-    skip: !selectedCourseId,
-  });
+    isLoading: isCycleLoading,
+    isError: isCycleError,
+  } = useGetAllCourseCycleBasedOnCourseIdQuery(
+    { courseId: selectedCourseId, limit },
+    { skip: !selectedCourseId }
+  );
   // console.log(cycleData);
 
   useEffect(() => {
@@ -52,9 +56,7 @@ export function SubjectList() {
   const { data, isError, isLoading, isFetching } =
     useGetCycleSubjectsByCycleIdQuery(
       {
-        page,
         limit,
-        searchTerm: searchQuery,
         cycleId: selectedCycleId,
       },
       {
@@ -137,18 +139,58 @@ export function SubjectList() {
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <CourseSelect
-          label="Select Course"
-          courses={courses?.data}
-          selectedCourseId={selectedCourseId}
-          onChange={setSelectedCourseId}
-        />
-        <CycleSelect
-          label="Select Cycle"
-          cycles={cycleData?.data}
-          selectedCycleId={selectedCycleId}
-          onChange={setSelectedCycleId}
-        />
+        {(isCourseLoading || isCycleLoading) && (
+          <div className="col-span-2 flex justify-center py-6">
+            <LoadingData />
+          </div>
+        )}
+
+        {(isCourseError || isCycleError) &&
+          !isCourseLoading &&
+          !isCycleLoading && (
+            <div className="col-span-2 text-center text-red-500 py-4">
+              Failed to load data.
+            </div>
+          )}
+
+        {!isCourseLoading &&
+          !isCycleLoading &&
+          !isCourseError &&
+          !isCycleError && (
+            <>
+              {courses?.data?.length > 0 ? (
+                <CourseSelect
+                  label="Select Course"
+                  courses={courses?.data}
+                  selectedCourseId={selectedCourseId}
+                  onChange={setSelectedCourseId}
+                />
+              ) : (
+                <div className="col-span-1 text-center text-gray-500 py-4">
+                  No courses available
+                </div>
+              )}
+
+              {selectedCourseId ? (
+                cycleData?.data?.length > 0 ? (
+                  <CycleSelect
+                    label="Select Cycle"
+                    cycles={cycleData?.data}
+                    selectedCycleId={selectedCycleId}
+                    onChange={setSelectedCycleId}
+                  />
+                ) : (
+                  <div className="col-span-1 text-center text-gray-500 py-4">
+                    No cycles available
+                  </div>
+                )
+              ) : (
+                <div className="col-span-1 text-center text-gray-400 py-4">
+                  Select a course to see cycles
+                </div>
+              )}
+            </>
+          )}
       </div>
 
       {(isLoading || isFetching) && (
@@ -163,9 +205,9 @@ export function SubjectList() {
         </div>
       )}
 
-      {!(isLoading || isFetching) && !isError && (
+      {!(isLoading || isFetching) && !isError && selectedCycleId && (
         <>
-          {!selectedCycleId || sortedSubject?.length === 0 ? (
+          {sortedSubject?.length === 0 ? (
             <div className="text-center text-gray-500 py-4">
               No Subjects Found
             </div>

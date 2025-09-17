@@ -44,76 +44,86 @@ export default function ClassContentForm() {
   const selectedSubjectId = useWatch({ control, name: "subject" });
   const fileInputRef = useRef(null);
 
+  const [createClassContent, { isLoading }] = useCreateClassContentMutation();
+
+  // Courses
   const {
     data: courseData,
     isLoading: isCourseLoading,
-    isError,
+    isError: isCourseError,
   } = useGetAllCourseQuery({ limit: 1000 });
 
-  const courses = courseData?.data;
-  const courseOptions =
-    courses?.data?.map((course) => ({
-      label: `${course?.productFullName} (${course?.productName})`,
-      value: course?.id,
-    })) || [];
+  const courseOptions = isCourseLoading
+    ? [{ label: "Loading courses...", value: "" }]
+    : isCourseError
+    ? [{ label: "Failed to load courses", value: "" }]
+    : courseData?.data?.data?.length
+    ? courseData?.data?.data.map((course) => ({
+        label: `${course?.productFullName} (${course?.productName})`,
+        value: course?.id,
+      }))
+    : [{ label: "No courses available", value: "" }];
 
+  // Cycles
   const {
     data: cycleData,
     isLoading: isCycleLoading,
-    isError: cycleError,
-  } = useGetAllCourseCycleBasedOnCourseIdQuery(selectedCourseId, {
-    skip: !selectedCourseId,
-  });
-  // console.log(cycleData);
+    isError: isCycleError,
+  } = useGetAllCourseCycleBasedOnCourseIdQuery(
+    { courseId: selectedCourseId, limit: 100 },
+    { skip: !selectedCourseId }
+  );
 
   const cycleOptions = isCycleLoading
     ? [{ label: "Loading cycles...", value: "" }]
+    : isCycleError
+    ? [{ label: "Failed to load cycles", value: "" }]
     : cycleData?.data?.length
-    ? cycleData.data.map((cycle) => ({
+    ? cycleData?.data?.map((cycle) => ({
         label: `${cycle?.title} (${cycle?.course?.productName})`,
         value: cycle?.id,
       }))
     : [{ label: "No cycles available", value: "" }];
 
+  // Subjects
   const {
     data: subjects,
     isLoading: isSubjectLoading,
     isError: isSubjectError,
   } = useGetCycleSubjectsByCycleIdQuery(
-    {
-      cycleId: selectedCycleId,
-      page: 1,
-      limit: 100,
-      searchTerm: "",
-    },
-    {
-      skip: !selectedCycleId,
-    }
+    { cycleId: selectedCycleId, limit: 100 },
+    { skip: !selectedCycleId }
   );
-
-  const { data: chapters, isLoading: isChapterLoading } =
-    useGetAllChaptersByCycleSubjectIdQuery(selectedSubjectId, {
-      skip: !selectedSubjectId,
-    });
-
-  // console.log("chapter", chapters);
-  const [createClassContent, { isLoading }] = useCreateClassContentMutation();
 
   const subjectOptions = isSubjectLoading
     ? [{ label: "Loading subjects...", value: "" }]
+    : isSubjectError
+    ? [{ label: "Failed to load subjects", value: "" }]
     : subjects?.data?.length
-    ? subjects.data.map((sub) => ({
+    ? subjects?.data?.map((sub) => ({
         label: sub?.subject?.title,
         value: sub?.id,
       }))
     : [{ label: "No subjects available", value: "" }];
 
+  // Chapters
+  const {
+    data: chapters,
+    isLoading: isChapterLoading,
+    isError: isChapterError,
+  } = useGetAllChaptersByCycleSubjectIdQuery(
+    { cycleSubjectId: selectedSubjectId, limit: 100 },
+    { skip: !selectedSubjectId }
+  );
+
   const chapterOptions = isChapterLoading
     ? [{ label: "Loading chapters...", value: "" }]
+    : isChapterError
+    ? [{ label: "Failed to load chapters", value: "" }]
     : chapters?.data?.length
     ? chapters.data.map((ch) => ({
-        label: ch.chapter.chapterName,
-        value: ch.id,
+        label: ch?.chapter?.chapterName,
+        value: ch?.id,
       }))
     : [{ label: "No chapters added yet", value: "" }];
 

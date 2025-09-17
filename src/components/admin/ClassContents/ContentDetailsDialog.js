@@ -15,21 +15,33 @@ export default function ContentDetailsDialog({
   isOpen,
   onOpenChange,
 }) {
+  // console.log(selectedContent);
   const infoFields = [
     {
       label: "Course",
       value:
-        selectedContent?.courseSubjectChapter?.courseSubject?.course
-          ?.productName,
+        selectedContent?.cycleSubjectChapter?.cycleSubject?.cycle?.course
+          ?.productName || "N/A",
+    },
+    {
+      label: "Cycle",
+      value:
+        selectedContent?.cycleSubjectChapter?.cycleSubject?.cycle?.title ||
+        "N/A",
     },
     {
       label: "Subject",
       value:
-        selectedContent?.courseSubjectChapter?.courseSubject?.subject?.title,
+        selectedContent?.cycleSubjectChapter?.cycleSubject?.title ||
+        selectedContent?.cycleSubjectChapter?.cycleSubject?.subject?.title ||
+        "N/A",
     },
     {
       label: "Chapter Title",
-      value: selectedContent?.courseSubjectChapter?.chapter?.chapterName,
+      value:
+        selectedContent?.cycleSubjectChapter?.title ||
+        selectedContent?.cycleSubjectChapter?.chapter?.chapterName ||
+        "N/A",
     },
     { label: "Class Title", value: selectedContent?.classTitle },
     { label: "Class Description", value: selectedContent?.description },
@@ -41,7 +53,7 @@ export default function ContentDetailsDialog({
     {
       label: "Content Uploaded",
       value: selectedContent?.createdAt
-        ? new Date(selectedContent.createdAt).toLocaleString()
+        ? new Date(selectedContent?.createdAt).toLocaleString()
         : "N/A",
     },
   ];
