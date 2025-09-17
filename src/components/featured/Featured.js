@@ -21,7 +21,7 @@ const Featured = ({ courseId }) => {
         <h2 className="text-xl md:text-3xl font-bold text-indigo-500">
           Featured Highlights
         </h2>
-        <p className="text-xs md:text-lg text-gray-600 dark:text-gray-300 my-8 ">
+        <p className="text-xs md:text-lg text-gray-600 dark:text-gray-300 my-4 ">
           Stay ahead with our latest features, exclusive learning packages,
           limited-time discounts, and special coupon codes
         </p>

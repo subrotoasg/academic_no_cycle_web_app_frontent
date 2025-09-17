@@ -40,7 +40,7 @@ const NoticeBoard = ({ courseId }) => {
             {noticesData.map((notice, index) => (
               <p key={index} className="mx-2 md:mx-4">
                 <span className="text-sm md:text-lg text-red-700 animate__animated animate__flash">
-                  {notice.description}
+                  {notice?.description}
                 </span>
               </p>
             ))}

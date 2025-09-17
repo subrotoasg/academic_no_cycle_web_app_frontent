@@ -19,10 +19,10 @@ function Subject() {
     skip: !cycleBasedSubjectId,
   });
   const cycleSubjects = cycleBasedSubjectData?.data;
-  const subjectName =
+  const courseName =
     cycleSubjects && cycleSubjects.length > 0
-      ? cycleSubjects[0].courseSubject?.subject?.title
-      : "Subject Details";
+      ? cycleSubjects?.[0].cycle?.course?.title
+      : "";
 
   if (isLoading || !cycleBasedSubjectId) {
     return (
@@ -43,7 +43,7 @@ function Subject() {
     <div className="mt-24 mx-5 mb-5">
       <div className="text-center mb-12">
         <h1 className="pt-3 text-center font-bold text-2xl sm:text-3xl mb-5 text-blue-500">
-          {subjectName}
+          {courseName}
         </h1>
       </div>
 

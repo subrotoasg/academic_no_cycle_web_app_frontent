@@ -22,8 +22,6 @@ function Class() {
   } = useGetClassContentsByCycleSubjectChapterIdQuery(cycleSubjectChapterId);
 
   const chapterContents = chapterContentsData?.data;
-  // console.log(chapterContents);
-
   const chapterTitle =
     chapterContents && chapterContents.length > 0
       ? chapterContents[0].courseSubjectChapter?.chapter?.chapterName
@@ -65,7 +63,7 @@ function Class() {
               </h3>{" "}
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 lg:gap-6 mb-10 px-3">
                 {chapterContents?.map((content) => (
-                  <ClassCard content={content} key={content.id} />
+                  <ClassCard content={content} key={content?.id} />
                 ))}
               </div>
             </>

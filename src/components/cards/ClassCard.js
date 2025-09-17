@@ -16,7 +16,8 @@ function ClassCard({ content }) {
     practiceSheet,
     solutionSheet,
   } = content || {};
-  const courseId = content?.courseSubjectChapter?.courseSubject?.course?.id;
+  const courseId =
+    content?.cycleSubjectChapter?.cycleSubject?.cycle?.course?.id;
   return (
     <Link
       href={{
@@ -26,7 +27,6 @@ function ClassCard({ content }) {
       className="block w-full max-w-xs mx-auto rounded-lg shadow-lg overflow-hidden bg-indigo-100 dark:bg-gray-900 hover:bg-indigo-300 dark:hover:bg-indigo-600 transition-colors duration-200"
     >
       {/* Thumbnail */}
-      {/* <div className="hover:bg-indigo-300 dark:hover:bg-indigo-600"> */}
       <div className="relative w-full md:h-40 h-48">
         <Image
           src={thumbneil || backupImg}
@@ -37,7 +37,7 @@ function ClassCard({ content }) {
       </div>
 
       <div className="p-1">
-        <h3 className="text-lg font-semibold text-gray-800 dark:text-white text-center">
+        <h3 className="text-lg font-semibold text-gray-800 dark:text-white ">
           Class {classNo} : {classTitle}
         </h3>
       </div>

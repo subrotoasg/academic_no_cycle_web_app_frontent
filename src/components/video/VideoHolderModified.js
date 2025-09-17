@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetClassContentsBySubjectChapterIdQuery } from "@/redux/services/contentsApi";
+import { useGetClassContentsByCycleSubjectChapterIdQuery } from "@/redux/services/contentsApi";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSelector } from "react-redux";
@@ -358,35 +358,6 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
             >
               {isPlaying ? "⏸" : "▶"}
             </button>
-            {/* <div className="relative group flex items-center">
-              <div className="hidden md:flex items-center">
-                <button onClick={toggleMute} className="z-10">
-                  {ytPlayer.current?.isMuted?.() ? "🔇" : "🔊"}
-                </button>
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={volume}
-                  onChange={changeVolume}
-                  className="absolute left-1/2 -translate-x-1/2 bottom-full mb-8 h-8 w-24 opacity-0 group-hover:opacity-100 transition-opacity rotate-[-90deg] z-20"
-                />
-              </div>
-
-              <div className="flex items-center  md:hidden">
-                <button onClick={toggleMute}>
-                  {ytPlayer.current?.isMuted?.() ? "🔇" : "🔊"}
-                </button>
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={volume}
-                  onChange={changeVolume}
-                  className="h-2 w-8"
-                />
-              </div>
-            </div> */}
             <div className="flex items-center gap-2">
               <button onClick={toggleMute} className="text-lg md:text-xl">
                 {ytPlayer.current?.isMuted?.() ? "🔇" : "🔊"}
@@ -501,10 +472,9 @@ const VideoHolderModified = ({ classContent }) => {
   const pdfRef = useRef(null);
 
   const { data: chapterContentsData, isLoading } =
-    useGetClassContentsBySubjectChapterIdQuery(
-      classContent?.courseSubjectChapter?.id
+    useGetClassContentsByCycleSubjectChapterIdQuery(
+      classContent?.cycleSubjectChapter?.id
     );
-
   const courseId =
     chapterContentsData?.data[0]?.courseSubjectChapter?.courseSubject?.course
       ?.id;
@@ -619,7 +589,7 @@ const VideoHolderModified = ({ classContent }) => {
                     Loading lessons...
                   </p>
                 ) : chapterContents?.length > 0 ? (
-                  chapterContents.map((content, index) => (
+                  chapterContents?.map((content, index) => (
                     <motion.a
                       key={content.id}
                       href={

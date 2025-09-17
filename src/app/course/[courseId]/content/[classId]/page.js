@@ -5,7 +5,7 @@ import LoadingData from "@/components/common/LoadingData";
 import Comments from "@/components/video/Comments";
 import VideoHolder from "@/components/video/VideoHolder";
 import VideoHolderModified from "@/components/video/VideoHolderModified";
-import { useGetClassContentByClassIdQuery } from "@/redux/services/contentsApi";
+import { useGetClassContentByCycleClassIdQuery } from "@/redux/services/contentsApi";
 import { useParams, useSearchParams } from "next/navigation";
 import React from "react";
 
@@ -17,7 +17,7 @@ const Videos = () => {
     data: classContentData,
     isLoading,
     error,
-  } = useGetClassContentByClassIdQuery(classId);
+  } = useGetClassContentByCycleClassIdQuery(classId);
 
   if (isLoading) {
     return (

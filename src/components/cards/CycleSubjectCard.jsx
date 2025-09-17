@@ -5,7 +5,6 @@ import Link from "next/link";
 import React from "react";
 
 function CycleSubjectCard({ subject }) {
-  console.log(subject);
   const imageUrl =
     subject?.cycleSubjectImage ||
     subject?.subject?.subjectImage ||

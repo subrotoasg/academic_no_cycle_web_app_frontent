@@ -9,6 +9,8 @@ import { useGetAllCourseCycleBasedOnCourseIdQuery } from "@/redux/services/cycle
 import CycleCard from "@/components/cards/CycleCard";
 import { useGetMeQuery } from "@/redux/services/userInfoApi";
 import LoadingData from "@/components/common/LoadingData";
+import NoticeCarousel from "@/components/notice/NoticeCarousel";
+import NoticeMarque from "@/components/notice/NoticeMarque";
 
 function CourseContent() {
   const params = useParams();
@@ -32,6 +34,7 @@ function CourseContent() {
 
   return (
     <div className="container mx-auto mt-20 md:mt-28 p-1">
+      <NoticeMarque courseId={courseId} />
       <div className="text-center mb-6">
         {hascycleDatas ? (
           <h3 className="text-2xl md:text-5xl font-bold text-center text-blue-500 mb-8">
@@ -42,12 +45,6 @@ function CourseContent() {
             Course Details
           </h3>
         )}
-      </div>
-      <div className="my-10 md:my-20">
-        <NoticeBoard courseId={courseId} />
-      </div>
-      <div className="my-10 md:my-20">
-        <Featured courseId={courseId} />
       </div>
       <div className="text-center mb-6">
         <h2 className="text-xl md:text-3xl font-bold text-center text-blue-500 my-10">
@@ -80,6 +77,13 @@ function CourseContent() {
             )}
           </>
         )}
+      </div>
+      <div className="my-10 md:my-10">
+        {/* <NoticeBoard courseId={courseId} /> */}
+        <NoticeCarousel courseId={courseId} />
+      </div>
+      <div className="my-10">
+        <Featured courseId={courseId} />
       </div>
     </div>
   );
