@@ -28,7 +28,7 @@ export default function ContentInfoEditDialog({
   selectedContent,
   refetchClassContents,
 }) {
-  console.log(selectedContent);
+  // console.log(selectedContent);
   const types = [
     { label: "Free Youtube", value: "freeyt" },
     { label: "Premium Youtube", value: "premyt" },

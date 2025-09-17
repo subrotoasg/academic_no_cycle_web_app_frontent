@@ -22,7 +22,6 @@ export function NoticeList() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const [selectedCourseId, setSelectedCourseId] = useState("");
-  // const courses = useSelector(selectAllCourses);
   const [selectedNotice, setSelectedNotice] = useState(null);
   const [noticeInfoModalOpen, setNoticeInfoModalOpen] = useState(false);
   const [noticeEditModalOpen, setNoticeEditModalOpen] = useState(false);
