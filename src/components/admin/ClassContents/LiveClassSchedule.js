@@ -1,6 +1,5 @@
 import React from "react";
 import LiveClassForm from "./LiveClassForm";
-// import LiveClassForm from "./LiveClassForm";
 
 function LiveClassSchedule() {
   return (

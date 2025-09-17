@@ -50,30 +50,38 @@ export default function LiveClassForm() {
     setImagePreview(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
+  // Courses
   const {
     data: courseData,
     isLoading: isCourseLoading,
-    isError,
+    isError: isCourseError,
   } = useGetAllCourseQuery({ limit: 1000 });
 
-  const courses = courseData?.data;
-  const courseOptions =
-    courses?.data?.map((course) => ({
-      label: `${course?.productFullName} (${course?.productName})`,
-      value: course?.id,
-    })) || [];
+  const courseOptions = isCourseLoading
+    ? [{ label: "Loading courses...", value: "" }]
+    : isCourseError
+    ? [{ label: "Failed to load courses", value: "" }]
+    : courseData?.data?.data?.length
+    ? courseData?.data?.data.map((course) => ({
+        label: `${course?.productFullName} (${course?.productName})`,
+        value: course?.id,
+      }))
+    : [{ label: "No courses available", value: "" }];
 
+  // Cycles
   const {
     data: cycleData,
     isLoading: isCycleLoading,
-    isError: cycleError,
+    isError: isCycleError,
   } = useGetAllCourseCycleBasedOnCourseIdQuery(
     { courseId: selectedCourseId, limit: 100 },
     { skip: !selectedCourseId }
   );
-  // console.log(cycleData);
+
   const cycleOptions = isCycleLoading
     ? [{ label: "Loading cycles...", value: "" }]
+    : isCycleError
+    ? [{ label: "Failed to load cycles", value: "" }]
     : cycleData?.data?.length
     ? cycleData?.data?.map((cycle) => ({
         label: `${cycle?.title} (${cycle?.course?.productName})`,
@@ -81,19 +89,28 @@ export default function LiveClassForm() {
       }))
     : [{ label: "No cycles available", value: "" }];
 
+  // Subjects
   const {
     data: subjects,
     isLoading: isSubjectLoading,
     isError: isSubjectError,
   } = useGetCycleSubjectsByCycleIdQuery(
-    {
-      cycleId: selectedCycleId,
-      limit: 100,
-    },
-    {
-      skip: !selectedCycleId,
-    }
+    { cycleId: selectedCycleId, limit: 100 },
+    { skip: !selectedCycleId }
   );
+
+  const subjectOptions = isSubjectLoading
+    ? [{ label: "Loading subjects...", value: "" }]
+    : isSubjectError
+    ? [{ label: "Failed to load subjects", value: "" }]
+    : subjects?.data?.length
+    ? subjects?.data?.map((sub) => ({
+        label: sub?.subject?.title,
+        value: sub?.id,
+      }))
+    : [{ label: "No subjects available", value: "" }];
+
+  // Chapters
   const {
     data: chapters,
     isLoading: isChapterLoading,
@@ -103,19 +120,12 @@ export default function LiveClassForm() {
     { skip: !selectedSubjectId }
   );
 
-  const subjectOptions = isSubjectLoading
-    ? [{ label: "Loading subjects...", value: "" }]
-    : subjects?.data?.length
-    ? subjects?.data?.map((sub) => ({
-        label: sub?.subject?.title,
-        value: sub?.id,
-      }))
-    : [{ label: "No subjects available", value: "" }];
-
   const chapterOptions = isChapterLoading
     ? [{ label: "Loading chapters...", value: "" }]
+    : isChapterError
+    ? [{ label: "Failed to load chapters", value: "" }]
     : chapters?.data?.length
-    ? chapters?.data?.map((ch) => ({
+    ? chapters.data.map((ch) => ({
         label: ch?.chapter?.chapterName,
         value: ch?.id,
       }))
@@ -158,7 +168,7 @@ export default function LiveClassForm() {
     const formData = new FormData();
 
     const liveClassInfo = {
-      courseSubjectChapterId: data.chapter,
+      cycleSubjectChapterId: data.chapter,
       title: data.title,
       classNumber: data.classNumber,
       description: data.description,
