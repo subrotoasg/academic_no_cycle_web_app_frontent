@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
-import { useForm, FormProvider } from "react-hook-form";
+import { useForm, FormProvider, useWatch } from "react-hook-form";
 import Image from "next/image";
 import InputField from "@/components/form/InputField";
 import Dropdown from "@/components/form/Dropdown";
@@ -9,8 +9,8 @@ import { Input } from "@/components/ui/input";
 import Swal from "sweetalert2";
 import { toast } from "sonner";
 import { useCreateNoticeRoutineMutation } from "@/redux/services/noticeRoutineApi";
-import { useSelector } from "react-redux";
-import { selectAllCourses } from "@/redux/Features/courseInfo";
+import { useGetAllCourseQuery } from "@/redux/services/courseApi";
+import { useGetAllCourseCycleBasedOnCourseIdQuery } from "@/redux/services/cycleApi";
 
 export default function NoticeForm() {
   const [createNoticeRoutine, { isLoading }] = useCreateNoticeRoutineMutation();
@@ -18,15 +18,9 @@ export default function NoticeForm() {
   const [imagePreview, setImagePreview] = useState(null);
   const fileInputRef = useRef(null);
 
-  const courses = useSelector(selectAllCourses);
-  const courseOptions =
-    courses?.data?.map((course) => ({
-      label: course.productFullName,
-      value: course.id,
-    })) || [];
-
   const defaultValues = {
     courseId: "",
+    cycleId: "",
     type: "",
     title: "",
     description: "",
@@ -34,17 +28,56 @@ export default function NoticeForm() {
     endTime: "",
     routineUrl: "",
   };
-
   const methods = useForm({ defaultValues });
-
   const {
     handleSubmit,
     reset,
     watch,
     getValues,
+    control,
     setValue,
     formState: { isSubmitting },
   } = methods;
+
+  const selectedCourseId = useWatch({ control, name: "courseId" });
+  // const selectedCycleId = useWatch({ control, name: "cycleId" });
+  const {
+    data: courseData,
+    isLoading: isCourseLoading,
+    isError: isCourseError,
+  } = useGetAllCourseQuery({ limit: 1000 });
+
+  const courseOptions = isCourseLoading
+    ? [{ label: "Loading courses...", value: "" }]
+    : isCourseError
+    ? [{ label: "Failed to load courses", value: "" }]
+    : courseData?.data?.data?.length
+    ? courseData?.data?.data.map((course) => ({
+        label: `${course?.productFullName} (${course?.productName})`,
+        value: course?.id,
+      }))
+    : [{ label: "No courses available", value: "" }];
+
+  // Cycles
+  const {
+    data: cycleData,
+    isLoading: isCycleLoading,
+    isError: isCycleError,
+  } = useGetAllCourseCycleBasedOnCourseIdQuery(
+    { courseId: selectedCourseId, limit: 100 },
+    { skip: !selectedCourseId }
+  );
+
+  const cycleOptions = isCycleLoading
+    ? [{ label: "Loading cycles...", value: "" }]
+    : isCycleError
+    ? [{ label: "Failed to load cycles", value: "" }]
+    : cycleData?.data?.length
+    ? cycleData?.data?.map((cycle) => ({
+        label: `${cycle?.title} (${cycle?.course?.productName})`,
+        value: cycle?.id,
+      }))
+    : [{ label: "No cycles available", value: "" }];
 
   const startTimeValue =
     watch("startTime") || new Date().toISOString().slice(0, 16);
@@ -66,20 +99,22 @@ export default function NoticeForm() {
   };
 
   const onSubmit = async (data) => {
-    if ((data.type === "Notice" || data.type === "Routine") && !selectedFile) {
+    if (!selectedFile) {
       toast.error("Please upload an image file");
       return;
     }
 
     const formData = new FormData();
     const NoticeInfo = {
-      courseId: data.courseId,
+      ...(data.cycleId
+        ? { cycleId: data.cycleId }
+        : { courseId: data.courseId }),
       title: data.title,
       type: data.type,
       description: data.description,
       startTime: data.startTime,
       endTime: data.endTime,
-      ...(data.type === "Routine" && { url: data.routineUrl }),
+      // ...(data.type === "Routine" && { url: data.routineUrl }),
     };
 
     if (selectedFile) {
@@ -116,9 +151,16 @@ export default function NoticeForm() {
           label="Select Course"
           name="courseId"
           options={courseOptions}
-          rules={{ required: "Course selection is required." }}
+          rules={{ required: "Course is required." }}
         />
 
+        {selectedCourseId && (
+          <Dropdown
+            label="Select Cycle (Only for cycle wise routine)"
+            name="cycleId"
+            options={cycleOptions}
+          />
+        )}
         {/* Type Dropdown */}
         <Dropdown
           label="Type"
