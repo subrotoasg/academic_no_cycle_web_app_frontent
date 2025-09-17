@@ -7,31 +7,38 @@ import PaginationControls from "../utilities/PaginationControls";
 import NoticeDetailsDialog from "./NoticeDetailsDialog";
 import Swal from "sweetalert2";
 import Loading from "../utilities/Loading";
-import { useSelector } from "react-redux";
 import {
   useDeleteNoticeRoutineMutation,
   useGetNoticeRoutinesByCourseIdQuery,
 } from "@/redux/services/noticeRoutineApi";
-import { selectAllCourses } from "@/redux/Features/courseInfo";
+
 import CourseSelect from "@/components/form/CourseSelect";
 import { toast } from "sonner";
 import LoadingData from "@/components/common/LoadingData";
+import { useGetAllCourseQuery } from "@/redux/services/courseApi";
 
 export function NoticeList() {
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const [selectedCourseId, setSelectedCourseId] = useState("");
-  const courses = useSelector(selectAllCourses);
   const [selectedNotice, setSelectedNotice] = useState(null);
   const [noticeInfoModalOpen, setNoticeInfoModalOpen] = useState(false);
   const [noticeEditModalOpen, setNoticeEditModalOpen] = useState(false);
 
+  const {
+    data: courseData,
+    isLoading: isCourseLoading,
+    isError: isCourseError,
+  } = useGetAllCourseQuery({ limit: 1000 });
+  const courses = courseData?.data;
+
   useEffect(() => {
     if (courses?.data?.length > 0 && !selectedCourseId) {
-      setSelectedCourseId(courses.data[0].id);
+      setSelectedCourseId(courses?.data[0]?.id);
     }
   }, [courses, selectedCourseId]);
+
   const {
     data,
     isLoading,
@@ -54,7 +61,7 @@ export function NoticeList() {
 
   const noticesData = data?.data?.data;
   const meta = data?.data?.meta;
-  const totalPages = meta?.totalCount ? Math.ceil(meta.totalCount / limit) : 1;
+  const totalPages = meta?.totalCount ? Math.ceil(meta?.totalCount / limit) : 1;
   useEffect(() => {
     setPage(1);
   }, [searchQuery]);
@@ -118,19 +125,38 @@ export function NoticeList() {
       <p className="text-xs md:text-sm text-muted-foreground text-center mt-2">
         Browse, edit, or delete the uploaded notices and routines.
       </p>
-      <CourseSelect
-        label="Select Course"
-        courses={courses?.data}
-        selectedCourseId={selectedCourseId}
-        onChange={setSelectedCourseId}
-      />
-      <div className="p-2">
-        <SearchBar
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          placeholder="Search by title ..."
-        />
+
+      <div className="grid grid-cols-1 gap-4">
+        {isCourseLoading && (
+          <div className="flex justify-center py-6">
+            <LoadingData />
+          </div>
+        )}
+
+        {isCourseError && !isCourseLoading && (
+          <div className="text-center text-red-500 py-4">
+            Failed to load courses.
+          </div>
+        )}
+
+        {!isCourseLoading && !isCourseError && (
+          <>
+            {courses?.data?.length > 0 ? (
+              <CourseSelect
+                label="Select Course"
+                courses={courses?.data}
+                selectedCourseId={selectedCourseId}
+                onChange={setSelectedCourseId}
+              />
+            ) : (
+              <div className="text-center text-gray-500 py-4">
+                No courses available
+              </div>
+            )}
+          </>
+        )}
       </div>
+
       {(isLoading || isFetching) && (
         <div className="w-full flex justify-center py-8">
           <LoadingData />
@@ -143,14 +169,21 @@ export function NoticeList() {
         </div>
       )}
 
-      {!(isLoading || isFetching) && !isError && (
+      {!(isLoading || isFetching) && !isError && selectedCourseId && (
         <>
-          {!selectedCourseId || sortedNotices.length === 0 ? (
+          {sortedNotices.length === 0 ? (
             <div className="text-center text-gray-500 py-4">
               No Notice Found
             </div>
           ) : (
             <>
+              <div className="p-2">
+                <SearchBar
+                  searchQuery={searchQuery}
+                  setSearchQuery={setSearchQuery}
+                  placeholder="Search by title ..."
+                />
+              </div>
               <NoticeTable
                 notices={sortedNotices}
                 handleDelete={handleNoticeDelete}
