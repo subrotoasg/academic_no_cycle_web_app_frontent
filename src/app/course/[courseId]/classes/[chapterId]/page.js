@@ -8,6 +8,7 @@ import { MoveLeft } from "lucide-react";
 import { useUploadingLiveClassQuery } from "@/redux/services/liveClassApi";
 import UploadingClass from "@/components/liveClass/uploadingClass/UploadingClasses";
 import LoadingData from "@/components/common/LoadingData";
+import VideoHolderModified from "@/components/video/VideoHolderModified";
 
 function Class() {
   const params = useParams();
@@ -24,7 +25,7 @@ function Class() {
   const chapterContents = chapterContentsData?.data;
   const chapterTitle =
     chapterContents && chapterContents.length > 0
-      ? chapterContents[0].courseSubjectChapter?.chapter?.chapterName
+      ? chapterContents?.[0]?.cycleSubjectChapter?.chapter?.chapterName
       : "Chapter Details";
 
   if (isLoading || !cycleSubjectChapterId) {
@@ -43,29 +44,24 @@ function Class() {
     );
   }
 
-  // const chapterContents = chapterContentsData?.data
-  //   ?.slice()
-  //   .sort((a, b) => Number(a.classNo) - Number(b.classNo));
-
   return (
     <div className="w-full mt-24 container mx-auto">
-      <div className="text-center mb-6">
-        <h1 className="pt-3 text-center font-bold text-2xl md:text-3xl mb-5 text-blue-500">
-          {chapterTitle}
-        </h1>
-      </div>
+      <h1 className="pt-3 text-center font-bold text-2xl md:text-3xl mb-2 text-blue-500">
+        {chapterTitle}
+      </h1>
       <div className="md:flex gap-4 justify-between my-5">
         <div className="w-full">
           {chapterContents?.length > 0 ? (
             <>
-              <h3 className="md:text-2xl font-semibold text-center my-7 text-indigo-500">
+              {/* <h3 className="md:text-2xl font-semibold text-center mb-7 text-indigo-500">
                 Available Classes
               </h3>{" "}
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 lg:gap-6 mb-10 px-3">
+              <div className="flex flex-wrap justify-center gap-4 md:gap-8">
                 {chapterContents?.map((content) => (
                   <ClassCard content={content} key={content?.id} />
                 ))}
-              </div>
+              </div> */}
+              <VideoHolderModified content={chapterContents?.[0]} />
             </>
           ) : (
             <p className="text-center text-lg font-semibold text-gray-500">

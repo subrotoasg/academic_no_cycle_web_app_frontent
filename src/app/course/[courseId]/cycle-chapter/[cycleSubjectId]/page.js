@@ -45,11 +45,9 @@ function CycleSubjectBasedChapter() {
   }
   return (
     <div className="mt-24 mx-5 mb-5">
-      <div className="text-center">
-        <h1 className="pt-3 text-center font-bold text-2xl sm:text-3xl mb-5 text-blue-500">
-          {subjectName}
-        </h1>
-      </div>
+      <h1 className="pt-3 text-center font-bold text-2xl sm:text-3xl mb-5 text-blue-500">
+        {subjectName}
+      </h1>
 
       <div className="w-full">
         {!Array.isArray(subjectChapters) || subjectChapters.length === 0 ? (
@@ -58,14 +56,19 @@ function CycleSubjectBasedChapter() {
           </div>
         ) : (
           <>
-            <h3 className="md:text-2xl font-semibold text-center my-7 md:my-10 text-indigo-500">
+            <h3 className="md:text-2xl font-semibold text-center my-7 md:mb-6 text-indigo-500">
               Available Chapters
             </h3>{" "}
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 justify-center gap-4 md:gap-7 items-center">
+            <div className="flex flex-wrap justify-center gap-4 md:gap-8">
               {subjectChapters?.map((chapter) => (
                 <ChapterCard key={chapter.id} chapter={chapter} />
               ))}
             </div>
+            {/* <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 justify-center gap-4 md:gap-7 items-center">
+              {subjectChapters?.map((chapter) => (
+                <ChapterCard key={chapter.id} chapter={chapter} />
+              ))}
+            </div> */}
           </>
         )}
       </div>

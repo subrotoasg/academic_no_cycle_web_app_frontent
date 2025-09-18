@@ -19,7 +19,7 @@ function ChapterCard({ chapter }) {
           title: chapter?.chapter?.chapterName,
         },
       }}
-      className="block rounded-xl overflow-hidden shadow-md hover:scale-102 bg-gray-600"
+      className="block rounded-xl overflow-hidden shadow-md hover:scale-102 bg-gray-600 md:w-1/3 lg:w-1/4 w-full"
     >
       <div className="p-2">
         <h3 className="text-xl font-semibold text-white ">

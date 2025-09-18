@@ -34,7 +34,6 @@ function CourseContent() {
 
   return (
     <div className="container mx-auto mt-20 md:mt-28 p-1">
-      <NoticeMarque courseId={courseId} />
       <div className="text-center mb-6">
         {hascycleDatas ? (
           <h3 className="text-2xl md:text-5xl font-bold text-center text-blue-500 mb-8">
@@ -47,10 +46,10 @@ function CourseContent() {
         )}
       </div>
       <div className="text-center mb-6">
-        <h2 className="text-xl md:text-3xl font-bold text-center text-blue-500 my-10">
+        <h2 className="text-xl md:text-3xl font-bold text-center text-blue-500 mt-7 md:mb-3 mb-1">
           Available Cycles
         </h2>
-        <p className="text-xs md:text-lg text-gray-600 dark:text-gray-300 mt-2">
+        <p className="text-xs md:text-lg text-gray-600 dark:text-gray-300 max-w-lg mx-auto">
           Explore the cycles available in the course and find the perfect fit
           for your academic path.
         </p>
@@ -77,13 +76,6 @@ function CourseContent() {
             )}
           </>
         )}
-      </div>
-      <div className="my-10 md:my-10">
-        {/* <NoticeBoard courseId={courseId} /> */}
-        <NoticeCarousel courseId={courseId} />
-      </div>
-      <div className="my-10">
-        <Featured courseId={courseId} />
       </div>
     </div>
   );

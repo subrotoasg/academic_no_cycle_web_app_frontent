@@ -24,7 +24,6 @@ const classContentApiServices = baseApi.injectEndpoints({
       ],
     }),
 
-<<<<<<< HEAD
     // Get Class Content By cycle Class ID
     getClassContentByCycleClassId: builder.query({
       query: (classId) => ({
@@ -36,10 +35,7 @@ const classContentApiServices = baseApi.injectEndpoints({
       ],
     }),
 
-    // Get All Class Contents By Course ID
-=======
     // Get All Class Contents By Cycle ID
->>>>>>> 24001057e46aa89459ca611914e78a9458e6a213
     getAllClassContents: builder.query({
       query: (queryParams) => {
         const { cycleId, ...params } = queryParams;
