@@ -13,6 +13,30 @@ const noticeRoutineApiServices = baseApi.injectEndpoints({
       invalidatesTags: [{ type: "noticeRoutine", id: "LIST" }],
     }),
 
+    // Get Notices or Routines by cycle Course ID
+    getNoticeRoutinesByCycleCourseId: builder.query({
+      query: (queryParams) => {
+        const url = quearyUrlGenerator(
+          `/course/notice/cycle/${queryParams.courseId}`,
+          queryParams
+        );
+        return {
+          url,
+          method: "GET",
+        };
+      },
+      providesTags: (result) =>
+        result?.data?.data
+          ? [
+              ...result.data.data.map((item) => ({
+                type: "noticeRoutine",
+                id: item.id,
+              })),
+              { type: "noticeRoutine", id: "LIST" },
+            ]
+          : [{ type: "noticeRoutine", id: "LIST" }],
+    }),
+
     // Get Notices or Routines by Course ID
     getNoticeRoutinesByCourseId: builder.query({
       query: (queryParams) => {
@@ -67,6 +91,7 @@ const noticeRoutineApiServices = baseApi.injectEndpoints({
 export const {
   useCreateNoticeRoutineMutation,
   useGetNoticeRoutinesByCourseIdQuery,
+  useGetNoticeRoutinesByCycleCourseIdQuery,
   useUpdateNoticeRoutineMutation,
   useDeleteNoticeRoutineMutation,
 } = noticeRoutineApiServices;

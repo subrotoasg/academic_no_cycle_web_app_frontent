@@ -13,6 +13,30 @@ const featuredApiServices = baseApi.injectEndpoints({
       invalidatesTags: [{ type: "featured", id: "LIST" }],
     }),
 
+    // Get Features By cycle ID
+    getFeaturesByCycleId: builder.query({
+      query: (queryParams) => {
+        const url = quearyUrlGenerator(
+          `/course/featured/cycle/${queryParams.courseId}`,
+          queryParams
+        );
+        return {
+          url,
+          method: "GET",
+        };
+      },
+      providesTags: (result) =>
+        result?.data?.data
+          ? [
+              ...result.data.data.map((item) => ({
+                type: "featured",
+                id: item.id,
+              })),
+              { type: "featured", id: "LIST" },
+            ]
+          : [{ type: "featured", id: "LIST" }],
+    }),
+
     // Get Features By Course ID
     getFeaturesByCourseId: builder.query({
       query: (queryParams) => {
@@ -67,6 +91,7 @@ const featuredApiServices = baseApi.injectEndpoints({
 export const {
   useCreateFeaturedMutation,
   useGetFeaturesByCourseIdQuery,
+  useGetFeaturesByCycleIdQuery,
   useUpdateFeaturedMutation,
   useDeleteFeaturedMutation,
 } = featuredApiServices;

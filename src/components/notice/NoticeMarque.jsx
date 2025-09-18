@@ -2,14 +2,16 @@
 
 import React from "react";
 import NoticeCarousel from "./NoticeCarousel";
-import { useGetNoticeRoutinesByCourseIdQuery } from "@/redux/services/noticeRoutineApi";
+import { useGetNoticeRoutinesByCycleCourseIdQuery } from "@/redux/services/noticeRoutineApi";
 import Marquee from "react-fast-marquee";
 import "animate.css";
 
 const NoticeMarque = ({ courseId }) => {
-  const { data: notices, isLoading } = useGetNoticeRoutinesByCourseIdQuery({
-    courseId,
-  });
+  const { data: notices, isLoading } = useGetNoticeRoutinesByCycleCourseIdQuery(
+    {
+      courseId,
+    }
+  );
   const today = new Date();
 
   const filteredNotices = notices?.data?.data?.filter((notice) => {

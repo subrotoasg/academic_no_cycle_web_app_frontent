@@ -4,19 +4,18 @@ import React from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import Image from "next/image";
-import { useGetNoticeRoutinesByCourseIdQuery } from "@/redux/services/noticeRoutineApi";
+import {
+  useGetNoticeRoutinesByCourseIdQuery,
+  useGetNoticeRoutinesByCycleCourseIdQuery,
+} from "@/redux/services/noticeRoutineApi";
 import LoadingData from "../common/LoadingData";
 
 const NoticeCarousel = ({ courseId }) => {
-  const { data: noticesData, isLoading } = useGetNoticeRoutinesByCourseIdQuery({
-    courseId,
-  });
-  // console.log(notices);
+  const { data: noticesData, isLoading } =
+    useGetNoticeRoutinesByCycleCourseIdQuery({
+      courseId,
+    });
   const today = new Date();
-
-  if (isLoading) {
-    return <LoadingData />;
-  }
 
   const filteredNotices = noticesData?.data?.data?.filter((notice) => {
     const endDate = new Date(notice.endTime);

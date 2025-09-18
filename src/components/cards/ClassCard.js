@@ -24,7 +24,7 @@ function ClassCard({ content }) {
         pathname: `/course/${courseId}/content/${id}`,
         query: { title: classTitle },
       }}
-      className="block w-full max-w-xs mx-auto rounded-lg shadow-lg overflow-hidden bg-indigo-100 dark:bg-gray-900 hover:bg-indigo-300 dark:hover:bg-indigo-600 transition-colors duration-200"
+      className="block w-full max-w-xs mx-auto rounded-lg shadow-lg overflow-hidden bg-indigo-100 dark:bg-gray-900 hover:bg-indigo-300 dark:hover:bg-indigo-600 transition-colors duration-200 md:w-1/3 lg:w-1/4"
     >
       {/* Thumbnail */}
       <div className="relative w-full md:h-40 h-48">

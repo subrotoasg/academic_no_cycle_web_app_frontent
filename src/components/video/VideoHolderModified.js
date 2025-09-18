@@ -8,6 +8,7 @@ import { currentUser } from "@/redux/Features/authentication";
 import { Eye, Maximize, Minimize } from "lucide-react";
 import Image from "next/image";
 import backupImg from "../../../public/img/backup.png";
+import Link from "next/link";
 
 const YouTubeOverlayPlayer = ({ videoId }) => {
   const containerRef = useRef(null);
@@ -20,10 +21,6 @@ const YouTubeOverlayPlayer = ({ videoId }) => {
   const [progress, setProgress] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [volume, setVolume] = useState(100);
-
-  // const singleTapTimer = useRef(null);
-
-  //  ------------ controls visibility -------------
   const [showControls, setShowControls] = useState(true);
   const hideTimer = useRef(null);
 
@@ -465,11 +462,14 @@ const TabButton = ({ title, isActive, onClick }) => (
   </button>
 );
 
-const VideoHolderModified = ({ classContent }) => {
+//Component to hold video and pdf viewer
+const VideoHolderModified = ({ content }) => {
+  console.log(content);
   const user = useSelector(currentUser);
   const isAdmin = user?.role === "admin";
   const [activeTab, setActiveTab] = useState(null);
   const pdfRef = useRef(null);
+  const [classContent, setClassContent] = useState(content || {});
 
   const { data: chapterContentsData, isLoading } =
     useGetClassContentsByCycleSubjectChapterIdQuery(
@@ -589,41 +589,100 @@ const VideoHolderModified = ({ classContent }) => {
                     Loading lessons...
                   </p>
                 ) : chapterContents?.length > 0 ? (
-                  chapterContents?.map((content, index) => (
-                    <motion.a
-                      key={content.id}
-                      href={
-                        isAdmin
-                          ? `/admin/content/${content?.id}?title=${content?.classTitle}`
-                          : `/course/${courseId}/content/${content?.id}?title=${content?.classTitle}`
-                      }
-                      className="flex items-center p-2 rounded-lg bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-300 shadow-md"
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.1, duration: 0.4 }}
-                    >
-                      {" "}
-                      {/* Thumbnail */}
-                      <div className="flex-shrink-0 w-16 h-12 md:w-24 md:h-16 rounded-md overflow-hidden mr-3">
-                        <Image
-                          src={content?.thumbneil || backupImg}
-                          alt={content?.classTitle}
-                          className="w-full h-full object-fill"
-                          width={50}
-                          height={30}
-                        />
+                  // chapterContents?.map((el, index) => (
+                  //   <Link
+                  //     key={el?.id}
+                  //     href={
+                  //       isAdmin
+                  //         ? `/admin/content/${el?.id}?title=${el?.classTitle}`
+                  //         : `/course/${courseId}/content/${el?.id}?title=${el?.classTitle}`
+                  //     }
+                  //     onClick={() => setClassContent(() => el)}
+                  //     className="flex items-center p-2 rounded-lg bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-300 shadow-md"
+                  //     initial={{ opacity: 0, x: 20 }}
+                  //     animate={{ opacity: 1, x: 0 }}
+                  //     transition={{ delay: index * 0.1, duration: 0.4 }}
+                  //   >
+                  //     {" "}
+                  //     {/* Thumbnail */}
+                  //     <div className="flex-shrink-0 w-16 h-12 md:w-24 md:h-16 rounded-md overflow-hidden mr-3">
+                  //       <Image
+                  //         src={el?.thumbneil || backupImg}
+                  //         alt={el?.classTitle}
+                  //         className="w-full h-full object-fill"
+                  //         width={50}
+                  //         height={30}
+                  //       />
+                  //     </div>
+                  //     <div className="flex-1 min-w-0 text-sm">
+                  //       <p className="font-semibold text-gray-800 dark:text-white truncate text-[10px]">
+                  //         {el?.classTitle}
+                  //       </p>
+                  //       <p className="text-sm text-gray-500 dark:text-gray-400 text-[8px]">
+                  //         Lesson {el?.classNo} • {el?.instructor || "Unknown"}
+                  //       </p>
+                  //     </div>
+                  //   </Link>
+                  // ))
+                  chapterContents?.map((el, index) =>
+                    isAdmin ? (
+                      <Link
+                        key={el?.id}
+                        href={`/admin/content/${el?.id}?title=${el?.classTitle}`}
+                        className="flex items-center p-2 rounded-lg bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-300 shadow-md"
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.1, duration: 0.4 }}
+                      >
+                        {/* Thumbnail */}
+                        <div className="flex-shrink-0 w-16 h-12 md:w-24 md:h-16 rounded-md overflow-hidden mr-3">
+                          <Image
+                            src={el?.thumbneil || backupImg}
+                            alt={el?.classTitle}
+                            className="w-full h-full object-fill"
+                            width={50}
+                            height={30}
+                          />
+                        </div>
+                        <div className="flex-1 min-w-0 text-sm">
+                          <p className="font-semibold text-gray-800 dark:text-white truncate text-[10px]">
+                            {el?.classTitle}
+                          </p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400 text-[8px]">
+                            Lesson {el?.classNo} • {el?.instructor || "Unknown"}
+                          </p>
+                        </div>
+                      </Link>
+                    ) : (
+                      <div
+                        key={el?.id}
+                        onClick={() => setClassContent(() => el)}
+                        className="flex items-center p-2 rounded-lg bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-300 shadow-md cursor-pointer"
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.1, duration: 0.4 }}
+                      >
+                        {/* Thumbnail */}
+                        <div className="flex-shrink-0 w-16 h-12 md:w-24 md:h-16 rounded-md overflow-hidden mr-3">
+                          <Image
+                            src={el?.thumbneil || backupImg}
+                            alt={el?.classTitle}
+                            className="w-full h-full object-fill"
+                            width={50}
+                            height={30}
+                          />
+                        </div>
+                        <div className="flex-1 min-w-0 text-sm">
+                          <p className="font-semibold text-gray-800 dark:text-white truncate text-[10px]">
+                            {el?.classTitle}
+                          </p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400 text-[8px]">
+                            Lesson {el?.classNo} • {el?.instructor || "Unknown"}
+                          </p>
+                        </div>
                       </div>
-                      <div className="flex-1 min-w-0 text-sm">
-                        <p className="font-semibold text-gray-800 dark:text-white truncate">
-                          {content?.classTitle}
-                        </p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          Lesson {content?.classNo} •{" "}
-                          {content?.instructor || "Unknown"}
-                        </p>
-                      </div>
-                    </motion.a>
-                  ))
+                    )
+                  )
                 ) : (
                   <p className="text-gray-500 dark:text-gray-400">
                     No related lessons found.

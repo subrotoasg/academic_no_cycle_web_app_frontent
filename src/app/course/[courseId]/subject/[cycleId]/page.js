@@ -6,6 +6,9 @@ import { MoveLeft } from "lucide-react";
 import LoadingData from "@/components/common/LoadingData";
 import CycleSubjectCard from "@/components/cards/CycleSubjectCard";
 import { useGetSubjectsByCycleIdQuery } from "@/redux/services/cycleSubjectApi";
+import NoticeMarque from "@/components/notice/NoticeMarque";
+import NoticeCarousel from "@/components/notice/NoticeCarousel";
+import Featured from "@/components/featured/Featured";
 
 function Subject() {
   const params = useParams();
@@ -21,7 +24,12 @@ function Subject() {
   const cycleSubjects = cycleBasedSubjectData?.data;
   const courseName =
     cycleSubjects && cycleSubjects.length > 0
-      ? cycleSubjects?.[0].cycle?.course?.title
+      ? cycleSubjects?.[0].cycle?.course?.productName
+      : "";
+
+  const cycleId =
+    cycleSubjects && cycleSubjects.length > 0
+      ? cycleSubjects?.[0]?.cycle?.id
       : "";
 
   if (isLoading || !cycleBasedSubjectId) {
@@ -41,8 +49,9 @@ function Subject() {
   }
   return (
     <div className="mt-24 mx-5 mb-5">
-      <div className="text-center mb-12">
-        <h1 className="pt-3 text-center font-bold text-2xl sm:text-3xl mb-5 text-blue-500">
+      <NoticeMarque courseId={cycleId} />
+      <div className="text-center">
+        <h1 className="pt-3 text-center font-bold text-2xl sm:text-3xl text-blue-500">
           {courseName}
         </h1>
       </div>
@@ -54,16 +63,27 @@ function Subject() {
           </div>
         ) : (
           <>
-            <h3 className="md:text-2xl font-semibold text-center my-7 md:my-10 text-indigo-500">
+            <h3 className="md:text-2xl font-semibold text-center my-7 md:my-5 text-indigo-500">
               Available Subjects
             </h3>{" "}
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 justify-center gap-4 md:gap-7 items-center">
+            <div className="flex flex-wrap justify-center gap-4 md:gap-8">
               {cycleSubjects?.map((subject) => (
                 <CycleSubjectCard key={subject.id} subject={subject} />
               ))}
             </div>
+            {/* <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 justify-center gap-4 md:gap-7 items-center">
+              {cycleSubjects?.map((subject) => (
+                <CycleSubjectCard key={subject.id} subject={subject} />
+              ))}
+            </div> */}
           </>
         )}
+      </div>
+      <div className="my-4 md:my-8">
+        <NoticeCarousel courseId={cycleId} />
+      </div>
+      <div className="my-10">
+        <Featured courseId={cycleId} />
       </div>
       <div className="text-center my-10 md:my-14">
         <button
