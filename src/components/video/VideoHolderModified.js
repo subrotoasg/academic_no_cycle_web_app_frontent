@@ -464,7 +464,6 @@ const TabButton = ({ title, isActive, onClick }) => (
 
 //Component to hold video and pdf viewer
 const VideoHolderModified = ({ content }) => {
-  console.log(content);
   const user = useSelector(currentUser);
   const isAdmin = user?.role === "admin";
   const [activeTab, setActiveTab] = useState(null);
@@ -581,12 +580,12 @@ const VideoHolderModified = ({ content }) => {
           <div className="lg:col-span-3 mt-5 lg:mt-0">
             <div className="sticky top-8 p-1 md:p-2">
               <h2 className="md:text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                Related Lessons
+                সম্পর্কযুক্ত ক্লাসসমূহ
               </h2>
               <div className="space-y-4">
                 {isLoading ? (
                   <p className="text-gray-500 dark:text-gray-400">
-                    Loading lessons...
+                    সম্পর্কযুক্ত ক্লাসসমূহ লোড হচ্ছে...
                   </p>
                 ) : chapterContents?.length > 0 ? (
                   // chapterContents?.map((el, index) => (
@@ -685,7 +684,7 @@ const VideoHolderModified = ({ content }) => {
                   )
                 ) : (
                   <p className="text-gray-500 dark:text-gray-400">
-                    No related lessons found.
+                    কোনো সম্পর্কযুক্ত ক্লাস নেই
                   </p>
                 )}
               </div>

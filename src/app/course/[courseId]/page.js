@@ -11,6 +11,8 @@ import { useGetMeQuery } from "@/redux/services/userInfoApi";
 import LoadingData from "@/components/common/LoadingData";
 import NoticeCarousel from "@/components/notice/NoticeCarousel";
 import NoticeMarque from "@/components/notice/NoticeMarque";
+import { useGetAllLiveClassQuery } from "@/redux/services/liveClassApi";
+import LiveClassLayout from "@/components/liveClass/LiveClassLayout";
 
 function CourseContent() {
   const params = useParams();
@@ -20,6 +22,7 @@ function CourseContent() {
       courseId,
       limit: 100,
     });
+  const { data, isLoading: isLiveLoading } = useGetAllLiveClassQuery();
   const { data: archiveData, isLoading: isArchiveLoading } =
     useGetArchivedCourseByIdQuery(courseId);
 
@@ -34,6 +37,7 @@ function CourseContent() {
 
   return (
     <div className="container mx-auto mt-20 md:mt-28 p-1">
+      <LiveClassLayout data={data} />
       <div className="text-center mb-6">
         {hascycleDatas ? (
           <h3 className="text-2xl md:text-5xl font-bold text-center text-blue-500 mb-8">
@@ -41,23 +45,22 @@ function CourseContent() {
           </h3>
         ) : (
           <h3 className="text-2xl md:text-5xl font-bold text-center text-blue-700 mb-8">
-            Course Details
+            কোর্সের বিস্তারিত
           </h3>
         )}
       </div>
       <div className="text-center mb-6">
         <h2 className="text-xl md:text-3xl font-bold text-center text-blue-500 mt-7 md:mb-3 mb-1">
-          Available Cycles
+          অধ্যায় ভিত্তিক সাইকেলের তালিকা
         </h2>
         <p className="text-xs md:text-lg text-gray-600 dark:text-gray-300 max-w-lg mx-auto">
-          Explore the cycles available in the course and find the perfect fit
-          for your academic path.
+          কোর্সে থাকা সাইকেলগুলো দেখে নেও এবং নিজের জন্য উপযুক্তটি বেছে নেও
         </p>
       </div>
       <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-8 mx-5">
         {cycleDatas?.length === 0 && !archiveData ? (
           <p className="text-green-600 text-lg font-semibold col-span-full text-center">
-            Archive will be available soon ...
+            আর্কাইভ খুব শীঘ্রই আপডেট করা হবে...
           </p>
         ) : (
           <>

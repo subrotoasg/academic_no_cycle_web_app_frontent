@@ -28,8 +28,8 @@ const NoticeCarousel = ({ courseId }) => {
   const notices = filteredNotices;
   return (
     <div className="w-full mt-3 md:mt-5 px-2 md:px-4 ">
-      <h2 className="text-xl md:text-3xl font-bold text-center text-indigo-500 my-3 md:my-5">
-        Announcements
+      <h2 className="text-xl md:text-3xl font-bold text-center text-indigo-500 my-3 md:my-8">
+        তোমার শিক্ষকের বার্তা
       </h2>
       <Carousel
         showArrows={true}

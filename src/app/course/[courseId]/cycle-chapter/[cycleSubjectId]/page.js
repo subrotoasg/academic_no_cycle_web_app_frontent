@@ -39,7 +39,7 @@ function CycleSubjectBasedChapter() {
   if (error) {
     return (
       <div className="text-center text-red-500 mt-26">
-        Failed to load chapters. Please try again later.
+        দুঃখিত! ডেটা লোড করা যায় নি। অনুগ্রহ করে কিছুক্ষণ পর আবার চেষ্টা করো
       </div>
     );
   }
@@ -52,12 +52,12 @@ function CycleSubjectBasedChapter() {
       <div className="w-full">
         {!Array.isArray(subjectChapters) || subjectChapters.length === 0 ? (
           <div className="text-center text-lg text-gray-500 mt-2 md:mt-10">
-            No chapters available yet.
+            কোনো অধ্যায় এই মুহুর্তে নেই
           </div>
         ) : (
           <>
             <h3 className="md:text-2xl font-semibold text-center my-7 md:mb-6 text-indigo-500">
-              Available Chapters
+              কোর্সের অধ্যায় গুলো দেখো
             </h3>{" "}
             <div className="flex flex-wrap justify-center gap-4 md:gap-8">
               {subjectChapters?.map((chapter) => (

@@ -43,7 +43,7 @@ function Subject() {
   if (error) {
     return (
       <div className="text-center text-red-500 mt-26">
-        Failed to load Subject. Please try again later.
+        দুঃখিত! ডেটা লোড করা যায় নি। অনুগ্রহ করে কিছুক্ষণ পর আবার চেষ্টা করো
       </div>
     );
   }
@@ -59,12 +59,12 @@ function Subject() {
       <div className="w-full">
         {!Array.isArray(cycleSubjects) || cycleSubjects.length === 0 ? (
           <div className="text-center text-lg text-gray-500 mt-2 md:mt-10">
-            No Subject available yet.
+            কোনো সাবজেক্ট পাওয়া যায় নি। দুঃখিত!
           </div>
         ) : (
           <>
             <h3 className="md:text-2xl font-semibold text-center my-7 md:my-5 text-indigo-500">
-              Available Subjects
+              কোর্সের সাবজেক্ট গুলো দেখো
             </h3>{" "}
             <div className="flex flex-wrap justify-center gap-4 md:gap-8">
               {cycleSubjects?.map((subject) => (
