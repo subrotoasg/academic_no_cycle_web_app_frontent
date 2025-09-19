@@ -39,7 +39,7 @@ function Class() {
   {
     isError && (
       <div className="text-center py-20 text-lg font-medium text-red-500">
-        Failed to load chapter data, please try again.
+        দুঃখিত! ডেটা লোড করা যায় নি। অনুগ্রহ করে কিছুক্ষণ পর আবার চেষ্টা করো
       </div>
     );
   }
@@ -65,7 +65,7 @@ function Class() {
             </>
           ) : (
             <p className="text-center text-lg font-semibold text-gray-500">
-              No classes available for this chapter.
+              দুঃখিত! এই অধ্যায়ের মধ্যে এখনো কোনো ক্লাস আপলোড করা হয় নি
             </p>
           )}
           <UploadingClass cycleSubjectChapterId={cycleSubjectChapterId} />

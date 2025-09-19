@@ -36,7 +36,7 @@ const VideoCarousel = ({ videos, title, setSelectedClass }) => {
     <div className="my-8 px-4">
       <div className="container mx-auto">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">
+          <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-blue-500 ">
             {title}
           </h2>
           {videos?.length > 0 && (

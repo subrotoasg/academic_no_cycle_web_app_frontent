@@ -87,7 +87,7 @@ function StudentDashboard() {
           {/* Available Courses */}
           <div className="mt-8">
             <h2 className="text-2xl font-semibold mb-4 text-center">
-              Available Courses
+              আপনার জন্য কোর্সসমূহ
             </h2>
             <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-4 md:py-8 p-4">
               {mergedCourses?.map((course) => (
@@ -103,9 +103,18 @@ function StudentDashboard() {
 
           {/* Enrolled Courses */}
           <div className="mb-12">
-            <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-white text-center md:mb-5 mb-2 md:text-left md:pl-4">
-              Enrolled Courses
-            </h2>
+            {/* <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-white text-center md:mb-5 mb-2 md:text-left md:pl-4">
+              আমার কোর্সসমূহ
+            </h2> */}
+            {mergedCourses?.filter((course) => course.isEnrolled).length >
+              0 && (
+              <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-blue-500  text-center md:mb-5 mb-2 md:text-left md:pl-4">
+                {mergedCourses.filter((course) => course.isEnrolled).length ===
+                1
+                  ? "আমার কোর্স"
+                  : "আমার কোর্সসমূহ"}
+              </h2>
+            )}
             <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-4">
               {mergedCourses
                 ?.filter((course) => course.isEnrolled)
@@ -120,8 +129,8 @@ function StudentDashboard() {
 
           {/* Available Courses */}
           <div>
-            <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-white text-center md:mb-5 mb-2 md:text-left md:pl-4">
-              Available Courses
+            <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-blue-500  text-center md:mb-5 mb-2 md:text-left md:pl-4 ">
+              কোর্সগুলো শুরু করো এখনই
             </h2>
             <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-4">
               {mergedCourses

@@ -59,10 +59,6 @@ const CourseFeature = () => {
     <>
       <LiveClassLayout data={data} />
       <div className="container mx-auto p-2">
-        {/* <h2 className="text-xl md:text-3xl font-bold text-center text-blue-500 mb-8">
-          Your Available Courses
-        </h2> */}
-
         <div className="flex flex-wrap justify-center gap-3 mb-8">
           {subCategories?.map((cat) => (
             <button
