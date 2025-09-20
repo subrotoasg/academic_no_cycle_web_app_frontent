@@ -2,16 +2,33 @@
 
 import React from "react";
 import NoticeCarousel from "./NoticeCarousel";
-import { useGetNoticeRoutinesByCourseIdQuery } from "@/redux/services/noticeRoutineApi";
+import {
+  useGetNoticeRoutinesByCourseIdQuery,
+  useGetNoticeRoutinesByCycleCourseIdQuery,
+} from "@/redux/services/noticeRoutineApi";
 import Loading from "@/app/loading";
 import Marquee from "react-fast-marquee";
 import "animate.css";
 import LoadingData from "../common/LoadingData";
 
-const NoticeBoard = ({ courseId }) => {
-  const { data: notices, isLoading } = useGetNoticeRoutinesByCourseIdQuery({
-    courseId,
-  });
+const NoticeBoard = ({ id, type = "course" }) => {
+  // const { data: notices, isLoading } = useGetNoticeRoutinesByCourseIdQuery({
+  //   courseId,
+  // });
+  const { data: courseNotices, isLoading: isCourseLoading } =
+    useGetNoticeRoutinesByCourseIdQuery(
+      { courseId: id },
+      { skip: type !== "course" }
+    );
+
+  const { data: cycleNotices, isLoading: isCycleLoading } =
+    useGetNoticeRoutinesByCycleCourseIdQuery(
+      { courseId: id },
+      { skip: type !== "cycle" }
+    );
+
+  const notices = type === "course" ? courseNotices : cycleNotices;
+  const isLoading = type === "course" ? isCourseLoading : isCycleLoading;
   // console.log(notices);
   const today = new Date();
 

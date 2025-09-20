@@ -16,7 +16,6 @@ import CourseEnrolledPill from "../admin/utilities/CourseEnrolledPill";
 
 export default function CycleCard(params) {
   const cycle = params?.cycle;
-  console.log(cycle);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const permalink = cycle?.course?.Permalink || "https://www.apars.shop/shop/";
   const user = useSelector(currentUser);

@@ -46,6 +46,15 @@ const courseApiServices = baseApi.injectEndpoints({
         { type: tagTypesValue.COURSE, id: courseId },
       ],
     }),
+    getArchivedCycleById: builder.query({
+      query: (cycleId) => ({
+        url: `/cycle/get-all/archive-cycles/${cycleId}`,
+        method: "GET",
+      }),
+      providesTags: (result, error, cycleId) => [
+        { type: tagTypesValue.COURSE, id: cycleId },
+      ],
+    }),
   }),
 });
 
@@ -53,6 +62,7 @@ export const {
   useGetCourseByIdQuery,
   useGetAllCourseQuery,
   useGetArchivedCourseByIdQuery,
+  useGetArchivedCycleByIdQuery,
 } = courseApiServices;
 
 export default courseApiServices;

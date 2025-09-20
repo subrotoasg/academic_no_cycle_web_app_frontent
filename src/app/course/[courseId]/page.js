@@ -101,10 +101,10 @@ function CourseContent() {
       </div>
 
       <div className="my-8 md:my-14">
-        <NoticeBoard courseId={courseId} />
+        <NoticeBoard id={courseId} type="course" />
       </div>
       <div className="my-10 md:my-14">
-        <Featured courseId={courseId} />
+        <Featured id={courseId} type="course" />
       </div>
     </div>
   );
