@@ -29,7 +29,7 @@ const NoticeCarousel = ({ notices }) => {
   // const notices = filteredNotices;
   return (
     // <div className="w-full mt-3 md:mt-5 px-2 md:px-4 ">
-    <div className="w-full mx-auto max-w-4xl mt-3 md:mt-5">
+    <div className="w-full mx-auto max-w-7xl mt-3 md:mt-5">
       {/* <h2 className="text-xl md:text-3xl font-bold text-center text-indigo-500 my-3 md:my-8">
         তোমার শিক্ষকের বার্তা
       </h2> */}
@@ -46,7 +46,7 @@ const NoticeCarousel = ({ notices }) => {
             <p className="p-2 font-medium text-xs md:text-lg dark:text-white">
               {notice.title}
             </p>
-            <div className="w-full h-60 sm:h-72 md:h-96 lg:h-[500px] xl:h-[600px] bg-black flex items-center justify-center rounded-2xl overflow-hidden">
+            <div className="w-full h-60 sm:h-72 md:h-96 lg:h-[520px] xl:h-[610px] bg-black flex items-center justify-center rounded-2xl overflow-hidden">
               <Image
                 src={notice?.image || "/img/aparsLogo.jpg"}
                 alt={`Notice ${index + 1}`}

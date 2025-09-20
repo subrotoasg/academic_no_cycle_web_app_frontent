@@ -18,7 +18,7 @@ const CourseSimpleCard = (params) => {
     <Card
       sx={{
         maxWidth: 345,
-        height: 380,
+        height: 360,
         borderRadius: 2,
         overflow: "hidden",
         boxShadow: 3,
@@ -44,7 +44,7 @@ const CourseSimpleCard = (params) => {
             sx={{
               objectFit: "fill",
               width: "100%",
-              height: 180,
+              height: 170,
               backgroundColor: "#f5f5f5",
             }}
             image={imageUrl}

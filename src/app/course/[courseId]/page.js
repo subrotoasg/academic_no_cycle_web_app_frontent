@@ -7,10 +7,7 @@ import { useGetArchivedCourseByIdQuery } from "@/redux/services/courseApi";
 import ArchiveCourseCard from "@/components/cards/ArchiveCard";
 import { useGetAllCourseCycleBasedOnCourseIdQuery } from "@/redux/services/cycleApi";
 import CycleCard from "@/components/cards/CycleCard";
-import { useGetMeQuery } from "@/redux/services/userInfoApi";
 import LoadingData from "@/components/common/LoadingData";
-import NoticeCarousel from "@/components/notice/NoticeCarousel";
-import NoticeMarque from "@/components/notice/NoticeMarque";
 import { useGetAllLiveClassQuery } from "@/redux/services/liveClassApi";
 import LiveClassLayout from "@/components/liveClass/LiveClassLayout";
 
@@ -52,13 +49,14 @@ function CourseContent() {
 
       <div className="text-center mb-6">
         <h2 className="text-xl md:text-3xl font-bold text-center text-blue-500 mt-7 md:mb-3 mb-1">
-          অধ্যায় ভিত্তিক সাইকেলের তালিকা
+          {/* কোর্স ভিত্তিক সাইকেলের তালিকা */}
+          Available Cycle Courses
         </h2>
         <p className="text-xs md:text-lg text-gray-600 dark:text-gray-300 max-w-lg mx-auto">
-          {/* কোর্সে থাকা সাইকেলগুলো দেখে নাও এবং পছন্দের কোর্সটিতে এখনই ভর্তি হয়ে
-          আপনার শেখার যাত্রা শুরু করুন। */}
-          সাইকেলভিত্তিক কোর্সগুলো দেখুন এবং আপনার একাডেমিক যাত্রার জন্য সবচেয়ে
-          উপযুক্ত কোর্সটিতে এখনই এনরোল হয়ে নিন।
+          {/* কোর্সগুলো দেখুন এবং আপনার একাডেমিক যাত্রার জন্য সবচেয়ে উপযুক্ত
+          কোর্সটিতে এখনই এনরোল করুন */}
+          Explore the cycles available in the course and find the perfect fit
+          for your academic learning path.
         </p>
       </div>
 
@@ -101,6 +99,7 @@ function CourseContent() {
           ))
         )}
       </div>
+
       <div className="my-8 md:my-14">
         <NoticeBoard courseId={courseId} />
       </div>

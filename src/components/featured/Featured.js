@@ -1,12 +1,18 @@
 "use client";
 import React, { useEffect } from "react";
 import FeaturedCard from "../cards/FeaturedCard";
-import { useGetFeaturesByCycleIdQuery } from "@/redux/services/featuredApi";
+import {
+  useGetFeaturesByCourseIdQuery,
+  useGetFeaturesByCycleIdQuery,
+} from "@/redux/services/featuredApi";
 
 import "aos/dist/aos.css";
 
 const Featured = ({ courseId }) => {
-  const { data: featureData, isLoading } = useGetFeaturesByCycleIdQuery({
+  // const { data: featureData, isLoading } = useGetFeaturesByCycleIdQuery({
+  //   courseId,
+  // });
+  const { data: featureData, isLoading } = useGetFeaturesByCourseIdQuery({
     courseId,
   });
 
