@@ -112,7 +112,7 @@ const VideoCarousel = ({ videos, title, setSelectedClass }) => {
             }}
             loop={true}
             pagination={{ clickable: true }}
-            scrollbar={{ draggable: true }}
+            // scrollbar={{ draggable: true }}
             className="pb-12"
             onReachBeginning={() => {
               document

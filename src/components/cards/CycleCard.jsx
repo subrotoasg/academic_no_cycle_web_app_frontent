@@ -17,14 +17,15 @@ import CourseEnrolledPill from "../admin/utilities/CourseEnrolledPill";
 export default function CycleCard(params) {
   const cycle = params?.cycle;
   const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const permalink = cycle?.course?.Permalink;
+  const permalink = cycle?.course?.Permalink || "https://www.apars.shop/shop/";
   const user = useSelector(currentUser);
   const isEnrolled = cycle?.isEnrolled;
   const isAdmin = user?.role === "admin";
 
   const handleCardClick = () => {
     if (isEnrolled || isAdmin) {
-      window.location.href = `/course/${course?.id}` || "/";
+      window.location.href =
+        `/course/${cycle?.course?.id}/subject/${cycle?.id}` || "/";
     } else if (permalink) {
       window.open(permalink, "_blank");
     }
@@ -32,14 +33,14 @@ export default function CycleCard(params) {
   return (
     <>
       <Card
-        // sx={{ maxWidth: 345, height: 320 }}
+        sx={{ maxWidth: 345, height: 380 }}
         className="transition-all duration-300 ease-out hover:scale-[1.01] hover:shadow-xl hover:-translate-y-1 rounded-2xl flex flex-col justify-between cursor-pointer"
         onClick={handleCardClick}
       >
         <div style={{ position: "relative" }}>
           <CardMedia
             component="img"
-            sx={{ objectFit: "fill", width: "100%", height: 150 }}
+            sx={{ objectFit: "fill", width: "100%", height: 170 }}
             image={cycle?.cycleImage || "/img/aparsLogo.jpg"}
             title={cycle?.productFullName || "Course Image"}
           />

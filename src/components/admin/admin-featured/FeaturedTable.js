@@ -19,6 +19,7 @@ export function FeaturedTable({
   handleFeatureEditModal,
   handleFeatureInfoModal,
 }) {
+  console.log(features);
   return (
     <div className="overflow-x-auto mb-6">
       <Table className="min-w-full border border-gray-100 text-center">
@@ -29,6 +30,9 @@ export function FeaturedTable({
             </TableHead>
             <TableHead className="text-center border text-sm md:text-base">
               Title
+            </TableHead>
+            <TableHead className="text-center text-sm md:text-base border">
+              Cycle
             </TableHead>
             <TableHead className="text-center border text-sm md:text-base">
               Type
@@ -50,13 +54,13 @@ export function FeaturedTable({
 
         <TableBody>
           {features?.length > 0 ? (
-            features.map((feature) => (
+            features?.map((feature) => (
               <TableRow key={feature?.id}>
                 <TableCell className="text-center border">
                   <Image
                     src={
-                      feature?.image && feature.image.trim() !== ""
-                        ? feature.image
+                      feature?.image && feature?.image?.trim() !== ""
+                        ? feature?.image
                         : featureImg
                     }
                     alt={feature?.title || "Featured image"}
@@ -67,6 +71,9 @@ export function FeaturedTable({
                 </TableCell>
                 <TableCell className="text-center border">
                   {feature?.title}
+                </TableCell>
+                <TableCell className="text-center border">
+                  {feature?.cycle ? feature.cycle.title : "N/A"}
                 </TableCell>
                 <TableCell className="text-center border">
                   {feature?.type}

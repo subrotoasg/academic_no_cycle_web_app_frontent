@@ -5,34 +5,33 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { MoveLeft } from "lucide-react";
 import LoadingData from "@/components/common/LoadingData";
 import CycleSubjectCard from "@/components/cards/CycleSubjectCard";
-import { useGetSubjectsByCycleIdQuery } from "@/redux/services/cycleSubjectApi";
 import NoticeMarque from "@/components/notice/NoticeMarque";
 import NoticeCarousel from "@/components/notice/NoticeCarousel";
 import Featured from "@/components/featured/Featured";
+import NoticeBoard from "@/components/notice/NoticeBoard";
+import { useGetSubjectsByCycleIdQuery } from "@/redux/services/cycleSubjectApi";
+import { useGetArchivedCycleByIdQuery } from "@/redux/services/courseApi";
+import ArchiveCourseCard from "@/components/cards/ArchiveCard";
 
 function Subject() {
   const params = useParams();
   const router = useRouter();
-  const cycleBasedSubjectId = params?.cycleId;
+  const cycleId = params?.cycleId;
+
   const {
     data: cycleBasedSubjectData,
     isLoading,
     error,
-  } = useGetSubjectsByCycleIdQuery(cycleBasedSubjectId, {
-    skip: !cycleBasedSubjectId,
+  } = useGetSubjectsByCycleIdQuery(cycleId, {
+    skip: !cycleId,
   });
-  const cycleSubjects = cycleBasedSubjectData?.data;
-  const courseName =
-    cycleSubjects && cycleSubjects.length > 0
-      ? cycleSubjects?.[0].cycle?.course?.productName
-      : "";
 
-  const cycleId =
-    cycleSubjects && cycleSubjects.length > 0
-      ? cycleSubjects?.[0]?.cycle?.id
-      : "";
+  const { data: archiveData, isLoading: isArchiveLoading } =
+    useGetArchivedCycleByIdQuery(cycleId, {
+      skip: !cycleId,
+    });
 
-  if (isLoading || !cycleBasedSubjectId) {
+  if (isLoading || isArchiveLoading || !cycleId) {
     return (
       <div className="mt-20">
         <LoadingData />
@@ -42,49 +41,68 @@ function Subject() {
 
   if (error) {
     return (
-      <div className="text-center text-red-500 mt-26">
-        দুঃখিত! ডেটা লোড করা যায় নি। অনুগ্রহ করে কিছুক্ষণ পর আবার চেষ্টা করো
-      </div>
+      <div className="text-center text-red-500 mt-26">Failed to laod data</div>
     );
   }
+
+  const cycleSubjects = cycleBasedSubjectData?.data || [];
+  const hasSubjects = cycleSubjects.length > 0;
+
+  const courseTitle = hasSubjects
+    ? `${cycleSubjects?.[0].cycle?.course?.productName} (${cycleSubjects?.[0].cycle?.title})`
+    : "Cycle Course Details";
+
   return (
     <div className="mt-24 mx-5 mb-5">
-      <NoticeMarque courseId={cycleId} />
+      {/* <NoticeMarque courseId={cycleId} /> */}
       <div className="text-center">
-        <h1 className="pt-3 text-center font-bold text-2xl sm:text-3xl text-blue-500">
-          {courseName}
+        <h1 className="text-2xl md:text-5xl font-bold text-center text-blue-500 mb-8">
+          {courseTitle}
         </h1>
       </div>
 
-      <div className="w-full">
-        {!Array.isArray(cycleSubjects) || cycleSubjects.length === 0 ? (
-          <div className="text-center text-lg text-gray-500 mt-2 md:mt-10">
-            কোনো সাবজেক্ট পাওয়া যায় নি। দুঃখিত!
-          </div>
+      <div className="text-center mb-6">
+        <h2 className="text-xl md:text-3xl font-bold text-center text-blue-500 my-10">
+          Available Subjects
+        </h2>
+        <p className="text-xs md:text-lg text-gray-600 dark:text-gray-300 mt-2">
+          Explore the subjects in this course and find the right path for your
+          preparation
+        </p>
+      </div>
+
+      {/* Subjects & Archive */}
+      <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-8 mx-5">
+        {cycleSubjects.length === 0 && !archiveData ? (
+          <p className="text-green-600 text-lg font-semibold col-span-full text-center">
+            Archive will be available soon ...
+          </p>
         ) : (
           <>
-            <h3 className="md:text-2xl font-semibold text-center my-7 md:my-5 text-indigo-500">
-              কোর্সের সাবজেক্ট গুলো দেখো
-            </h3>{" "}
-            <div className="flex flex-wrap justify-center gap-4 md:gap-8">
-              {cycleSubjects?.map((subject) => (
-                <CycleSubjectCard key={subject.id} subject={subject} />
-              ))}
-            </div>
-            {/* <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 justify-center gap-4 md:gap-7 items-center">
-              {cycleSubjects?.map((subject) => (
-                <CycleSubjectCard key={subject.id} subject={subject} />
-              ))}
-            </div> */}
+            {cycleSubjects.map((subject) => (
+              <div
+                key={subject.id}
+                className="transition-transform transform hover:scale-105"
+              >
+                <CycleSubjectCard subject={subject} />
+              </div>
+            ))}
+            {archiveData?.data && (
+              <div className="transition-transform transform hover:scale-105">
+                <ArchiveCourseCard archiveData={archiveData} />
+              </div>
+            )}
           </>
         )}
       </div>
-      <div className="my-4 md:my-8">
-        <NoticeCarousel courseId={cycleId} />
+
+      <div className="my-10 md:my-20">
+        <NoticeBoard id={cycleId} type="cycle" />
       </div>
-      <div className="my-10">
-        <Featured courseId={cycleId} />
+      <div className="my-10 md:my-20">
+        <Featured id={cycleId} type="cycle" />
       </div>
+
       <div className="text-center my-10 md:my-14">
         <button
           onClick={() => router.back()}

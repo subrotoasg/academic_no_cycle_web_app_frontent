@@ -8,28 +8,34 @@ import { FeaturedTable } from "./FeaturedTable";
 import FeaturedInfoEditDialog from "./FeaturedInfoEditDialog";
 import Swal from "sweetalert2";
 import Loading from "../utilities/Loading";
-import { useSelector } from "react-redux";
 import {
   useDeleteFeaturedMutation,
   useGetFeaturesByCourseIdQuery,
 } from "@/redux/services/featuredApi";
-import { selectAllCourses } from "@/redux/Features/courseInfo";
 import CourseSelect from "@/components/form/CourseSelect";
 import LoadingData from "@/components/common/LoadingData";
+import { useGetAllCourseQuery } from "@/redux/services/courseApi";
 
 export function FeaturedList() {
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const [selectedCourseId, setSelectedCourseId] = useState("");
-  const courses = useSelector(selectAllCourses);
+  // const courses = useSelector(selectAllCourses);
   const [selectedFeature, setSelectedFeature] = useState(null);
   const [featureInfoModalOpen, setFeatureInfoModalOpen] = useState(false);
   const [featureEditModalOpen, setFeatureEditModalOpen] = useState(false);
 
+  const {
+    data: courseData,
+    isLoading: isCourseLoading,
+    isError: isCourseError,
+  } = useGetAllCourseQuery({ limit: 1000 });
+  const courses = courseData?.data;
+
   useEffect(() => {
     if (courses?.data?.length > 0 && !selectedCourseId) {
-      setSelectedCourseId(courses.data[0].id);
+      setSelectedCourseId(courses?.data[0]?.id);
     }
   }, [courses, selectedCourseId]);
 
@@ -117,20 +123,45 @@ export function FeaturedList() {
       <p className="text-xs md:text-sm text-muted-foreground text-center mt-2">
         View, edit, or delete featured content, discounts, and offers.
       </p>
-      <CourseSelect
+
+      {/* <CourseSelect
         label="Select Course"
         courses={courses?.data}
         selectedCourseId={selectedCourseId}
         onChange={setSelectedCourseId}
-      />
+      /> */}
 
-      <div className="p-2">
-        <SearchBar
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          placeholder="Search by Feature Title..."
-        />
+      <div className="grid grid-cols-1 gap-4">
+        {isCourseLoading && (
+          <div className="flex justify-center py-6">
+            <LoadingData />
+          </div>
+        )}
+
+        {isCourseError && !isCourseLoading && (
+          <div className="text-center text-red-500 py-4">
+            Failed to load courses
+          </div>
+        )}
+
+        {!isCourseLoading && !isCourseError && (
+          <>
+            {courses?.data?.length > 0 ? (
+              <CourseSelect
+                label="Select Course"
+                courses={courses?.data}
+                selectedCourseId={selectedCourseId}
+                onChange={setSelectedCourseId}
+              />
+            ) : (
+              <div className="text-center text-gray-500 py-4">
+                No courses available
+              </div>
+            )}
+          </>
+        )}
       </div>
+
       {(isLoading || isFetching) && (
         <div className="w-full flex justify-center py-8">
           <LoadingData />
@@ -143,14 +174,21 @@ export function FeaturedList() {
         </div>
       )}
 
-      {!(isLoading || isFetching) && !isError && (
+      {!(isLoading || isFetching) && !isError && selectedCourseId && (
         <>
-          {!selectedCourseId || sortedFeatures.length === 0 ? (
+          {sortedFeatures?.length === 0 ? (
             <div className="text-center text-gray-500 py-4">
               No Features Found
             </div>
           ) : (
             <>
+              <div className="p-2">
+                <SearchBar
+                  searchQuery={searchQuery}
+                  setSearchQuery={setSearchQuery}
+                  placeholder="Search by Feature Title..."
+                />
+              </div>
               <FeaturedTable
                 features={sortedFeatures}
                 handleDelete={handleFeatureDelete}

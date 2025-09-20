@@ -62,7 +62,7 @@ export default function LiveClassForm() {
     : isCourseError
     ? [{ label: "Failed to load courses", value: "" }]
     : courseData?.data?.data?.length
-    ? courseData?.data?.data.map((course) => ({
+    ? courseData?.data?.data?.map((course) => ({
         label: `${course?.productFullName} (${course?.productName})`,
         value: course?.id,
       }))
@@ -125,7 +125,7 @@ export default function LiveClassForm() {
     : isChapterError
     ? [{ label: "Failed to load chapters", value: "" }]
     : chapters?.data?.length
-    ? chapters.data.map((ch) => ({
+    ? chapters?.data?.map((ch) => ({
         label: ch?.chapter?.chapterName,
         value: ch?.id,
       }))
@@ -241,7 +241,6 @@ export default function LiveClassForm() {
           label="Class Title"
           name="title"
           placeholder="Enter class title"
-          // rules={{ required: "Class title is required" }}
           rules={{
             required: "Class title is required",
             minLength: {
@@ -273,7 +272,6 @@ export default function LiveClassForm() {
               message: "Description must be at least 5 characters long",
             },
           }}
-          // required
         />
         <Dropdown
           label="Instructor"

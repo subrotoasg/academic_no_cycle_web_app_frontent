@@ -54,12 +54,12 @@ export default function NoticeInfoEditDialog({
   useEffect(() => {
     if (notice) {
       reset({
-        course: notice.course?.productName || "",
-        type: notice.type || "",
-        title: notice.title || "",
-        description: notice.description || "",
-        startTime: formatLocalDateTime(notice.startTime),
-        endTime: formatLocalDateTime(notice.endTime),
+        course: notice?.course?.productName || "",
+        type: notice?.type || "",
+        title: notice?.title || "",
+        description: notice?.description || "",
+        startTime: formatLocalDateTime(notice?.startTime),
+        endTime: formatLocalDateTime(notice?.endTime),
         // url: notice.url || "",
       });
 

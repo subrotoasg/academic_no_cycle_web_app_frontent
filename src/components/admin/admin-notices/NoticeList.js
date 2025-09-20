@@ -135,7 +135,7 @@ export function NoticeList() {
 
         {isCourseError && !isCourseLoading && (
           <div className="text-center text-red-500 py-4">
-            Failed to load courses.
+            Failed to load courses
           </div>
         )}
 
@@ -171,7 +171,7 @@ export function NoticeList() {
 
       {!(isLoading || isFetching) && !isError && selectedCourseId && (
         <>
-          {sortedNotices.length === 0 ? (
+          {sortedNotices?.length === 0 ? (
             <div className="text-center text-gray-500 py-4">
               No Notice Found
             </div>

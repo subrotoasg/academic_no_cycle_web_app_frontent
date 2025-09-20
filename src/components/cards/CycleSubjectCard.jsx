@@ -3,38 +3,53 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import Card from "@mui/material/Card";
+import { CardActionArea, CardContent, Typography } from "@mui/material";
 
 function CycleSubjectCard({ subject }) {
   const imageUrl =
     subject?.cycleSubjectImage ||
     subject?.subject?.subjectImage ||
     "/img/aparsLogo.jpg";
+  const title = subject?.subject?.title;
   const courseId = subject?.cycle?.course?.id;
   return (
-    <Link
-      href={{
-        pathname: `/course/${courseId}/cycle-chapter/${subject?.id}`,
-        query: {
-          title: subject?.subject?.title,
+    <Card
+      sx={{
+        maxWidth: 345,
+        transition: "transform 0.3s",
+        "&:hover": {
+          transform: "scale(1.01)",
         },
       }}
-      className="block rounded-xl overflow-hidden shadow-md hover:scale-102 bg-gray-600 md:w-1/3 lg:w-1/4 w-full"
+      className="rounded-3xl mx-auto"
     >
-      <div className="p-2">
-        <h3 className="text-xl font-semibold text-white ">
-          {subject?.subject?.title}
-        </h3>
-      </div>
-      <div className="relative w-full h-48">
-        <Image
-          src={imageUrl}
-          alt={subject?.subject?.title || "subject image"}
-          layout="fill"
-          loading="lazy"
-          className="object-fit rounded-b-xl"
-        />
-      </div>
-    </Link>
+      <Link
+        href={{
+          pathname: `/course/${courseId}/cycle-chapter/${subject?.id}`,
+          query: {
+            title,
+          },
+        }}
+        passHref
+      >
+        <CardActionArea component="div" sx={{ height: "100%" }}>
+          <div className="relative w-full h-[185px] bg-gray-100">
+            <Image
+              src={imageUrl}
+              alt={title || "Subject image"}
+              fill
+              className="object-fill"
+            />
+          </div>
+          <CardContent>
+            <Typography gutterBottom variant="h6" component="div">
+              {title}
+            </Typography>
+          </CardContent>
+        </CardActionArea>
+      </Link>
+    </Card>
   );
 }
 

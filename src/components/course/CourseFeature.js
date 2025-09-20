@@ -59,6 +59,9 @@ const CourseFeature = () => {
     <>
       <LiveClassLayout data={data} />
       <div className="container mx-auto p-2">
+        <h2 className="text-2xl md:text-3xl font-bold text-center text-blue-500 mb-8">
+          Available Courses
+        </h2>
         <div className="flex flex-wrap justify-center gap-3 mb-8">
           {subCategories?.map((cat) => (
             <button
@@ -85,7 +88,7 @@ const CourseFeature = () => {
           ))}
         </div>
 
-        <div className="grid gap-x-3 gap-y-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 py-4 md:py-6 p-4 justify-center">
+        <div className="grid gap-x-3 gap-y-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-4 md:py-6 p-4 justify-center">
           {filteredCourses?.map((course) => (
             <div key={course.id}>
               <CourseSimpleCard course={course} />

@@ -43,15 +43,15 @@ export default function FeaturedInfoEditDialog({
   useEffect(() => {
     if (featured) {
       reset({
-        title: featured.title || "",
-        type: featured.type || "",
-        description: featured.description || "",
-        coupne: featured.coupne || "",
-        // link: featured.url || "",
+        title: featured?.title || "",
+        type: featured?.type || "",
+        description: featured?.description || "",
+        coupne: featured?.coupne || "",
+        // link: featured?.url || "",
       });
 
-      setImagePreview(featured.image || null);
-      setSelectedFile(featured.image || null);
+      setImagePreview(featured?.image || null);
+      setSelectedFile(featured?.image || null);
     }
   }, [featured, reset]);
 
