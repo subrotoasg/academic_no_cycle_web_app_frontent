@@ -3,12 +3,12 @@ import React from "react";
 import Link from "next/link";
 import {
   Card,
-  CardActionArea,
   CardContent,
   CardMedia,
   Typography,
   Chip,
   Box,
+  Tooltip,
 } from "@mui/material";
 
 const CourseSimpleCard = (params) => {
@@ -17,8 +17,9 @@ const CourseSimpleCard = (params) => {
   return (
     <Card
       sx={{
-        maxWidth: 360,
-        borderRadius: 4,
+        maxWidth: 345,
+        height: 380,
+        borderRadius: 2,
         overflow: "hidden",
         boxShadow: 3,
         bgcolor: "background.paper",
@@ -37,33 +38,47 @@ const CourseSimpleCard = (params) => {
         }}
         passHref
       >
-        <CardActionArea sx={{ height: "100%" }}>
-          {/* Course Image */}
+        <div style={{ position: "relative" }}>
           <CardMedia
             component="img"
-            image={imageUrl}
-            height="300"
-            alt={course?.productFullName}
             sx={{
               objectFit: "fill",
               width: "100%",
-              height: 220,
+              height: 180,
               backgroundColor: "#f5f5f5",
             }}
+            image={imageUrl}
+            title={course?.productFullName || "Course Image"}
+            alt={course?.productFullName}
           />
+        </div>
 
-          {/* Content */}
-          <CardContent>
+        {/* Content */}
+        <CardContent>
+          <Tooltip title={course?.productFullName || ""} arrow>
             <Typography
               variant="h6"
               component="div"
               gutterBottom
-              sx={{ fontWeight: 600, fontSize: 14, mb: 2 }}
+              className="line-clamp-3 cursor-help"
+              sx={{
+                display: "-webkit-box",
+                WebkitBoxOrient: "vertical",
+                WebkitLineClamp: 3,
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                height: 75,
+                fontWeight: 500,
+                fontSize: 16.5,
+                mb: 1,
+              }}
             >
               {course?.productFullName}
             </Typography>
+          </Tooltip>
 
-            {/* Category + SubCategory */}
+          {/* Category + SubCategory */}
+          <div className="flex gap-1 items-center mt-3">
             <Box
               sx={{
                 display: "flex",
@@ -87,33 +102,32 @@ const CourseSimpleCard = (params) => {
                 />
               )}
             </Box>
+          </div>
 
-            {/* Enrollment Status */}
-            <Box
+          {/* Enrollment Status */}
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 2,
+            }}
+          >
+            <Typography
+              variant="body2"
               sx={{
-                display: "flex",
-                // justifyContent: "center",
-                flexWrap: "wrap",
-                gap: 2,
+                color: "success.main",
+                fontWeight: 500,
               }}
             >
-              <Typography
-                variant="body2"
-                sx={{
-                  color: "success.main",
-                  fontWeight: 500,
-                }}
-              >
-                Enrolled:
-              </Typography>
+              Enrolled:
+            </Typography>
 
-              {/* Student Count */}
-              <Typography variant="caption" color="text.secondary">
-                {course._count?.student ?? 0} Students
-              </Typography>
-            </Box>
-          </CardContent>
-        </CardActionArea>
+            {/* Student Count */}
+            <Typography variant="caption" color="text.secondary">
+              {course?._count?.student ?? 0} Students
+            </Typography>
+          </Box>
+        </CardContent>
       </Link>
     </Card>
   );

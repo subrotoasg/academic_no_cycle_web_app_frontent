@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <div className="py-14 md:py-20">
       <HeaderTitle />
-      <div className="mb-14 mt-5">
+      <div className="my-14 mt-5">
         <CourseFeature />
       </div>
     </div>

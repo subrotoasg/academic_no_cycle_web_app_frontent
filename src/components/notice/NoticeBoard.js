@@ -24,7 +24,7 @@ const NoticeBoard = ({ courseId }) => {
     return endDate >= today;
   });
 
-  if (!notices || filteredNotices.length === 0) {
+  if (!notices || filteredNotices?.length === 0) {
     return null;
   }
   const noticesData = filteredNotices;

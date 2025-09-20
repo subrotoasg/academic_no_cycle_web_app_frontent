@@ -37,7 +37,6 @@ function CourseContent() {
 
   return (
     <div className="container mx-auto mt-20 md:mt-28 p-1">
-      <LiveClassLayout data={data} />
       <div className="text-center mb-6">
         {hascycleDatas ? (
           <h3 className="text-2xl md:text-5xl font-bold text-center text-blue-500 mb-8">
@@ -49,15 +48,21 @@ function CourseContent() {
           </h3>
         )}
       </div>
+      <LiveClassLayout data={data} />
+
       <div className="text-center mb-6">
         <h2 className="text-xl md:text-3xl font-bold text-center text-blue-500 mt-7 md:mb-3 mb-1">
           অধ্যায় ভিত্তিক সাইকেলের তালিকা
         </h2>
         <p className="text-xs md:text-lg text-gray-600 dark:text-gray-300 max-w-lg mx-auto">
-          কোর্সে থাকা সাইকেলগুলো দেখে নেও এবং নিজের জন্য উপযুক্তটি বেছে নেও
+          {/* কোর্সে থাকা সাইকেলগুলো দেখে নাও এবং পছন্দের কোর্সটিতে এখনই ভর্তি হয়ে
+          আপনার শেখার যাত্রা শুরু করুন। */}
+          সাইকেলভিত্তিক কোর্সগুলো দেখুন এবং আপনার একাডেমিক যাত্রার জন্য সবচেয়ে
+          উপযুক্ত কোর্সটিতে এখনই এনরোল হয়ে নিন।
         </p>
       </div>
-      <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-8 mx-5">
+
+      {/* <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-8 mx-5">
         {cycleDatas?.length === 0 && !archiveData ? (
           <p className="text-green-600 text-lg font-semibold col-span-full text-center">
             আর্কাইভ খুব শীঘ্রই আপডেট করা হবে...
@@ -79,6 +84,28 @@ function CourseContent() {
             )}
           </>
         )}
+      </div> */}
+      <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-8 mx-5">
+        {cycleDatas?.length === 0 ? (
+          <p className="text-green-600 text-lg font-semibold col-span-full text-center">
+            No cycle available yet in this course...
+          </p>
+        ) : (
+          cycleDatas?.map((cs) => (
+            <div
+              key={cs.id}
+              className="transition-transform transform hover:scale-105"
+            >
+              <CycleCard cycle={cs} />
+            </div>
+          ))
+        )}
+      </div>
+      <div className="my-8 md:my-14">
+        <NoticeBoard courseId={courseId} />
+      </div>
+      <div className="my-10 md:my-14">
+        <Featured courseId={courseId} />
       </div>
     </div>
   );
