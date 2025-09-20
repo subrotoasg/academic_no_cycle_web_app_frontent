@@ -16,11 +16,11 @@ import Dropdown from "@/components/form/Dropdown";
 import InputField from "@/components/form/InputField";
 import Swal from "sweetalert2";
 import { toast } from "sonner";
-import { useSelector } from "react-redux";
-import { selectAllCourses } from "@/redux/Features/courseInfo";
-import { useGetSubjectsByCourseIdQuery } from "@/redux/services/subjectsApi";
-import { useGetChaptersByCourseSubjectIdQuery } from "@/redux/services/chapterAPi";
 import { useUpdateLiveClassMutation } from "@/redux/services/liveClassApi";
+import { useGetAllCourseQuery } from "@/redux/services/courseApi";
+import { useGetAllCourseCycleBasedOnCourseIdQuery } from "@/redux/services/cycleApi";
+import { useGetCycleSubjectsByCycleIdQuery } from "@/redux/services/cycleSubjectApi";
+import { useGetAllChaptersByCycleSubjectIdQuery } from "@/redux/services/cycleChapterApi";
 
 export default function LiveClassEditDialog({
   isOpen,
@@ -28,9 +28,9 @@ export default function LiveClassEditDialog({
   selectedLiveClass,
   refetchLiveClasses,
 }) {
-  // console.log(selectedLiveClass);
   const defaultValues = {
     courseId: "",
+    cycleId: "",
     subject: "",
     chapter: "",
     title: "",
@@ -41,46 +41,91 @@ export default function LiveClassEditDialog({
 
   const methods = useForm({ defaultValues });
   const { reset, handleSubmit, control, setValue } = methods;
-
   const selectedCourseId = useWatch({ control, name: "courseId" });
+  const selectedCycleId = useWatch({ control, name: "cycleId" });
   const selectedSubjectId = useWatch({ control, name: "subject" });
-
   const [selectedFile, setSelectedFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const fileInputRef = useRef(null);
 
-  const courses = useSelector(selectAllCourses);
-  const courseOptions =
-    courses?.data?.map((course) => ({
-      label: course.productFullName,
-      value: course.id,
-    })) || [];
+  // Courses
+  const {
+    data: courseData,
+    isLoading: isCourseLoading,
+    isError: isCourseError,
+  } = useGetAllCourseQuery({ limit: 1000 });
 
-  const { data: subjects, isLoading: isSubjectLoading } =
-    useGetSubjectsByCourseIdQuery(selectedCourseId, {
-      skip: !selectedCourseId,
-    });
+  const courseOptions = isCourseLoading
+    ? [{ label: "Loading courses...", value: "" }]
+    : isCourseError
+    ? [{ label: "Failed to load courses", value: "" }]
+    : courseData?.data?.data?.length
+    ? courseData?.data?.data?.map((course) => ({
+        label: `${course?.productFullName} (${course?.productName})`,
+        value: course?.id,
+      }))
+    : [{ label: "No courses available", value: "" }];
 
-  const { data: chapters, isLoading: isChapterLoading } =
-    useGetChaptersByCourseSubjectIdQuery(selectedSubjectId, {
-      skip: !selectedSubjectId,
-    });
+  // Cycles
+  const {
+    data: cycleData,
+    isLoading: isCycleLoading,
+    isError: isCycleError,
+  } = useGetAllCourseCycleBasedOnCourseIdQuery(
+    { courseId: selectedCourseId, limit: 100 },
+    { skip: !selectedCourseId }
+  );
+
+  const cycleOptions = isCycleLoading
+    ? [{ label: "Loading cycles...", value: "" }]
+    : isCycleError
+    ? [{ label: "Failed to load cycles", value: "" }]
+    : cycleData?.data?.length
+    ? cycleData?.data?.map((cycle) => ({
+        label: `${cycle?.title} (${cycle?.course?.productName})`,
+        value: cycle?.id,
+      }))
+    : [{ label: "No cycles available", value: "" }];
+
+  // Subjects
+  const {
+    data: subjects,
+    isLoading: isSubjectLoading,
+    isError: isSubjectError,
+  } = useGetCycleSubjectsByCycleIdQuery(
+    { cycleId: selectedCycleId, limit: 100 },
+    { skip: !selectedCycleId }
+  );
 
   const subjectOptions = isSubjectLoading
     ? [{ label: "Loading subjects...", value: "" }]
+    : isSubjectError
+    ? [{ label: "Failed to load subjects", value: "" }]
     : subjects?.data?.length
-    ? subjects.data.map((sub) => ({
-        label: sub.subject.title,
-        value: sub.id,
+    ? subjects?.data?.map((sub) => ({
+        label: sub?.subject?.title,
+        value: sub?.id,
       }))
     : [{ label: "No subjects available", value: "" }];
 
+  // Chapters
+  const {
+    data: chapters,
+    isLoading: isChapterLoading,
+    isError: isChapterError,
+  } = useGetAllChaptersByCycleSubjectIdQuery(
+    { cycleSubjectId: selectedSubjectId, limit: 100 },
+    { skip: !selectedSubjectId }
+  );
+
   const chapterOptions = isChapterLoading
     ? [{ label: "Loading chapters...", value: "" }]
+    : isChapterError
+    ? [{ label: "Failed to load chapters", value: "" }]
     : chapters?.data?.length
-    ? chapters.data.map((ch) => ({
-        label: ch.chapter.chapterName,
-        value: ch.id,
+    ? chapters?.data?.map((ch) => ({
+        label: ch?.chapter?.chapterName,
+        value: ch?.id,
       }))
     : [{ label: "No chapters added yet", value: "" }];
 
@@ -159,7 +204,7 @@ export default function LiveClassEditDialog({
   const onSubmit = async (data) => {
     const formData = new FormData();
     const liveClassInfo = {
-      courseSubjectChapterId: data.chapter,
+      cycleSubjectChapterId: data.chapter,
       title: data.title,
       description: data.description,
       instructor: data.instructor,
@@ -173,7 +218,7 @@ export default function LiveClassEditDialog({
 
     try {
       const res = await updateLiveClass({
-        id: selectedLiveClass.id,
+        id: selectedLiveClass?.id,
         formData,
       }).unwrap();
       if (res?.success) {
@@ -213,7 +258,16 @@ export default function LiveClassEditDialog({
               options={courseOptions}
               rules={{ required: "Course is required" }}
             />
+
             {selectedCourseId && (
+              <Dropdown
+                label="Select Cycle"
+                name="cycleId"
+                options={cycleOptions}
+                rules={{ required: "Cycle is required" }}
+              />
+            )}
+            {selectedCycleId && (
               <Dropdown
                 label="Select Subject"
                 name="subject"
@@ -233,7 +287,6 @@ export default function LiveClassEditDialog({
               label="Class Title"
               name="title"
               placeholder="Enter class title"
-              // rules={{ required: "Class title is required" }}
               rules={{
                 required: "Class title is required",
                 minLength: {
@@ -255,7 +308,6 @@ export default function LiveClassEditDialog({
                   message: "Description must be at least 5 characters long",
                 },
               }}
-              // required
             />
             <Dropdown
               label="Instructor"

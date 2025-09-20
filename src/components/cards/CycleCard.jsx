@@ -24,7 +24,7 @@ export default function CycleCard(params) {
 
   const handleCardClick = () => {
     if (isEnrolled || isAdmin) {
-      window.location.href = `/course/${course?.id}` || "/";
+      window.location.href = `/course/${cycle?.id}` || "/";
     } else if (permalink) {
       window.open(permalink, "_blank");
     }
