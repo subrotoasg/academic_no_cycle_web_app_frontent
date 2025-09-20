@@ -40,7 +40,7 @@ export default function NoticeForm() {
   } = methods;
 
   const selectedCourseId = useWatch({ control, name: "courseId" });
-  // const selectedCycleId = useWatch({ control, name: "cycleId" });
+
   const {
     data: courseData,
     isLoading: isCourseLoading,

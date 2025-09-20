@@ -29,10 +29,12 @@ export function NoticeTable({
             <TableHead className="text-center text-sm md:text-base border">
               Title
             </TableHead>
+            <TableHead className="text-center text-sm md:text-base border">
+              Cycle
+            </TableHead>
             <TableHead className="px-2 py-2 text-center text-sm md:text-base border">
               Type
             </TableHead>
-
             <TableHead className="text-center text-sm md:text-base border">
               Info
             </TableHead>
@@ -48,7 +50,7 @@ export function NoticeTable({
 
         <TableBody>
           {notices?.length > 0 ? (
-            notices.map((notice) => (
+            notices?.map((notice) => (
               <TableRow key={notice?.id}>
                 <TableCell className="text-center border">
                   <Image
@@ -61,6 +63,9 @@ export function NoticeTable({
                 </TableCell>
                 <TableCell className="text-center border">
                   {notice?.title}
+                </TableCell>
+                <TableCell className="text-center border">
+                  {notice?.cycle ? notice.cycle.title : "N/A"}
                 </TableCell>
                 <TableCell className="text-center border">
                   {notice?.type}

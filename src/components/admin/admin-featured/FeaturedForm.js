@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { useForm, FormProvider } from "react-hook-form";
+import { useForm, FormProvider, useWatch } from "react-hook-form";
 import Image from "next/image";
 import InputField from "@/components/form/InputField";
 import Dropdown from "@/components/form/Dropdown";
@@ -11,8 +11,8 @@ import { Button } from "@/components/ui/button";
 import Swal from "sweetalert2";
 import { toast } from "sonner";
 import { useCreateFeaturedMutation } from "@/redux/services/featuredApi";
-import { useSelector } from "react-redux";
-import { selectAllCourses } from "@/redux/Features/courseInfo";
+import { useGetAllCourseQuery } from "@/redux/services/courseApi";
+import { useGetAllCourseCycleBasedOnCourseIdQuery } from "@/redux/services/cycleApi";
 
 function FeaturedForm() {
   const [createFeatured, { isLoading }] = useCreateFeaturedMutation();
@@ -20,25 +20,12 @@ function FeaturedForm() {
   const [imagePreview, setImagePreview] = useState(null);
   const fileInputRef = useRef(null);
 
-  const courses = useSelector(selectAllCourses);
-
-  const courseOptions =
-    courses?.data?.map((course) => ({
-      label: course.productFullName,
-      value: course.id,
-    })) || [];
-
-  const types = [
-    { label: "Discount", value: "Discount" },
-    { label: "Offer", value: "Offer" },
-    { label: "Coupon", value: "Coupon" },
-  ];
   const defaultValues = {
+    courseId: "",
     title: "",
     type: "",
     description: "",
     coupon: "",
-    // link: "",
   };
   const methods = useForm({ defaultValues });
   const {
@@ -46,8 +33,55 @@ function FeaturedForm() {
     reset,
     setValue,
     watch,
+    control,
     formState: { isSubmitting },
   } = methods;
+
+  const selectedCourseId = useWatch({ control, name: "courseId" });
+
+  const {
+    data: courseData,
+    isLoading: isCourseLoading,
+    isError: isCourseError,
+  } = useGetAllCourseQuery({ limit: 1000 });
+
+  const courseOptions = isCourseLoading
+    ? [{ label: "Loading courses...", value: "" }]
+    : isCourseError
+    ? [{ label: "Failed to load courses", value: "" }]
+    : courseData?.data?.data?.length
+    ? courseData?.data?.data.map((course) => ({
+        label: `${course?.productFullName} (${course?.productName})`,
+        value: course?.id,
+      }))
+    : [{ label: "No courses available", value: "" }];
+
+  // Cycles
+  const {
+    data: cycleData,
+    isLoading: isCycleLoading,
+    isError: isCycleError,
+  } = useGetAllCourseCycleBasedOnCourseIdQuery(
+    { courseId: selectedCourseId, limit: 100 },
+    { skip: !selectedCourseId }
+  );
+
+  const cycleOptions = isCycleLoading
+    ? [{ label: "Loading cycles...", value: "" }]
+    : isCycleError
+    ? [{ label: "Failed to load cycles", value: "" }]
+    : cycleData?.data?.length
+    ? cycleData?.data?.map((cycle) => ({
+        label: `${cycle?.title} (${cycle?.course?.productName})`,
+        value: cycle?.id,
+      }))
+    : [{ label: "No cycles available", value: "" }];
+
+  const types = [
+    { label: "Discount", value: "Discount" },
+    { label: "Offer", value: "Offer" },
+    { label: "Coupon", value: "Coupon" },
+  ];
 
   const handleFileChange = (e) => {
     const file = e.target.files?.[0];
@@ -79,7 +113,9 @@ function FeaturedForm() {
 
     const formData = new FormData();
     const featuredInfo = {
-      courseId: data.courseId,
+      ...(data.cycleId
+        ? { cycleId: data.cycleId }
+        : { courseId: data.courseId }),
       title: data.title,
       type: data.type,
       description: data.description,
@@ -118,6 +154,13 @@ function FeaturedForm() {
           options={courseOptions}
           rules={{ required: "Course is required" }}
         />
+        {selectedCourseId && (
+          <Dropdown
+            label="Select Cycle (Only for cycle wise feature)"
+            name="cycleId"
+            options={cycleOptions}
+          />
+        )}
         <InputField
           label="Feature Title"
           name="title"
@@ -186,7 +229,7 @@ function FeaturedForm() {
             disabled={isLoading || isSubmitting}
             className="w-full bg-blue-400 text-sm md:text-base text-white py-2 px-4 rounded-sm hover:rounded-3xl hover:bg-blue-700 transition flex justify-center items-center dark:bg-blue-500 dark:hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isLoading || isSubmitting ? "Creating..." : "Create Feature"}
+            {isLoading || isSubmitting ? "Creating ..." : "Create New Feature"}
           </Button>
         </div>
       </form>
