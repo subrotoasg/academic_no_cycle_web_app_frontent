@@ -1,11 +1,9 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-import SearchBar from "../utilities/SearchBar";
 import PaginationControls from "../utilities/PaginationControls";
 import Loading from "../utilities/Loading";
 import Swal from "sweetalert2";
-import CourseSelect from "@/components/form/CourseSelect";
 import {
   useDeleteLiveClassMutation,
   useGetAllLiveClassQuery,
@@ -23,19 +21,18 @@ const LiveClassList = () => {
 
   const [selectedLiveClass, setSelectedLiveClass] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [joinClassUrl, setJoinClassUrl] = useState(null);
 
-  const {
-    data: courseData,
-    isLoading: isCourseLoading,
-    isError: isCourseError,
-  } = useGetAllCourseQuery({ limit: 1000 });
-  const courses = courseData?.data;
-  useEffect(() => {
-    if (courses?.data?.length > 0 && !selectedCourseId) {
-      setSelectedCourseId(courses?.data[0]?.id);
-    }
-  }, [courses, selectedCourseId]);
+  // const {
+  //   data: courseData,
+  //   isLoading: isCourseLoading,
+  //   isError: isCourseError,
+  // } = useGetAllCourseQuery({ limit: 1000 });
+  // const courses = courseData?.data;
+  // useEffect(() => {
+  //   if (courses?.data?.length > 0 && !selectedCourseId) {
+  //     setSelectedCourseId(courses?.data[0]?.id);
+  //   }
+  // }, [courses, selectedCourseId]);
 
   const {
     data,
@@ -50,7 +47,7 @@ const LiveClassList = () => {
   });
 
   const [deleteLiveClass] = useDeleteLiveClassMutation();
-  console.log(data);
+
   const meta = data?.meta;
   const totalPages = meta?.totalCount ? Math.ceil(meta?.totalCount / limit) : 1;
 
@@ -58,10 +55,10 @@ const LiveClassList = () => {
     setPage(1);
   }, [searchQuery]);
 
-  useEffect(() => {
-    setSearchQuery("");
-    setPage(1);
-  }, [selectedCourseId]);
+  // useEffect(() => {
+  //   setSearchQuery("");
+  //   setPage(1);
+  // }, [selectedCourseId]);
 
   const combinedClasses = useMemo(() => {
     const live = Array.isArray(data?.data?.liveClasses)
@@ -150,21 +147,6 @@ const LiveClassList = () => {
         View and manage all scheduled live classes
       </p>
 
-      {/* <CourseSelect
-        label="Select Course"
-        courses={courses?.data}
-        selectedCourseId={selectedCourseId}
-        onChange={setSelectedCourseId}
-      /> */}
-
-      {/* <div className="p-2">
-        <SearchBar
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          placeholder="Search by live class title..."
-        />
-      </div> */}
-
       {(isLoading || isFetching) && (
         <div className="w-full flex justify-center py-8">
           <LoadingData />
@@ -173,13 +155,13 @@ const LiveClassList = () => {
 
       {isError && !(isLoading || isFetching) && (
         <div className="text-center text-red-500 py-4">
-          Failed to load live classes.
+          Failed to load live classes
         </div>
       )}
 
       {!(isLoading || isFetching) && !isError && (
         <>
-          {!selectedCourseId || sortedData?.length === 0 ? (
+          {sortedData?.length === 0 ? (
             <div className="text-center text-gray-500 py-4">
               No Live Classes Found
             </div>

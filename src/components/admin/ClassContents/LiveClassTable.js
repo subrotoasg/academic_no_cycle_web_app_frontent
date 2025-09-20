@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
-import { ArrowUpDown, Edit, Trash2, Video, X } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { Edit, Trash2, Video, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -17,11 +17,9 @@ import ProtectedIframe from "@/components/liveClass/protectIframe/ProtectedIfram
 
 export default function LiveClassTable({
   contentData = [],
-  handleSort,
   handleDelete,
   handleEditModal,
 }) {
-  // console.log(contentData);
   const [selectedJoinClass, setSelectedJoinClasses] = useState(null);
   const { data, isFetching, isLoading, refetch } = useJoinLiveClassQuery(
     { id: selectedJoinClass },
@@ -29,7 +27,6 @@ export default function LiveClassTable({
   );
 
   const joinUrl = data?.data?.isLiveUrl;
-  const isLiveClassStart = data?.data?.isLive;
 
   const handleJoin = async (content) => {
     if (!content?.id) {
@@ -92,17 +89,20 @@ export default function LiveClassTable({
                   Instructor
                 </TableHead>
                 <TableHead className="text-center text-sm md:text-base border">
-                  Chapter
+                  Cycle
                 </TableHead>
                 <TableHead className="text-center text-sm md:text-base border">
                   Subject
+                </TableHead>
+                <TableHead className="text-center text-sm md:text-base border">
+                  Chapter
                 </TableHead>
               </TableRow>
             </TableHeader>
 
             <TableBody>
               {contentData?.length > 0 ? (
-                contentData.map((content) => (
+                contentData?.map((content) => (
                   <TableRow key={content?.id}>
                     <TableCell className="text-center border">
                       <Button
@@ -141,7 +141,7 @@ export default function LiveClassTable({
 
                     <TableCell className="text-center border">
                       {content?.startTime
-                        ? new Date(content.startTime).toLocaleString("en-GB", {
+                        ? new Date(content?.startTime).toLocaleString("en-GB", {
                             day: "2-digit",
                             month: "long",
                             year: "numeric",
@@ -169,11 +169,13 @@ export default function LiveClassTable({
                     </TableCell>
 
                     <TableCell className="text-center border">
-                      {content?.courseSubjectChapter?.chapterName || "N/A"}
+                      {content?.cycle?.title || "N/A"}
                     </TableCell>
-
                     <TableCell className="font-medium text-center border">
-                      {content?.courseSubject?.subjectName || "N/A"}
+                      {content?.cycleSubject?.subjectName || "N/A"}
+                    </TableCell>
+                    <TableCell className="text-center border">
+                      {content?.cycleSubjectChapter?.chapterName || "N/A"}
                     </TableCell>
                   </TableRow>
                 ))
